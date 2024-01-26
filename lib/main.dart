@@ -1,110 +1,220 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      home: HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
+      appBar: AppBar(backgroundColor: Colors.blue),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: const Size(100, 50),
+          ),
+          child: const Text('Start', style: TextStyle(fontSize: 20)),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const BackgroundPage()),
+            );
+          },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class BackgroundPage extends StatefulWidget {
+  const BackgroundPage({Key? key}) : super(key: key);
+
+  @override
+  _BackgroundPageState createState() => _BackgroundPageState();
+}
+
+class _BackgroundPageState extends State<BackgroundPage> {
+  final List<String> images = [
+    'images/slider/1.jpg',
+    'images/slider/2.jpg',
+    'images/slider/3.jpg',
+    'images/slider/4.jpg',
+    'images/slider/5.jpg',
+    'images/slider/1.jpg',
+    'images/slider/2.jpg',
+    'images/slider/3.jpg',
+    'images/slider/4.jpg',
+    // Add more image paths as needed
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background Image
+          Image.asset(
+            'images/background.png',
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            fit: BoxFit.cover,
+          ),
+          // Slider Container
+          Positioned(
+            left: 250,
+            top: 90,
+            child: Container(
+              width: 850,
+              height: 200,
+              child: CarouselSlider.builder(
+                itemCount: images.length ~/ 3,
+                options: CarouselOptions(
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 1,
+                  initialPage: 0,
+                  enableInfiniteScroll: true,
+                  reverse: false,
+                  autoPlay: false,
+                  autoPlayInterval: Duration(seconds: 3),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
+                  onPageChanged: (index, reason) {},
+                  scrollDirection: Axis.horizontal,
+                ),
+                itemBuilder: (context, index, realIndex) {
+                  return Row(
+                    children: [
+                      _buildImageWithPadding(images[index * 3], index * 3),
+                      _buildImageWithPadding(images[index * 3 + 1], index * 3 + 1),
+                      _buildImageWithPadding(images[index * 3 + 2], index * 3 + 2),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildImageWithPadding(String imagePath, int index) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SecondScreen(imagePath: imagePath)),
+          );
+        },
+        child: Image.asset(imagePath, width: 200, height: 200),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatefulWidget {
+  final String imagePath;
+
+  const SecondScreen({Key? key, required this.imagePath}) : super(key: key);
+
+  @override
+  _SecondScreenState createState() => _SecondScreenState();
+}
+
+class _SecondScreenState extends State<SecondScreen> {
+  List<DraggableImage> droppedImages = [];
+
+  @override
+  Widget build(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Screen'),
+        backgroundColor: Colors.blue,
+      ),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 3,
+            child: Container(
+              color: Colors.red,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return Draggable<DraggableImage>(
+                    data: DraggableImage(
+                        name: 'images/puzzle/puzzle${index + 1}',
+                        path: 'images/puzzle/puzzle${index + 1}.png'),
+                    feedback: Image.asset('images/puzzle/puzzle${index + 1}.png',
+                        width: 50, height: 50),
+                    child: Image.asset('images/puzzle/puzzle${index + 1}.png',
+                        width: 100, height: 100),
+                  );
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 7,
+            child: DragTarget<DraggableImage>(
+              builder: (context, candidateData, rejectedData) {
+                return Container(
+                  color: Colors.green,
+                  child: droppedImages.isNotEmpty
+                      ? Stack(
+                    children: droppedImages.asMap().entries.map((entry) {
+                      int index = entry.key;
+                      DraggableImage draggableImage = entry.value;
+
+                      return Positioned(
+                        left: index * 80.0,
+                        child: Image.asset(draggableImage.path,
+                            width: 100, height: 100),
+                      );
+                    }).toList(),
+                  )
+                      : const Center(child: Text('Drop the image here')),
+                );
+              },
+              onWillAccept: (data) => true,
+              onAccept: (data) {
+                setState(() {
+                  droppedImages = List.from(droppedImages)..add(data);
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class DraggableImage {
+  final String name;
+  final String path;
+
+  DraggableImage({required this.name, required this.path});
 }
