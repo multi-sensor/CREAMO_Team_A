@@ -1,3 +1,4 @@
+//승연 편집
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -170,7 +171,7 @@ class _SecondScreenState extends State<SecondScreen> {
                     feedback: Image.asset('images/puzzle/puzzle${index + 1}.png',
                         width: 50, height: 50),
                     child: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 100, height: 100),
+                        width: 80, height: 80),
                   );
                 },
               ),
