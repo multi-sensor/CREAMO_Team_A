@@ -79,7 +79,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     );
   }
 }
-
+//굿
 class DraggableImage {
   final String name;
   final String path;
