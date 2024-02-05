@@ -1,3 +1,5 @@
+//test
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,14 +14,26 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
+  final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<BluetoothDevice> devices = [];
 
+  Future<Size> _getImageSize(Image image) async {
+    final Completer<Size> completer = Completer<Size>();
+    image.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener(
+            (ImageInfo info, bool _) => completer.complete(Size(
+          info.image.width.toDouble(),
+          info.image.height.toDouble(),
+        )),
+      ),
+    );
+    return completer.future;
+  }
+
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
@@ -40,16 +54,43 @@ class _PuzzlePageState extends State<PuzzlePage> {
               color: Colors.red,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 4,
+                itemCount: 3,
                 itemBuilder: (context, index) {
-                  return Draggable<DraggableImage>(
-                    data: DraggableImage(
-                        name: 'images/puzzle/puzzle${index + 1}',
-                        path: 'images/puzzle/puzzle${index + 1}.png'),
-                    feedback: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 50, height: 50),
-                    child: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 100, height: 100),
+                  final image = Image.asset('images/puzzle/block${index + 1}.png');
+                  return FutureBuilder<Size>(
+                    future: _getImageSize(image),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        return Draggable<DraggableImage>(
+                          data: DraggableImage(
+                            name: 'images/puzzle/block${index + 1}',
+                            path: 'images/puzzle/block${index + 1}.png',
+                            position: Offset.zero,
+                            size: snapshot.data!,
+                          ),
+                          feedback: image,
+                          child: image,
+                          onDragEnd: (details) {
+                            final RenderBox targetBox =
+                            _targetKey.currentContext!.findRenderObject() as RenderBox;
+                            final targetPosition = targetBox.globalToLocal(details.offset);
+
+                            if (targetBox.size.contains(targetPosition)) {
+                              setState(() {
+                                droppedImages.add(DraggableImage(
+                                  name: 'images/puzzle/block${index + 1}',
+                                  path: 'images/puzzle/block${index + 1}.png',
+                                  position: targetPosition,
+                                  size: snapshot.data!,
+                                ));
+                              });
+                            }
+                          },
+                        );
+                      } else {
+                        return CircularProgressIndicator();
+                      }
+                    },
                   );
                 },
               ),
@@ -58,31 +99,27 @@ class _PuzzlePageState extends State<PuzzlePage> {
           Expanded(
             flex: 7,
             child: DragTarget<DraggableImage>(
+              key: _targetKey,
               builder: (context, candidateData, rejectedData) {
                 return Container(
                   color: Colors.green,
-                  child: droppedImages.isNotEmpty
-                      ? Stack(
-                    children: droppedImages.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      DraggableImage draggableImage = entry.value;
-
+                  child: Stack(
+                    children: droppedImages.map((draggableImage) {
                       return Positioned(
-                        left: index * 80.0,
-                        child: Image.asset(draggableImage.path,
-                            width: 100, height: 100),
+                        left: draggableImage.position.dx,
+                        top: draggableImage.position.dy,
+                        child: Image.asset(
+                          draggableImage.path,
+                          width: draggableImage.size.width,
+                          height: draggableImage.size.height,
+                        ),
                       );
                     }).toList(),
-                  )
-                      : const Center(child: Text('Drop the image here')),
+                  ),
                 );
               },
               onWillAccept: (data) => true,
-              onAccept: (data) {
-                setState(() {
-                  droppedImages = List.from(droppedImages)..add(data);
-                });
-              },
+              onAccept: (data) {},
             ),
           ),
         ],
@@ -151,6 +188,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
 class DraggableImage {
   final String name;
   final String path;
+  Offset position;
+  Size size;
 
-  DraggableImage({required this.name, required this.path});
+  DraggableImage({required this.name, required this.path, required this.position, required this.size});
 }
