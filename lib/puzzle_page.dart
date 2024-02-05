@@ -128,7 +128,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
   }
 
   void startBluetoothScan() {
-    flutterBlue.startScan(timeout: Duration(seconds: 4));
+    flutterBlue.startScan(timeout: Duration(seconds: 10));
 
     flutterBlue.scanResults.listen((results) {
       for (ScanResult r in results) {
@@ -138,50 +138,51 @@ class _PuzzlePageState extends State<PuzzlePage> {
       }
     });
 
-    flutterBlue.stopScan();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Bluetooth Devices'),
-          content: Container(
-            width: double.maxFinite,
-            child: ListView.builder(
-              itemCount: devices.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(devices[index].name),
-                  subtitle: Text(devices[index].id.toString()),
-                  onTap: () {
-                    devices[index].connect().then((_) {
-                      Fluttertoast.showToast(
-                          msg: "Connected to ${devices[index].name}",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.green,
-                          textColor: Colors.white,
-                          fontSize: 16.0
-                      );
-                      Navigator.of(context).pop();
-                    });
-                  },
-                );
-              },
+    Future.delayed(Duration(seconds: 10)).then((_) {
+      flutterBlue.stopScan();
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Bluetooth Devices'),
+            content: Container(
+              width: double.maxFinite,
+              child: ListView.builder(
+                itemCount: devices.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text(devices[index].name),
+                    subtitle: Text(devices[index].id.toString()),
+                    onTap: () {
+                      devices[index].connect().then((_) {
+                        Fluttertoast.showToast(
+                            msg: "Connected to ${devices[index].name}",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.green,
+                            textColor: Colors.white,
+                            fontSize: 16.0
+                        );
+                        Navigator.of(context).pop();
+                      });
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text("Close"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+            actions: <Widget>[
+              TextButton(
+                child: Text("Close"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    });
   }
 }
 

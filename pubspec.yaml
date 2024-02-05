@@ -76,9 +76,9 @@ flutter:
     - images/slider/3.jpg
     - images/slider/4.jpg
     - images/slider/5.jpg
-    - images/puzzle/puzzle1.png
-    - images/puzzle/puzzle2.png
-    - images/puzzle/puzzle3.png
+    - images/puzzle/block1.png
+    - images/puzzle/block2.png
+    - images/puzzle/block3.png
     #- images/puzzle/puzzle4.png
     - images/background.png
 
