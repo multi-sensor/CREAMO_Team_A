@@ -1,6 +1,6 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'dart:async';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -14,9 +14,10 @@ class PuzzlePage extends StatefulWidget {
 class _PuzzlePageState extends State<PuzzlePage> {
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
+  int startFlag = 0; // 시작 플래그 추가
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<BluetoothDevice> devices = [];
-  int startFlag = 0;
+
   Future<Size> _getImageSize(Image image) async {
     final Completer<Size> completer = Completer<Size>();
     image.image.resolve(const ImageConfiguration()).addListener(
@@ -52,9 +53,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
               color: Colors.red,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: startFlag == 0? 3 : 2,
+                itemCount: startFlag == 0 ? 3 : 2,
                 itemBuilder: (context, index) {
-                  final imageIdx = startFlag == 0? index + 1 : index + 2;
+                  final imageIdx = startFlag == 0 ? index + 1 : index + 2;
                   final image = Image.asset('images/puzzle/block${imageIdx}.png');
                   return FutureBuilder<Size>(
                     future: _getImageSize(image),
@@ -123,10 +124,26 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       return Positioned(
                         left: draggableImage.position.dx,
                         top: draggableImage.position.dy,
-                        child: Image.asset(
-                          draggableImage.path,
-                          width: draggableImage.size.width,
-                          height: draggableImage.size.height,
+                        child: Draggable(
+                          data: draggableImage,
+                          feedback: Image.asset(
+                            draggableImage.path,
+                            width: draggableImage.size.width,
+                            height: draggableImage.size.height,
+                          ),
+                          child: Image.asset(
+                            draggableImage.path,
+                            width: draggableImage.size.width,
+                            height: draggableImage.size.height,
+                          ),
+                          onDraggableCanceled: (_, __) {
+                            // 드래그 취소 시에 호출되는 함수
+                            setState(() {
+                              if(draggableImage.blockIndex == 1)
+                                startFlag = 0;
+                              droppedImages.remove(draggableImage);
+                            });
+                          },
                         ),
                       );
                     }).toList(),
@@ -187,9 +204,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     return nearestSnapPoint;
   }
-
-
-
 
   void startBluetoothScan() {
     flutterBlue.startScan(timeout: Duration(seconds: 10));
