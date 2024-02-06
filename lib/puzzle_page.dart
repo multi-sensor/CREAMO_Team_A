@@ -193,3 +193,6 @@ class DraggableImage {
 
   DraggableImage({required this.name, required this.path, required this.position, required this.size});
 }
+
+
+//0206try
