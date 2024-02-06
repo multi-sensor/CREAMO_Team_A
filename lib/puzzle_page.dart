@@ -1,8 +1,6 @@
-//test
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-//import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -18,10 +16,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
   List<DraggableImage> droppedImages = [];
   FlutterBlue flutterBlue = FlutterBlue.instance;
   List<BluetoothDevice> devices = [];
-
-
+  int startFlag = 0;
   Future<Size> _getImageSize(Image image) async {
-    // 이미지의 크기를 비동기적으로 가져오는 함수
     final Completer<Size> completer = Completer<Size>();
     image.image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener(
@@ -56,49 +52,50 @@ class _PuzzlePageState extends State<PuzzlePage> {
               color: Colors.red,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: 3,
+                itemCount: startFlag == 0? 3 : 2,
                 itemBuilder: (context, index) {
-                  final image = Image.asset('images/puzzle/block${index + 1}.png');
+                  final imageIdx = startFlag == 0? index + 1 : index + 2;
+                  final image = Image.asset('images/puzzle/block${imageIdx}.png');
                   return FutureBuilder<Size>(
                     future: _getImageSize(image),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         return Draggable<DraggableImage>(
                           data: DraggableImage(
-                            name: 'images/puzzle/block${index + 1}',
-                            path: 'images/puzzle/block${index + 1}.png',
+                            name: 'images/puzzle/block${imageIdx}',
+                            path: 'images/puzzle/block${imageIdx}.png',
                             position: Offset.zero,
                             size: snapshot.data!,
-                            blockIndex: index + 1,
+                            blockIndex: imageIdx, // 블록의 인덱스 추가
                           ),
                           feedback: image,
                           child: image,
                           onDragEnd: (details) {
-                            final RenderBox targetBox = _targetKey.currentContext!.findRenderObject() as RenderBox;
+                            final RenderBox targetBox =
+                            _targetKey.currentContext!.findRenderObject() as RenderBox;
                             final targetPosition = targetBox.globalToLocal(details.offset);
+                            if (imageIdx == 1){
+                              setState((){startFlag = 1;});
+                            }
 
                             setState(() {
                               final newImage = DraggableImage(
-                                name: 'images/puzzle/block${index + 1}',
-                                path: 'images/puzzle/block${index + 1}.png',
+                                name: 'images/puzzle/block${imageIdx}',
+                                path: 'images/puzzle/block${imageIdx}.png',
                                 position: targetPosition,
                                 size: snapshot.data!,
-                                blockIndex: index + 1,
+                                blockIndex: imageIdx, // 블록의 인덱스 추가
                               );
 
-                              // 첫 번째 블록이 드랍되지 않은 경우 위치를 조정
-                              if (droppedImages.isEmpty) {
-                                newImage.position = Offset(
-                                  targetPosition.dx - snapshot.data!.width / 2,
-                                  targetPosition.dy - snapshot.data!.height / 2,
+                              // 현재 드랍한 블록과 가장 근접한 기존 블록 찾기
+                              DraggableImage? nearestImage = getNearestImage(newImage);
+
+                              // 근접한 블록이 있다면 스냅 포인트에 따라 위치 조절
+                              if (nearestImage != null) {
+                                newImage.position = getSnappedPosition(
+                                  targetPosition,
+                                  nearestImage,
                                 );
-                              } else {
-                                // 첫 번째 블록 이후의 블록은 가장 가까운 스냅 포인트에 맞춰 붙도록 설정
-                                final nearestImage = getNearestImage(newImage);
-                                if (nearestImage != null) {
-                                  final snappedPosition = getSnappedPosition(newImage, nearestImage);
-                                  newImage.position = snappedPosition;
-                                }
                               }
 
                               droppedImages.add(newImage);
@@ -161,35 +158,37 @@ class _PuzzlePageState extends State<PuzzlePage> {
     return nearestImage;
   }
 
-  Offset getSnappedPosition(DraggableImage newImage, DraggableImage nearestImage) {
+  Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
     final snapPoints = {
-      1: {'left': Offset(0, 50), 'right': Offset(116, 50)},
-      2: {'left': Offset(116, 50), 'right': Offset(216, 50)},
-      3: {'left': Offset(216, 50), 'right': Offset(316, 50)},
+      1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
+      2: {'left': Offset(16, 50), 'right': Offset(232, 50)},
+      3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
     };
 
-    final leftSnapPoint = snapPoints[nearestImage.blockIndex]!['left']!;
-    final rightSnapPoint = snapPoints[nearestImage.blockIndex]!['right']!;
+    Offset nearestSnapPoint = targetPosition;
+    double minDistance = double.infinity;
 
-    final newImageCenter =
-    Offset(newImage.position.dx + newImage.size.width / 2,
-        newImage.position.dy + newImage.size.height / 2);
+    // 새로운 블록의 왼쪽 스냅포인트
+    final newImageLeftSnapPoint = snapPoints[newImage.blockIndex]!['left']! + targetPosition;
 
-    final nearestImageCenter =
-    Offset(nearestImage.position.dx + nearestImage.size.width / 2,
-        nearestImage.position.dy + nearestImage.size.height / 2);
+    for (var droppedImage in droppedImages) { // droppedImages는 모든 드랍된 이미지들의 리스트를 참조해야 합니다.
+      // 기존 드랍된 블록의 오른쪽 스냅포인트
+      final droppedImageRightSnapPoint = snapPoints[droppedImage.blockIndex]!['right']! + droppedImage.position;
 
-    final leftDistance = (newImageCenter - leftSnapPoint).distance;
-    final rightDistance = (newImageCenter - rightSnapPoint).distance;
+      // 거리 계산
+      final distance = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
-    final snappedPoint =
-    leftDistance < rightDistance ? leftSnapPoint : rightSnapPoint;
+      // 가장 가까운 스냅포인트 찾기
+      if (distance < 30.0 && distance < minDistance) {
+        nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
+        minDistance = distance;
+      }
+    }
 
-    return Offset(
-      snappedPoint.dx - newImage.size.width / 2,
-      snappedPoint.dy - newImage.size.height / 2,
-    );
+    return nearestSnapPoint;
   }
+
+
 
 
   void startBluetoothScan() {
