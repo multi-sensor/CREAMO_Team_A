@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'bluetooth_communication.dart';
 
 class BluetoothHelper {
   static BluetoothDevice? connectedDevice;
   static List<BluetoothDevice> devices = [];
   static StreamSubscription<List<ScanResult>>? scanSubscription;
+  static BluetoothCommunication? bluetoothCommunication; // BluetoothCommunication 객체 추가
 
   static Future<void> startBluetoothScan(BuildContext context) async {
     devices.clear(); // 기존에 스캔한 장치 정보 초기화
