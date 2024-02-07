@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'bluetooth_helper.dart';
+import '../class/bluetooth_helper.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
