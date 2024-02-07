@@ -196,7 +196,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
       final distance = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
       // 가장 가까운 스냅포인트 찾기
-      if (distance < 30.0 && distance < minDistance) {
+      if (distance < 50.0 && distance < minDistance) {
         nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
         minDistance = distance;
       }
