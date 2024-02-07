@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'bluetooth_helper.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -20,6 +21,15 @@ class _PuzzlePageState extends State<PuzzlePage> {
       appBar: AppBar(
         title: const Text('Puzzle Page'),
         backgroundColor: Colors.blue,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.bluetooth_searching),
+            tooltip: 'Connect to Bluetooth',
+            onPressed: () {
+              BluetoothHelper.startBluetoothScan(context);
+            },
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -35,10 +45,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     data: DraggableImage(
                         name: 'images/puzzle/puzzle${index + 1}',
                         path: 'images/puzzle/puzzle${index + 1}.png'),
-                    feedback: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 50, height: 50),
-                    child: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 100, height: 100),
+                    feedback: Image.asset(
+                        'images/puzzle/puzzle${index + 1}.png',
+                        width: 50,
+                        height: 50),
+                    child: Image.asset(
+                        'images/puzzle/puzzle${index + 1}.png',
+                        width: 100,
+                        height: 100),
                   );
                 },
               ),
@@ -52,7 +66,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   color: Colors.green,
                   child: droppedImages.isNotEmpty
                       ? Stack(
-                    children: droppedImages.asMap().entries.map((entry) {
+                    children: droppedImages
+                        .asMap()
+                        .entries
+                        .map((entry) {
                       int index = entry.key;
                       DraggableImage draggableImage = entry.value;
 
@@ -79,7 +96,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     );
   }
 }
-//굿
+
 class DraggableImage {
   final String name;
   final String path;
