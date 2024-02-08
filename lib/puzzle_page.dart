@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'bluetooth_helper.dart';
 
 class PuzzlePage extends StatefulWidget {
@@ -33,6 +34,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);//status 바 숨김 기능
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
