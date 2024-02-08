@@ -89,7 +89,6 @@ class BluetoothHelper {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text('기기명: ${connectedDevice?.name ?? ''}'),
-              Text('기기 ID: ${connectedDevice?.id.toString() ?? ''}'),
             ],
           ),
           actions: <Widget>[
