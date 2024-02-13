@@ -63,7 +63,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
               color: Colors.red,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: startFlag == 0 ? 5 : 4,
+                itemCount: startFlag == 0 ? 13 : 12,
                 itemBuilder: (context, index) {
                   final imageIdx = startFlag == 0 ? index + 1 : index + 2;
                   final image = Image.asset(
@@ -251,6 +251,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
       3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
       4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
       5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      6: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      7: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      8: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      9: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      10: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      11: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      12: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      13: {'left': Offset(16, 50), 'right': Offset(132, 50)},
     };
 
     Offset nearestSnapPoint = targetPosition;
