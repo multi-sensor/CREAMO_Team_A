@@ -254,7 +254,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
     final snapPoints = {
       1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
-      2: {'left': Offset(16, 50), 'right': Offset(232, 50)},
+      2: {'left': Offset(16, 50), 'right': Offset(284, 50)},
       3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
       4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
       5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
