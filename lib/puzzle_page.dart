@@ -17,7 +17,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
   List<DraggableImage> droppedImages = [];
   int startFlag = 0; // 시작 플래그 추가
 
-
   Future<Size> _getImageSize(Image image) async {
     final Completer<Size> completer = Completer<Size>();
     image.image.resolve(const ImageConfiguration()).addListener(
@@ -32,9 +31,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
     return completer.future;
   }
 
+  void _resetImages() {
+    setState(() {
+      droppedImages.clear();
+      startFlag = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);//status 바 숨김 기능
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
@@ -59,7 +65,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 scrollDirection: Axis.horizontal,
                 itemCount: startFlag == 0 ? 5 : 4,
                 itemBuilder: (context, index) {
-                  final imageIdx = startFlag == 0 ? index + 1: index + 2;
+                  final imageIdx = startFlag == 0 ? index + 1 : index + 2;
                   final image = Image.asset(
                       'images/puzzle/block${imageIdx}.png');
                   return FutureBuilder<Size>(
@@ -124,44 +130,56 @@ class _PuzzlePageState extends State<PuzzlePage> {
           ),
           Expanded(
             flex: 8,
-            child: DragTarget<DraggableImage>(
-              key: _targetKey,
-              builder: (context, candidateData, rejectedData) {
-                return Container(
-                  color: Colors.green,
-                  child: Stack(
-                    children: droppedImages.map((draggableImage) {
-                      return Positioned(
-                        left: draggableImage.position.dx,
-                        top: draggableImage.position.dy,
-                        child: Draggable(
-                          data: draggableImage,
-                          feedback: Image.asset(
-                            draggableImage.path,
-                            width: draggableImage.size.width,
-                            height: draggableImage.size.height,
-                          ),
-                          child: Image.asset(
-                            draggableImage.path,
-                            width: draggableImage.size.width,
-                            height: draggableImage.size.height,
-                          ),
-                          onDraggableCanceled: (_, __) {
-                            // 드래그 취소 시에 호출되는 함수
-                            setState(() {
-                              if (draggableImage.blockIndex == 1)
-                                startFlag = 0;
-                              droppedImages.remove(draggableImage);
-                            });
-                          },
-                        ),
-                      );
-                    }).toList(),
+            child: Stack(
+              children: [
+                DragTarget<DraggableImage>(
+                  key: _targetKey,
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      color: Colors.green,
+                      child: Stack(
+                        children: droppedImages.map((draggableImage) {
+                          return Positioned(
+                            left: draggableImage.position.dx,
+                            top: draggableImage.position.dy,
+                            child: Draggable(
+                              data: draggableImage,
+                              feedback: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+                              child: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+                              onDraggableCanceled: (_, __) {
+                                // 드래그 취소 시에 호출되는 함수
+                                setState(() {
+                                  if (draggableImage.blockIndex == 1)
+                                    startFlag = 0;
+                                  droppedImages.remove(draggableImage);
+                                });
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                  onWillAccept: (data) => true,
+                  onAccept: (data) {},
+                ),
+                Positioned(
+                  bottom: 16,
+                  right: 16,
+                  child: ElevatedButton(
+                    onPressed: _resetImages,
+                    child: Text('Reset'),
                   ),
-                );
-              },
-              onWillAccept: (data) => true,
-              onAccept: (data) {},
+                ),
+              ],
             ),
           ),
         ],
@@ -191,7 +209,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
       2: {'left': Offset(16, 50), 'right': Offset(232, 50)},
       3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
       4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-
       5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
     };
 
@@ -221,10 +238,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     return nearestSnapPoint;
   }
-
-
 }
-
 
 class DraggableImage {
   final String name;
