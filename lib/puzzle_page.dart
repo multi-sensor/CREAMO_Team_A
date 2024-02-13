@@ -58,80 +58,80 @@ class _PuzzlePageState extends State<PuzzlePage> {
       ),
       body: Column(
         children: <Widget>[
-        Expanded(
-        flex: 2,
-        child: Container(
-          color: Colors.red,
-          child: Scrollbar(
-            controller: _scrollController,
-            child: ListView.builder(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              itemCount: startFlag == 0 ? 13 : 12,
-              itemBuilder: (context, index) {
-                final imageIdx = startFlag == 0 ? index + 1 : index + 2;
-                final image = Image.asset('images/puzzle/block${imageIdx}.png');
-                return FutureBuilder<Size>(
-                  future: _getImageSize(image),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      return Draggable<DraggableImage>(
-                        data: DraggableImage(
-                          name: 'images/puzzle/block${imageIdx}',
-                          path: 'images/puzzle/block${imageIdx}.png',
-                          position: Offset.zero,
-                          size: snapshot.data!,
-                          blockIndex: imageIdx,
-                        ),
-                        feedback: image,
-                        child: image,
-                        onDragEnd: (details) {
-                          final RenderBox targetBox =
-                          _targetKey.currentContext!
-                              .findRenderObject() as RenderBox;
-                          final targetPosition =
-                          targetBox.globalToLocal(details.offset);
-                          if (imageIdx == 1) {
-                            setState(() {
-                              startFlag = 1;
-                            });
-                          }
-
-                          setState(() {
-                            final newImage = DraggableImage(
+          Expanded(
+            flex: 2,
+            child: Container(
+              color: Colors.red,
+              child: Scrollbar(
+                controller: _scrollController,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: startFlag == 0 ? 13 : 12,
+                  itemBuilder: (context, index) {
+                    final imageIdx = startFlag == 0 ? index + 1 : index + 2;
+                    final image = Image.asset('images/puzzle/block${imageIdx}.png');
+                    return FutureBuilder<Size>(
+                      future: _getImageSize(image),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return Draggable<DraggableImage>(
+                            data: DraggableImage(
                               name: 'images/puzzle/block${imageIdx}',
                               path: 'images/puzzle/block${imageIdx}.png',
-                              position: targetPosition,
+                              position: Offset.zero,
                               size: snapshot.data!,
                               blockIndex: imageIdx,
-                            );
+                            ),
+                            feedback: image,
+                            child: image,
+                            onDragEnd: (details) {
+                              final RenderBox targetBox =
+                              _targetKey.currentContext!
+                                  .findRenderObject() as RenderBox;
+                              final targetPosition =
+                              targetBox.globalToLocal(details.offset);
+                              if (imageIdx == 1) {
+                                setState(() {
+                                  startFlag = 1;
+                                });
+                              }
 
-                            // 현재 드랍한 블록과 가장 근접한 기존 블록 찾기
-                            DraggableImage? nearestImage =
-                            getNearestImage(newImage);
+                              setState(() {
+                                final newImage = DraggableImage(
+                                  name: 'images/puzzle/block${imageIdx}',
+                                  path: 'images/puzzle/block${imageIdx}.png',
+                                  position: targetPosition,
+                                  size: snapshot.data!,
+                                  blockIndex: imageIdx,
+                                );
 
-                            // 근접한 블록이 있다면 스냅 포인트에 따라 위치 조절
-                            if (nearestImage != null) {
-                              newImage.position = getSnappedPosition(
-                                targetPosition,
-                                nearestImage,
-                              );
-                            }
+                                // 현재 드랍한 블록과 가장 근접한 기존 블록 찾기
+                                DraggableImage? nearestImage =
+                                getNearestImage(newImage);
 
-                            droppedImages.add(newImage);
-                          });
-                        },
-                      );
-                    } else {
-                      return CircularProgressIndicator();
-                    }
+                                // 근접한 블록이 있다면 스냅 포인트에 따라 위치 조절
+                                if (nearestImage != null) {
+                                  newImage.position = getSnappedPosition(
+                                    targetPosition,
+                                    nearestImage,
+                                  );
+                                }
+
+                                droppedImages.add(newImage);
+                              });
+                            },
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    );
                   },
-                );
-              },
+                ),
+              ),
             ),
           ),
-        ),
-      ),
 
           Expanded(
             flex: 8,
