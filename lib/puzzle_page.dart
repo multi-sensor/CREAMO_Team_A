@@ -161,6 +161,13 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               ),
 
                               onDragEnd: (details) {
+                                setState(() {
+                                  final RenderBox box = context.findRenderObject() as RenderBox;
+                                  final droppedPosition = box.globalToLocal(details.offset);
+                                  // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
+                                  final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
+                                  draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
+                                });
                                 // 쓰레기통의 범위를 정의합니다.
                                 final trashCanRange = Offset(MediaQuery
                                     .of(context).size.width - 300, MediaQuery.of(context).size.height - 300);
