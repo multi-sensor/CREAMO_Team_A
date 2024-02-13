@@ -168,6 +168,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   draggableImage.position = snappedPosition;
                                 });
 
+
                                 // 쓰레기통의 위치를 설정합니다.
                                 final trashCanPosition = Offset(MediaQuery.of(context).size.width - 300, MediaQuery.of(context).size.height - 300);
 
@@ -190,6 +191,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   droppedImages.remove(draggableImage);
                                 });
                               },
+
+
+
+
                             ),
                           );
                         }).toList(),
@@ -249,6 +254,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     onAccept: (data) {
                       setState(() {
                         droppedImages.remove(data);
+                        if(data.blockIndex == 1){
+                          startFlag = 0;
+                        }
                       });
                     },
                   ),
@@ -307,12 +315,12 @@ class _PuzzlePageState extends State<PuzzlePage> {
       final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
       final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
-      if (distanceLeft < 30.0 && distanceLeft < minDistance) {
+      if (distanceLeft < 50.0 && distanceLeft < minDistance) {
         nearestSnapPoint = droppedImageLeftSnapPoint - snapPoints[newImage.blockIndex]!['right']!;
         minDistance = distanceLeft;
       }
 
-      if (distanceRight < 30.0 && distanceRight < minDistance) {
+      if (distanceRight < 50.0 && distanceRight < minDistance) {
         nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
         minDistance = distanceRight;
       }
