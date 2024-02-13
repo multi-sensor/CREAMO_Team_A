@@ -213,15 +213,21 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: DragTarget<DraggableImage>(
                     builder: (context, candidateData, rejectedData) {
                       return Container(
-                        width: 50,
-                        height: 50,
-                        decoration: ShapeDecoration(
-                          color: Colors.white,
-                          shape: CircleBorder(),
-                        ),
-                        child: Icon(
-                          Icons.delete,
-                          size: 25,
+                        width: 100,  // 쓰레기통의 드롭 수용 범위 너비
+                        height: 100,  // 쓰레기통의 드롭 수용 범위 높이
+                        child: Center(  // Container의 중앙에 배치하기 위해 Center 위젯 사용
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: CircleBorder(),
+                            ),
+                            child: Icon(
+                              Icons.delete_outline,
+                              size: 80,
+                            ),
+                          ),
                         ),
                       );
                     },
@@ -229,13 +235,27 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     onAccept: (data) {
                       setState(() {
                         droppedImages.remove(data);
-                        if(data.blockIndex == 1){
+                        if (data.blockIndex == 1) {
                           startFlag = 0;
                         }
                       });
+
+                      // 드롭된 이미지의 위치를 쓰레기통 이미지의 중심으로 조정
+                      // 쓰레기통 이미지의 중심 좌표
+                      final trashCanCenter = Offset(16 + 200 / 2, MediaQuery.of(context).size.height - 16 - 200 / 2);
+                      // 드롭된 이미지의 중심 좌표
+                      final imageCenter = Offset(data.position.dx + data.size.width / 2, data.position.dy + data.size.height / 2);
+                      // 쓰레기통과 드롭된 이미지의 중심 사이의 거리
+                      final distanceToTrashCan = (imageCenter - trashCanCenter).distance;
+                      // 일정 거리 내에 드롭된 경우 이미지 삭제
+                      if (distanceToTrashCan <= 100) { // 일정 거리 예시로 100으로 설정
+                        droppedImages.remove(data);
+                      }
                     },
                   ),
                 ),
+
+
               ],
             ),
           ),
