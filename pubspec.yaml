@@ -83,6 +83,9 @@ flutter:
     - images/puzzle/block1.png
     - images/puzzle/block2.png
     - images/puzzle/block3.png
+    - images/puzzle/block4.png
+    - images/puzzle/block5.png
+
     - images/background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
