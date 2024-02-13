@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart';
+import 'package:flutter/services.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -33,6 +34,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);//status 바 숨김 기능
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
@@ -189,6 +191,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
       2: {'left': Offset(16, 50), 'right': Offset(232, 50)},
       3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
       4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+
       5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
     };
 
