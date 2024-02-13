@@ -128,102 +128,102 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ),
             ),
           ),
-      Expanded(
-        flex: 8,
-        child: Stack(
-          children: <Widget>[
-            DragTarget<DraggableImage>(
-              key: _targetKey,
-              builder: (context, candidateData, rejectedData) {
-                return Container(
-                  color: Colors.green,
-                  child: Stack(
-                    children: droppedImages.map((draggableImage) {
-                      return Positioned(
-                        left: draggableImage.position.dx,
-                        top: draggableImage.position.dy,
-                        child: Draggable<DraggableImage>(
-                          data: draggableImage,
-                          feedback: Image.asset(
-                            draggableImage.path,
-                            width: draggableImage.size.width,
-                            height: draggableImage.size.height,
-                          ),
-                          child: Image.asset(
-                            draggableImage.path,
-                            width: draggableImage.size.width,
-                            height: draggableImage.size.height,
-                          ),
-                          onDragEnd: (details) {
-                            // 쓰레기통의 범위를 정의합니다.
-                            final trashCanRange = Offset(MediaQuery
-                                .of(context).size.width - 300, MediaQuery.of(context).size.height - 300);
+          Expanded(
+            flex: 8,
+            child: Stack(
+              children: <Widget>[
+                DragTarget<DraggableImage>(
+                  key: _targetKey,
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      color: Colors.green,
+                      child: Stack(
+                        children: droppedImages.map((draggableImage) {
+                          return Positioned(
+                            left: draggableImage.position.dx,
+                            top: draggableImage.position.dy,
+                            child: Draggable<DraggableImage>(
+                              data: draggableImage,
+                              feedback: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+                              child: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+                              onDragEnd: (details) {
+                                // 쓰레기통의 범위를 정의합니다.
+                                final trashCanRange = Offset(MediaQuery
+                                    .of(context).size.width - 300, MediaQuery.of(context).size.height - 300);
 
-                            // 쓰레기통의 범위 내에 블록이 있는지 확인합니다.
-                            if (details.offset.dx >= trashCanRange.dx &&
-                                details.offset.dy >= trashCanRange.dy) {
-                              // 블록이 쓰레기통의 범위 내에 있다면 블록을 제거합니다.
-                              setState(() {
-                                droppedImages.remove(draggableImage);
-                              });
-                            }
-                          },
-                          onDraggableCanceled: (_, __) {
-                            // 드래그 취소 시에 호출되는 함수
-                            setState(() {
-                              if (draggableImage.blockIndex == 1)
-                                startFlag = 0;
-                              droppedImages.remove(draggableImage);
-                            });
-                          },
+                                // 쓰레기통의 범위 내에 블록이 있는지 확인합니다.
+                                if (details.offset.dx >= trashCanRange.dx &&
+                                    details.offset.dy >= trashCanRange.dy) {
+                                  // 블록이 쓰레기통의 범위 내에 있다면 블록을 제거합니다.
+                                  setState(() {
+                                    droppedImages.remove(draggableImage);
+                                  });
+                                }
+                              },
+                              onDraggableCanceled: (_, __) {
+                                // 드래그 취소 시에 호출되는 함수
+                                setState(() {
+                                  if (draggableImage.blockIndex == 1)
+                                    startFlag = 0;
+                                  droppedImages.remove(draggableImage);
+                                });
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                  onWillAccept: (data) => true,
+                  onAccept: (data) {},
+                ),
+                // Reset button
+                Positioned(
+                  bottom: 16,
+                  left: 16,
+                  child: ElevatedButton(
+                    onPressed: _resetImages,
+                    child: Text('Reset'),
+                  ),
+                ),
+                // 쓰레기통
+                Positioned(
+                  right: 16,
+                  bottom: 16,
+                  child: DragTarget<DraggableImage>(
+                    builder: (context, candidateData, rejectedData) {
+                      return Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          //color: candidateData.isEmpty ? Colors.red : Colors.green,
+                        ),
+                        child: Icon(
+                          Icons.delete,
+                          size: 25,
                         ),
                       );
-                    }).toList(),
+                    },
+                    onWillAccept: (data) => true,
+                    onAccept: (data) {
+                      setState(() {
+                        droppedImages.remove(data);
+                      });
+                    },
                   ),
-                );
-              },
-              onWillAccept: (data) => true,
-              onAccept: (data) {},
+                ),
+              ],
             ),
-            // Reset button
-            Positioned(
-              bottom: 16,
-              left: 16,
-              child: ElevatedButton(
-                onPressed: _resetImages,
-                child: Text('Reset'),
-              ),
-            ),
-            // 쓰레기통
-            Positioned(
-              right: 16,
-              bottom: 16,
-              child: DragTarget<DraggableImage>(
-                builder: (context, candidateData, rejectedData) {
-                  return Container(
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(
-                      //color: candidateData.isEmpty ? Colors.red : Colors.green,
-                    ),
-                    child: Icon(
-                      Icons.delete,
-                      size: 25,
-                    ),
-                  );
-                },
-                onWillAccept: (data) => true,
-                onAccept: (data) {
-                  setState(() {
-                    droppedImages.remove(data);
-                  });
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    ],
+          ),
+        ],
       ),
     );
   }
