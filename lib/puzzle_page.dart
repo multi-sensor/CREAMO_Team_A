@@ -168,27 +168,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
                                   draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
                                 });
-                                // 쓰레기통의 범위를 정의합니다.
-                                final trashCanRange = Offset(MediaQuery
-                                    .of(context).size.width - 300, MediaQuery.of(context).size.height - 300);
+                              },
 
-                                // 쓰레기통의 범위 내에 블록이 있는지 확인합니다.
-                                if (details.offset.dx >= trashCanRange.dx &&
-                                    details.offset.dy >= trashCanRange.dy) {
-                                  // 블록이 쓰레기통의 범위 내에 있다면 블록을 제거합니다.
-                                  setState(() {
-                                    droppedImages.remove(draggableImage);
-                                  });
-                                }
-                              },
-                              onDraggableCanceled: (_, __) {
-                                // 드래그 취소 시에 호출되는 함수
-                                setState(() {
-                                  if (draggableImage.blockIndex == 1)
-                                    startFlag = 0;
-                                  droppedImages.remove(draggableImage);
-                                });
-                              },
                             ),
                           );
                         }).toList(),
@@ -248,6 +229,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     onAccept: (data) {
                       setState(() {
                         droppedImages.remove(data);
+                        if(data.blockIndex == 1){
+                          startFlag = 0;
+                        }
                       });
                     },
                   ),
@@ -306,12 +290,12 @@ class _PuzzlePageState extends State<PuzzlePage> {
       final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
       final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
-      if (distanceLeft < 30.0 && distanceLeft < minDistance) {
+      if (distanceLeft < 50.0 && distanceLeft < minDistance) {
         nearestSnapPoint = droppedImageLeftSnapPoint - snapPoints[newImage.blockIndex]!['right']!;
         minDistance = distanceLeft;
       }
 
-      if (distanceRight < 30.0 && distanceRight < minDistance) {
+      if (distanceRight < 50.0 && distanceRight < minDistance) {
         nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
         minDistance = distanceRight;
       }
