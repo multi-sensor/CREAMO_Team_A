@@ -85,6 +85,15 @@ flutter:
     - images/puzzle/block3.png
     - images/puzzle/block4.png
     - images/puzzle/block5.png
+    - images/puzzle/block6.png
+    - images/puzzle/block7.png
+    - images/puzzle/block8.png
+    - images/puzzle/block9.png
+    - images/puzzle/block10.png
+    - images/puzzle/block11.png
+    - images/puzzle/block12.png
+    - images/puzzle/block13.png
+
 
     - images/background.png
 
@@ -113,3 +122,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+images/puzzle/block5:
+  png:
