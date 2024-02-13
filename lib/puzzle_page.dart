@@ -164,36 +164,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 setState(() {
                                   final RenderBox box = context.findRenderObject() as RenderBox;
                                   final droppedPosition = box.globalToLocal(details.offset);
+                                  // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
                                   final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
-                                  draggableImage.position = snappedPosition;
-                                });
-
-
-                                // 쓰레기통의 위치를 설정합니다.
-                                final trashCanPosition = Offset(MediaQuery.of(context).size.width - 300, MediaQuery.of(context).size.height - 300);
-
-                                // 쓰레기통의 '근처'를 정의하는 원의 반지름을 설정합니다.
-                                final trashCanRadius = 10000.0;
-
-                                // 블록의 위치가 쓰레기통의 '근처'(여기서는 반지름 300px의 원) 내에 있는지 확인합니다.
-                                if ((details.offset - trashCanPosition).distance <= trashCanRadius) {
-                                  setState(() {
-                                    droppedImages.remove(draggableImage);
-                                  });
-                                }
-                              },
-
-                              onDraggableCanceled: (_, __) {
-                                // 드래그 취소 시에 호출되는 함수
-                                setState(() {
-                                  if (draggableImage.blockIndex == 1)
-                                    startFlag = 0;
-                                  droppedImages.remove(draggableImage);
+                                  draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
                                 });
                               },
-
-
-
 
                             ),
                           );
