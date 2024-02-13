@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart';
+import 'package:flutter/services.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -33,6 +34,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);//status 바 숨김 기능
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
@@ -50,14 +52,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
               color: Colors.red,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: startFlag == 0 ? 3 : 2,
+                itemCount: startFlag == 0 ? 5 : 4,
                 itemBuilder: (context, index) {
-                  final imageIdx = startFlag == 0 ? index + 1 : index + 2;
+                  final imageIdx = startFlag == 0 ? index + 1: index + 2;
                   final image = Image.asset(
                       'images/puzzle/block${imageIdx}.png');
                   return FutureBuilder<Size>(
@@ -121,7 +123,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
             ),
           ),
           Expanded(
-            flex: 7,
+            flex: 8,
             child: DragTarget<DraggableImage>(
               key: _targetKey,
               builder: (context, candidateData, rejectedData) {
@@ -188,34 +190,39 @@ class _PuzzlePageState extends State<PuzzlePage> {
       1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
       2: {'left': Offset(16, 50), 'right': Offset(232, 50)},
       3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
+      4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+
+      5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
     };
 
     Offset nearestSnapPoint = targetPosition;
     double minDistance = double.infinity;
 
-    // 새로운 블록의 왼쪽 스냅포인트
-    final newImageLeftSnapPoint = snapPoints[newImage.blockIndex]!['left']! +
-        targetPosition;
+    final newImageLeftSnapPoint = snapPoints[newImage.blockIndex]!['left']! + targetPosition;
+    final newImageRightSnapPoint = snapPoints[newImage.blockIndex]!['right']! + targetPosition;
 
-    for (var droppedImage in droppedImages) { // droppedImages는 모든 드랍된 이미지들의 리스트를 참조해야 합니다.
-      // 기존 드랍된 블록의 오른쪽 스냅포인트
-      final droppedImageRightSnapPoint = snapPoints[droppedImage
-          .blockIndex]!['right']! + droppedImage.position;
+    for (var droppedImage in droppedImages) {
+      final droppedImageLeftSnapPoint = snapPoints[droppedImage.blockIndex]!['left']! + droppedImage.position;
+      final droppedImageRightSnapPoint = snapPoints[droppedImage.blockIndex]!['right']! + droppedImage.position;
 
-      // 거리 계산
-      final distance = (newImageLeftSnapPoint - droppedImageRightSnapPoint)
-          .distance;
+      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
+      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
-      // 가장 가까운 스냅포인트 찾기
-      if (distance < 30.0 && distance < minDistance) {
-        nearestSnapPoint = droppedImageRightSnapPoint -
-            snapPoints[newImage.blockIndex]!['left']!;
-        minDistance = distance;
+      if (distanceLeft < 30.0 && distanceLeft < minDistance) {
+        nearestSnapPoint = droppedImageLeftSnapPoint - snapPoints[newImage.blockIndex]!['right']!;
+        minDistance = distanceLeft;
+      }
+
+      if (distanceRight < 30.0 && distanceRight < minDistance) {
+        nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
+        minDistance = distanceRight;
       }
     }
 
     return nearestSnapPoint;
   }
+
+
 }
 
 

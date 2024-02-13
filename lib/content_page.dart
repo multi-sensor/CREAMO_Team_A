@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'puzzle_page.dart'; // Importing PuzzlePage
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -25,6 +26,7 @@ class _ContentPageState extends State<ContentPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);//status 바 숨김 기능
     return Scaffold(
       body: Stack(
         children: [
@@ -90,4 +92,3 @@ class _ContentPageState extends State<ContentPage> {
     );
   }
 }
-
