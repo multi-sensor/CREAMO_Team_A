@@ -154,6 +154,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 width: draggableImage.size.width,
                                 height: draggableImage.size.height,
                               ),
+
                               onDragEnd: (details) {
                                 // 쓰레기통의 범위를 정의합니다.
                                 final trashCanRange = Offset(MediaQuery
@@ -201,10 +202,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: DragTarget<DraggableImage>(
                     builder: (context, candidateData, rejectedData) {
                       return Container(
-                        width: 100,
-                        height: 100,
-                        decoration: BoxDecoration(
-                          //color: candidateData.isEmpty ? Colors.red : Colors.green,
+                        width: 50,
+                        height: 50,
+                        decoration: ShapeDecoration(
+                          color: Colors.white,
+                          shape: CircleBorder(),
                         ),
                         child: Icon(
                           Icons.delete,
