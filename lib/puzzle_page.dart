@@ -45,7 +45,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.lightBlueAccent,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.bluetooth_searching),
@@ -61,7 +61,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
           Expanded(
             flex: 2,
             child: Container(
-              color: Colors.red,
+              color: Colors.white,
               child: Scrollbar(
                 controller: _scrollController,
                 child: ListView.builder(
@@ -141,7 +141,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   key: _targetKey,
                   builder: (context, candidateData, rejectedData) {
                     return Container(
-                      color: Colors.green,
+                      color: Colors.black12,
                       child: Stack(
                         children: droppedImages.map((draggableImage) {
                           return Positioned(
