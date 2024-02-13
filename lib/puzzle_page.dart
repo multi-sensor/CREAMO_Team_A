@@ -194,7 +194,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 // Reset button
                 Positioned(
                   bottom: 16,
-                  left: 16,
+                  right: 120,
                   child: ElevatedButton(
                     onPressed: _resetImages,
                     child: Text('Reset'),
@@ -202,7 +202,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 // 쓰레기통
                 Positioned(
-                  right: 16,
+                  left: 16,
                   bottom: 16,
                   child: DragTarget<DraggableImage>(
                     builder: (context, candidateData, rejectedData) {
