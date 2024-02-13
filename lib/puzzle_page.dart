@@ -193,31 +193,31 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 // Reset button
                 Positioned(
-                  bottom: 16,
-                  right: 120,
+                  bottom: 40,
+                  right: 125,
                   child: ElevatedButton(
                     onPressed: _resetImages,
                     child: Text('Reset'),
                   ),
                 ),
                 //플레이버튼
-            Positioned(
-              right: 50,
-              bottom: 55,
-              child: FloatingActionButton(
-                onPressed: () {
-                  // 플레이 버튼을 눌렀을 때 수행할 동작을 여기에 추가합니다.
-                },
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                hoverElevation: 0.0,
-                highlightElevation: 0.0,
-                child: Icon(
-                  Icons.play_circle_fill,
-                  size: 100,
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: InkWell(
+                    onTap: () {
+                      // 플레이 버튼을 눌렀을 때 수행할 동작을 여기에 추가합니다.
+                    },
+                    hoverColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    child: Icon(
+                      Icons.play_circle_fill,
+                      size: 100,
+                    ),
+                  ),
                 ),
-              ),
-            ),
+
                 // 쓰레기통
                 Positioned(
                   left: 16,
