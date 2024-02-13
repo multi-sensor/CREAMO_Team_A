@@ -173,7 +173,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 Positioned(
                   bottom: 16,
-                  right: 16,
+                  left: 16,
                   child: ElevatedButton(
                     onPressed: _resetImages,
                     child: Text('Reset'),
