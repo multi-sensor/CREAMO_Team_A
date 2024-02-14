@@ -281,7 +281,54 @@ class _PuzzlePageState extends State<PuzzlePage> {
   }
 
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
-    final snapPoints = {
+    Offset nearestSnapPoint = targetPosition;
+    double minDistance = double.infinity;
+
+    final newImageLeftSnapPoint = newImage.leftSnapPoint + targetPosition;
+    final newImageRightSnapPoint = newImage.rightSnapPoint + targetPosition;
+
+    for (var droppedImage in droppedImages) {
+      final droppedImageLeftSnapPoint = droppedImage.leftSnapPoint + droppedImage.position;
+      final droppedImageRightSnapPoint = droppedImage.rightSnapPoint + droppedImage.position;
+
+      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
+      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
+
+      if (distanceLeft < 50.0 && distanceLeft < minDistance) {
+        nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
+        minDistance = distanceLeft;
+      }
+
+      if (distanceRight < 50.0 && distanceRight < minDistance) {
+        nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
+        minDistance = distanceRight;
+      }
+    }
+
+    return nearestSnapPoint;
+  }
+
+}
+class DraggableImage {
+  final String name;
+  final String path;
+  Offset position;
+  Size size;
+  int blockIndex; // 블록의 인덱스 추가
+  Offset leftSnapPoint; // 왼쪽 스냅 포인트 추가
+  Offset rightSnapPoint; // 오른쪽 스냅 포인트 추가
+
+  DraggableImage({
+    required this.name,
+    required this.path,
+    required this.position,
+    required this.size,
+    required this.blockIndex,
+  }) : leftSnapPoint = getSnapPoints(blockIndex)['left']!,
+        rightSnapPoint = getSnapPoints(blockIndex)['right']!;
+
+  static Map<String, Offset> getSnapPoints(int index) {
+    return {
       1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
       2: {'left': Offset(16, 50), 'right': Offset(284, 50)},
       3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
@@ -295,49 +342,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
       11: {'left': Offset(16, 50), 'right': Offset(132, 50)},
       12: {'left': Offset(16, 50), 'right': Offset(132, 50)},
       13: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-    };
-
-    Offset nearestSnapPoint = targetPosition;
-    double minDistance = double.infinity;
-
-    final newImageLeftSnapPoint = snapPoints[newImage.blockIndex]!['left']! + targetPosition;
-    final newImageRightSnapPoint = snapPoints[newImage.blockIndex]!['right']! + targetPosition;
-
-    for (var droppedImage in droppedImages) {
-      final droppedImageLeftSnapPoint = snapPoints[droppedImage.blockIndex]!['left']! + droppedImage.position;
-      final droppedImageRightSnapPoint = snapPoints[droppedImage.blockIndex]!['right']! + droppedImage.position;
-
-      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
-      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
-
-      if (distanceLeft < 50.0 && distanceLeft < minDistance) {
-        nearestSnapPoint = droppedImageLeftSnapPoint - snapPoints[newImage.blockIndex]!['right']!;
-        minDistance = distanceLeft;
-      }
-
-      if (distanceRight < 50.0 && distanceRight < minDistance) {
-        nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
-        minDistance = distanceRight;
-      }
-    }
-
-    return nearestSnapPoint;
+    }[index]!;
   }
 }
-
-class DraggableImage {
-  final String name;
-  final String path;
-  Offset position;
-  Size size;
-  int blockIndex; // 블록의 인덱스 추가
-
-  DraggableImage({
-    required this.name,
-    required this.path,
-    required this.position,
-    required this.size,
-    required this.blockIndex,
-  });
-}
-
