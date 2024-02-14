@@ -1,4 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'bluetooth_helper.dart';
+import 'package:flutter/services.dart';
 
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -10,79 +13,330 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
+  int startFlag = 0; // 시작 플래그 추가
+
+  Future<Size> _getImageSize(Image image) async {
+    final Completer<Size> completer = Completer<Size>();
+    image.image.resolve(const ImageConfiguration()).addListener(
+      ImageStreamListener(
+            (ImageInfo info, bool _) =>
+            completer.complete(Size(
+              info.image.width.toDouble(),
+              info.image.height.toDouble(),
+            )),
+      ),
+    );
+    return completer.future;
+  }
+
+  void _resetImages() {
+    setState(() {
+      droppedImages.clear();
+      startFlag = 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    var screenWidth = MediaQuery.of(context).size.width;
-
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.lightBlueAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.bluetooth_searching),
+            tooltip: 'Connect to Bluetooth',
+            onPressed: () {
+              BluetoothHelper.startBluetoothScan(context);
+            },
+          ),
+        ],
       ),
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 3,
+            flex: 2,
             child: Container(
-              color: Colors.red,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return Draggable<DraggableImage>(
-                    data: DraggableImage(
-                        name: 'images/puzzle/puzzle${index + 1}',
-                        path: 'images/puzzle/puzzle${index + 1}.png'),
-                    feedback: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 50, height: 50),
-                    child: Image.asset('images/puzzle/puzzle${index + 1}.png',
-                        width: 100, height: 100),
-                  );
-                },
+              color: Colors.white,
+              child: Scrollbar(
+                controller: _scrollController,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: startFlag == 0 ? 13 : 12,
+                  itemBuilder: (context, index) {
+                    final imageIdx = startFlag == 0 ? index + 1 : index + 2;
+                    final image = Image.asset('images/puzzle/block${imageIdx}.png');
+                    return FutureBuilder<Size>(
+                      future: _getImageSize(image),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          return Draggable<DraggableImage>(
+                            data: DraggableImage(
+                              name: 'images/puzzle/block${imageIdx}',
+                              path: 'images/puzzle/block${imageIdx}.png',
+                              position: Offset.zero,
+                              size: snapshot.data!,
+                              blockIndex: imageIdx,
+                            ),
+                            feedback: image,
+                            child: image,
+                            onDragEnd: (details) {
+                              final RenderBox targetBox =
+                              _targetKey.currentContext!
+                                  .findRenderObject() as RenderBox;
+                              final targetPosition =
+                              targetBox.globalToLocal(details.offset);
+                              if (imageIdx == 1) {
+                                setState(() {
+                                  startFlag = 1;
+                                });
+                              }
+
+                              setState(() {
+                                final newImage = DraggableImage(
+                                  name: 'images/puzzle/block${imageIdx}',
+                                  path: 'images/puzzle/block${imageIdx}.png',
+                                  position: targetPosition,
+                                  size: snapshot.data!,
+                                  blockIndex: imageIdx,
+                                );
+
+                                // 현재 드랍한 블록과 가장 근접한 기존 블록 찾기
+                                DraggableImage? nearestImage =
+                                getNearestImage(newImage);
+
+                                // 근접한 블록이 있다면 스냅 포인트에 따라 위치 조절
+                                if (nearestImage != null) {
+                                  newImage.position = getSnappedPosition(
+                                    targetPosition,
+                                    nearestImage,
+                                  );
+                                }
+
+                                droppedImages.add(newImage);
+                              });
+                            },
+                          );
+                        } else {
+                          return CircularProgressIndicator();
+                        }
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ),
-          Expanded(
-            flex: 7,
-            child: DragTarget<DraggableImage>(
-              builder: (context, candidateData, rejectedData) {
-                return Container(
-                  color: Colors.green,
-                  child: droppedImages.isNotEmpty
-                      ? Stack(
-                    children: droppedImages.asMap().entries.map((entry) {
-                      int index = entry.key;
-                      DraggableImage draggableImage = entry.value;
 
-                      return Positioned(
-                        left: index * 80.0,
-                        child: Image.asset(draggableImage.path,
-                            width: 100, height: 100),
+          Expanded(
+            flex: 8,
+            child: Stack(
+              children: <Widget>[
+                DragTarget<DraggableImage>(
+                  key: _targetKey,
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      color: Colors.black12,
+                      child: Stack(
+                        children: droppedImages.map((draggableImage) {
+                          return Positioned(
+                            left: draggableImage.position.dx,
+                            top: draggableImage.position.dy,
+                            child: Draggable<DraggableImage>(
+                              data: draggableImage,
+                              feedback: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+                              child: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+
+                              onDragEnd: (details) {
+                                setState(() {
+                                  final RenderBox box = context.findRenderObject() as RenderBox;
+                                  final droppedPosition = box.globalToLocal(details.offset);
+                                  // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
+                                  final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
+                                  draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
+                                });
+                              },
+
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                  onWillAccept: (data) => true,
+                  onAccept: (data) {},
+                ),
+                // Reset button
+                Positioned(
+                  bottom: 40,
+                  right: 125,
+                  child: ElevatedButton(
+                    onPressed: _resetImages,
+                    child: Text('Reset'),
+                  ),
+                ),
+                //플레이버튼
+                Positioned(
+                  right: 10,
+                  bottom: 10,
+                  child: InkWell(
+                    onTap: () {
+                      // 플레이 버튼을 눌렀을 때 수행할 동작을 여기에 추가합니다.
+                    },
+                    hoverColor: Colors.transparent,
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    child: Icon(
+                      Icons.play_circle_fill,
+                      size: 100,
+                    ),
+                  ),
+                ),
+
+                // 쓰레기통
+                Positioned(
+                  left: 16,
+                  bottom: 16,
+                  child: DragTarget<DraggableImage>(
+                    builder: (context, candidateData, rejectedData) {
+                      return Container(
+                        width: 100,  // 쓰레기통의 드롭 수용 범위 너비
+                        height: 100,  // 쓰레기통의 드롭 수용 범위 높이
+                        child: Center(  // Container의 중앙에 배치하기 위해 Center 위젯 사용
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: ShapeDecoration(
+                              color: Colors.white,
+                              shape: CircleBorder(),
+                            ),
+                            child: Icon(
+                              Icons.delete_outline,
+                              size: 80,
+                            ),
+                          ),
+                        ),
                       );
-                    }).toList(),
-                  )
-                      : const Center(child: Text('Drop the image here')),
-                );
-              },
-              onWillAccept: (data) => true,
-              onAccept: (data) {
-                setState(() {
-                  droppedImages = List.from(droppedImages)..add(data);
-                });
-              },
+                    },
+                    onWillAccept: (data) => true,
+                    onAccept: (data) {
+                      setState(() {
+                        droppedImages.remove(data);
+                        if (data.blockIndex == 1) {
+                          startFlag = 0;
+                        }
+                      });
+
+                      // 드롭된 이미지의 위치를 쓰레기통 이미지의 중심으로 조정
+                      // 쓰레기통 이미지의 중심 좌표
+                      final trashCanCenter = Offset(16 + 200 / 2, MediaQuery.of(context).size.height - 16 - 200 / 2);
+                      // 드롭된 이미지의 중심 좌표
+                      final imageCenter = Offset(data.position.dx + data.size.width / 2, data.position.dy + data.size.height / 2);
+                      // 쓰레기통과 드롭된 이미지의 중심 사이의 거리
+                      final distanceToTrashCan = (imageCenter - trashCanCenter).distance;
+                      // 일정 거리 내에 드롭된 경우 이미지 삭제
+                      if (distanceToTrashCan <= 100) { // 일정 거리 예시로 100으로 설정
+                        droppedImages.remove(data);
+                      }
+                    },
+                  ),
+                ),
+
+
+              ],
             ),
           ),
         ],
       ),
     );
   }
+
+  DraggableImage? getNearestImage(DraggableImage newImage) {
+    DraggableImage? nearestImage;
+
+    double minDistance = double.infinity;
+
+    for (var droppedImage in droppedImages) {
+      final distance = (newImage.position - droppedImage.position).distance;
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestImage = droppedImage;
+      }
+    }
+
+    return nearestImage;
+  }
+
+  Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
+    final snapPoints = {
+      1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
+      2: {'left': Offset(16, 50), 'right': Offset(284, 50)},
+      3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
+      4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      6: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      7: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      8: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      9: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      10: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      11: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      12: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      13: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+    };
+
+    Offset nearestSnapPoint = targetPosition;
+    double minDistance = double.infinity;
+
+    final newImageLeftSnapPoint = snapPoints[newImage.blockIndex]!['left']! + targetPosition;
+    final newImageRightSnapPoint = snapPoints[newImage.blockIndex]!['right']! + targetPosition;
+
+    for (var droppedImage in droppedImages) {
+      final droppedImageLeftSnapPoint = snapPoints[droppedImage.blockIndex]!['left']! + droppedImage.position;
+      final droppedImageRightSnapPoint = snapPoints[droppedImage.blockIndex]!['right']! + droppedImage.position;
+
+      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
+      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
+
+      if (distanceLeft < 50.0 && distanceLeft < minDistance) {
+        nearestSnapPoint = droppedImageLeftSnapPoint - snapPoints[newImage.blockIndex]!['right']!;
+        minDistance = distanceLeft;
+      }
+
+      if (distanceRight < 50.0 && distanceRight < minDistance) {
+        nearestSnapPoint = droppedImageRightSnapPoint - snapPoints[newImage.blockIndex]!['left']!;
+        minDistance = distanceRight;
+      }
+    }
+
+    return nearestSnapPoint;
+  }
 }
-//굿
+
 class DraggableImage {
   final String name;
   final String path;
+  Offset position;
+  Size size;
+  int blockIndex; // 블록의 인덱스 추가
 
-  DraggableImage({required this.name, required this.path});
+  DraggableImage({
+    required this.name,
+    required this.path,
+    required this.position,
+    required this.size,
+    required this.blockIndex,
+  });
 }
