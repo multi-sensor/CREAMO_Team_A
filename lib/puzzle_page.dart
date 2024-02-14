@@ -340,3 +340,4 @@ class DraggableImage {
     required this.blockIndex,
   });
 }
+
