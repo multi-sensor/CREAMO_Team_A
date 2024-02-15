@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'bluetooth_helper.dart';
+import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
 
+// 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
 
@@ -16,8 +17,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
-  int startFlag = 0; // 시작 플래그 추가
+  int startFlag = 0; // 시작 플래그
 
+  // 이미지 크기를 비동기적으로 가져오는 함수
   Future<Size> _getImageSize(Image image) async {
     final Completer<Size> completer = Completer<Size>();
     image.image.resolve(const ImageConfiguration()).addListener(
@@ -32,6 +34,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     return completer.future;
   }
 
+  // 이미지들을 초기화하는 함수
   void _resetImages() {
     setState(() {
       droppedImages.clear();
@@ -39,9 +42,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
     });
   }
 
+  // 위젯 빌드 함수
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Puzzle Page'),
@@ -51,7 +56,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
             icon: const Icon(Icons.bluetooth_searching),
             tooltip: 'Connect to Bluetooth',
             onPressed: () {
-              BluetoothHelper.startBluetoothScan(context);
+              BluetoothHelper.startBluetoothScan(context); // 블루투스 스캔 시작
             },
           ),
         ],
@@ -319,8 +324,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     },
                   ),
                 ),
-
-
               ],
             ),
           ),
@@ -329,6 +332,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     );
   }
 
+  // 가장 가까운 이미지를 찾는 함수
   DraggableImage? getNearestImage(DraggableImage newImage) {
     DraggableImage? nearestImage;
 
@@ -345,6 +349,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
     return nearestImage;
   }
 
+  // 스냅된 위치를 반환하는 함수
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
     Offset nearestSnapPoint = targetPosition;
     double minDistance = double.infinity;
@@ -374,6 +379,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
   }
 
 }
+
+// 드래그 가능한 이미지 클래스
 class DraggableImage {
   final String name;
   final String path;
@@ -383,6 +390,7 @@ class DraggableImage {
   Offset leftSnapPoint; // 왼쪽 스냅 포인트 추가
   Offset rightSnapPoint; // 오른쪽 스냅 포인트 추가
 
+  // 생성자
   DraggableImage({
     required this.name,
     required this.path,
@@ -392,6 +400,7 @@ class DraggableImage {
   }) : leftSnapPoint = getSnapPoints(blockIndex)['left']!,
         rightSnapPoint = getSnapPoints(blockIndex)['right']!;
 
+  // 블록의 스냅 포인트를 반환하는 함수
   static Map<String, Offset> getSnapPoints(int index) {
     return {
       1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
