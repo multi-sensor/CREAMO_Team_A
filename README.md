@@ -11,6 +11,15 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 <hr/>
 0201~ , KIST_Creamo
 <br/><br/>
+<h1>🙂 Members </h1>
+<hr/>
+
+|Members|
+|------|
+|Seungyeon JI|
+|Heeyun HEO|
+|Jiwoo BYUN|
+
 <h1>:gear: Environment Setting</h1>
 <hr/>
 
