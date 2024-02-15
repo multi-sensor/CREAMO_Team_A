@@ -35,17 +35,17 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 
 `main.dart`
 
-1. The file that runs the application. 
+* The file that runs the application. 
 
 
 `start_page.dart`
 
-1. This is the initial screen where Addi AI coding is executed.
+* This is the initial screen where Addi AI coding is executed.
 
 
 `content_page.dart`
 
-1. You can check the problem table of contents and select a problem from here.
+* You can check the problem table of contents and select a problem from here.
 
 
 `puzzle_page.dart`
