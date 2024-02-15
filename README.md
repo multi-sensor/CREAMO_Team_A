@@ -9,7 +9,7 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 <br/><br/>
 <h1>:calendar: When? </h1>
 <hr/>
-0201~ , KIST_Creamo
+240201~ , KIST_Creamo
 <br/><br/>
 <h1>🙂 Members </h1>
 <hr/>
