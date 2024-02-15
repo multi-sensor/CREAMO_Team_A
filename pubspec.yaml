@@ -33,7 +33,6 @@ dependencies:
   carousel_slider: ^4.2.1
   smooth_page_indicator: ^1.0.0+2
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -83,6 +82,18 @@ flutter:
     - images/puzzle/block1.png
     - images/puzzle/block2.png
     - images/puzzle/block3.png
+    - images/puzzle/block4.png
+    - images/puzzle/block5.png
+    - images/puzzle/block6.png
+    - images/puzzle/block7.png
+    - images/puzzle/block8.png
+    - images/puzzle/block9.png
+    - images/puzzle/block10.png
+    - images/puzzle/block11.png
+    - images/puzzle/block12.png
+    - images/puzzle/block13.png
+
+
     - images/background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -110,3 +121,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+images/puzzle/block5:
+  png:
