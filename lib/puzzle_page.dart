@@ -188,14 +188,76 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     child: Text('Reset'),
                   ),
                 ),
-                //플레이버튼
+//플레이버튼
                 Positioned(
                   right: 10,
                   bottom: 10,
                   child: InkWell(
+
                     onTap: () {
-                      // 플레이 버튼을 눌렀을 때 수행할 동작을 여기에 추가합니다.
+                      // '시작' 블록을 찾습니다.
+                      DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
+                          orElse: () => DraggableImage(
+                            name: 'default',
+                            path: 'default',
+                            position: Offset.zero,
+                            size: Size.zero,
+                            blockIndex: 0,
+                          ));
+
+                      // '시작' 블록부터 시작하여 연결된 이미지들의 파일명을 순서대로 출력합니다.
+                      List<String> connectedImages = [startImage.path];
+                      DraggableImage? currentImage = startImage;
+
+                      while (currentImage != null) {
+                        DraggableImage? nextImage;
+                        double minDistance = double.infinity;
+                        for (var image in droppedImages) {
+                          if (image == currentImage) continue;
+                          if ((image.leftSnapPoint + image.position -
+                              currentImage.rightSnapPoint - currentImage.position)
+                              .distance <
+                              minDistance) {
+                            nextImage = image;
+                            minDistance = (image.leftSnapPoint + image.position -
+                                currentImage.rightSnapPoint - currentImage.position)
+                                .distance;
+                          }
+                        }
+                        if (nextImage != null && minDistance < 50.0) {
+                          connectedImages.add(nextImage.path);
+                          currentImage = nextImage;
+                        } else {
+                          currentImage = null;
+                        }
+                      }
+
+                      // 팝업을 띄웁니다.
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('연결된 이미지 목록'),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: connectedImages.map((path) => Text(path)).toList(),
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('확인'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
+
+
+
                     hoverColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
@@ -205,6 +267,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     ),
                   ),
                 ),
+
 
                 // 쓰레기통
                 Positioned(
