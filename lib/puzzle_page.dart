@@ -209,7 +209,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       List<String> connectedImages = [startImage.path];
                       DraggableImage? currentImage = startImage;
 
-                      while (currentImage != null) {
+                      while (currentImage != null && currentImage.blockIndex != 3) {
                         DraggableImage? nextImage;
                         double minDistance = double.infinity;
                         for (var image in droppedImages) {
@@ -232,28 +232,30 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         }
                       }
 
-                      // 팝업을 띄웁니다.
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('연결된 이미지 목록'),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: connectedImages.map((path) => Text(path)).toList(),
+                      if (currentImage != null && currentImage.blockIndex == 3) {
+                        // 팝업을 띄웁니다.
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('연결된 이미지 목록'),
+                              content: SingleChildScrollView(
+                                child: ListBody(
+                                  children: connectedImages.map((path) => Text(path)).toList(),
+                                ),
                               ),
-                            ),
-                            actions: <Widget>[
-                              TextButton(
-                                child: Text('확인'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                              actions: <Widget>[
+                                TextButton(
+                                  child: Text('확인'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      }
                     },
 
 
