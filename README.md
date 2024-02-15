@@ -1,4 +1,4 @@
-<h1>Addi AI Coding </h1>
+<h1>ADDI AI Coding </h1>
 <hr/>
 Block coding application utilizing ADDI blocks
 <br/><br/>
