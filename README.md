@@ -1,16 +1,22 @@
-# Creamo Team A(SWU)
-//hi
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<h1>Addi AI Coding </h1>
+<hr/>
+앱 설명
+<br/><br/>
+<h1> 📱 Project Introduction </h1>
+<hr/>
+프로젝트 설명
+<br/><br/>
+<h1>:calendar: When? </h1>
+<hr/>
+0201~, KIST_Creamo
+<br/><br/>
+<h1>:gear: Environment Setting</h1>
+<hr/>
+<ul>
+  <li><b>버전1</b></li>
+  <li><b>IDE: </b> 버전2</li>
+</ul>
+<br/><br/>
+<h1> ➕ Details </h1>
+<hr/>
+추가설명
