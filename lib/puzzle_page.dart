@@ -353,30 +353,45 @@ class _PuzzlePageState extends State<PuzzlePage> {
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
     Offset nearestSnapPoint = targetPosition;
     double minDistance = double.infinity;
+    bool useInnerSnapPoint = false;
 
     final newImageLeftSnapPoint = newImage.leftSnapPoint + targetPosition;
     final newImageRightSnapPoint = newImage.rightSnapPoint + targetPosition;
+    final newImageRightInnerSnapPoint = newImage.rightInnerSnapPoint + targetPosition;
 
     for (var droppedImage in droppedImages) {
       final droppedImageLeftSnapPoint = droppedImage.leftSnapPoint + droppedImage.position;
       final droppedImageRightSnapPoint = droppedImage.rightSnapPoint + droppedImage.position;
+      final droppedImageRightInnerSnapPoint = droppedImage.rightInnerSnapPoint + droppedImage.position;
 
-      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
-      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
+      final distanceRightInner = (newImageRightInnerSnapPoint - droppedImageRightInnerSnapPoint).distance;
 
-      if (distanceLeft < 50.0 && distanceLeft < minDistance) {
-        nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
-        minDistance = distanceLeft;
+      if (distanceRightInner < 30.0 && distanceRightInner < minDistance) {
+        nearestSnapPoint = droppedImageRightInnerSnapPoint - newImage.rightInnerSnapPoint;
+        minDistance = distanceRightInner;
+        useInnerSnapPoint = true;
       }
 
-      if (distanceRight < 50.0 && distanceRight < minDistance) {
-        nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
-        minDistance = distanceRight;
+      if (!useInnerSnapPoint) {
+        final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
+        final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
+
+        if (distanceLeft < 30.0 && distanceLeft < minDistance) {
+          nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
+          minDistance = distanceLeft;
+        }
+
+        if (distanceRight < 30.0 && distanceRight < minDistance) {
+          nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
+          minDistance = distanceRight;
+        }
       }
     }
 
     return nearestSnapPoint;
   }
+
+
 
 }
 
@@ -389,6 +404,8 @@ class DraggableImage {
   int blockIndex; // 블록의 인덱스 추가
   Offset leftSnapPoint; // 왼쪽 스냅 포인트 추가
   Offset rightSnapPoint; // 오른쪽 스냅 포인트 추가
+  Offset leftInnerSnapPoint; // 내부 왼쪽 스냅 포인트 추가
+  Offset rightInnerSnapPoint; // 내부 오른쪽 스냅 포인트 추가
 
   // 생성자
   DraggableImage({
@@ -398,24 +415,27 @@ class DraggableImage {
     required this.size,
     required this.blockIndex,
   }) : leftSnapPoint = getSnapPoints(blockIndex)['left']!,
-        rightSnapPoint = getSnapPoints(blockIndex)['right']!;
+        rightSnapPoint = getSnapPoints(blockIndex)['right']!,
+        leftInnerSnapPoint = getSnapPoints(blockIndex)['leftInner']!,
+        rightInnerSnapPoint = getSnapPoints(blockIndex)['rightInner']!;
+
 
   // 블록의 스냅 포인트를 반환하는 함수
   static Map<String, Offset> getSnapPoints(int index) {
     return {
-      1: {'left': Offset(16, 50), 'right': Offset(116, 50)},
-      2: {'left': Offset(16, 50), 'right': Offset(284, 50)},
-      3: {'left': Offset(16, 50), 'right': Offset(116, 50)},
-      4: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      5: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      6: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      7: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      8: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      9: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      10: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      11: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      12: {'left': Offset(16, 50), 'right': Offset(132, 50)},
-      13: {'left': Offset(16, 50), 'right': Offset(132, 50)},
+      1: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
+      2: {'left': Offset(16, 50), 'right': Offset(284, 50), 'leftInner': Offset(142, 50), 'rightInner': Offset(196, 50),},
+      3: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
+      4: {'left': Offset(16, 50), 'right': Offset(132, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      5: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      6: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      7: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      8: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      9: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      10: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      11: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      12: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      13: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
     }[index]!;
   }
 }
