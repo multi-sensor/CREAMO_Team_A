@@ -332,10 +332,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
     );
   }
 
-  // 가장 가까운 이미지를 찾는 함수
+// 가장 가까운 이미지를 찾는 함수
   DraggableImage? getNearestImage(DraggableImage newImage) {
     DraggableImage? nearestImage;
-
     double minDistance = double.infinity;
 
     for (var droppedImage in droppedImages) {
@@ -346,8 +345,23 @@ class _PuzzlePageState extends State<PuzzlePage> {
       }
     }
 
+    if (nearestImage != null && minDistance < 50.0) {  // 연결 거리 제한 추가
+      newImage.connectedImages.add(nearestImage);  // 이 이미지와 연결된 이미지 추가
+      nearestImage.connectedImages.add(newImage);  // 상호 참조
+    }
+
     return nearestImage;
   }
+
+
+  onDragUpdate(DraggableImage image, Offset newOffset) {
+    Offset delta = newOffset - image.position;  // 이동한 거리 계산
+
+    BlockGroup group = new BlockGroup();
+    group.addImage(image);
+    group.moveBy(delta);
+  }
+
 
   // 스냅된 위치를 반환하는 함수
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
@@ -380,6 +394,29 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
 }
 
+class BlockGroup {
+  List<DraggableImage> images = [];
+
+  void addImage(DraggableImage image) {
+    if (!images.contains(image)) {
+      images.add(image);
+      print('Image ${image.name} added to the group');
+      for (DraggableImage connectedImage in image.connectedImages) {
+        print('Connected image: ${connectedImage.name}');
+        addImage(connectedImage);
+      }
+    }
+  }
+
+
+  void moveBy(Offset delta) {
+    for (DraggableImage image in images) {
+      image.position += delta;
+    }
+  }
+}
+
+
 // 드래그 가능한 이미지 클래스
 class DraggableImage {
   final String name;
@@ -389,6 +426,7 @@ class DraggableImage {
   int blockIndex; // 블록의 인덱스 추가
   Offset leftSnapPoint; // 왼쪽 스냅 포인트 추가
   Offset rightSnapPoint; // 오른쪽 스냅 포인트 추가
+  List<DraggableImage> connectedImages = [];  // 연결된 이미지를 저장하는 리스트
 
   // 생성자
   DraggableImage({
