@@ -217,18 +217,38 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       while (currentImage != null && currentImage.blockIndex != 3) {
                         DraggableImage? nextImage;
                         double minDistance = double.infinity;
-                        for (var image in droppedImages) {
-                          if (image == currentImage) continue;
-                          if ((image.leftSnapPoint + image.position -
-                              currentImage.rightSnapPoint - currentImage.position)
-                              .distance <
-                              minDistance) {
-                            nextImage = image;
-                            minDistance = (image.leftSnapPoint + image.position -
-                                currentImage.rightSnapPoint - currentImage.position)
+
+                        // 블록2의 내부 스냅 포인트에 연결된 이미지를 찾습니다.
+                        if (currentImage.blockIndex == 2) {
+                          for (var image in droppedImages) {
+                            if (image == currentImage) continue;
+                            double distance = (image.leftSnapPoint + image.position -
+                                currentImage.rightInnerSnapPoint - currentImage.position)
                                 .distance;
+                            if (distance < minDistance) {
+                              nextImage = image;
+                              minDistance = distance;
+                            }
+                          }
+                          // 내부 스냅 포인트에 연결된 이미지가 있으면 추가하고 currentImage를 유지합니다.
+                          if (nextImage != null && minDistance < 50.0) {
+                            connectedImages.add(nextImage.path);
+                            continue;
                           }
                         }
+
+                        // 외부 스냅 포인트에 연결된 이미지를 찾습니다.
+                        for (var image in droppedImages) {
+                          if (image == currentImage) continue;
+                          double distance = (image.leftSnapPoint + image.position -
+                              currentImage.rightSnapPoint - currentImage.position)
+                              .distance;
+                          if (distance < minDistance) {
+                            nextImage = image;
+                            minDistance = distance;
+                          }
+                        }
+
                         if (nextImage != null && minDistance < 50.0) {
                           connectedImages.add(nextImage.path);
                           currentImage = nextImage;
@@ -262,6 +282,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         );
                       }
                     },
+
+
+
 
 
 
@@ -424,7 +447,7 @@ class DraggableImage {
   static Map<String, Offset> getSnapPoints(int index) {
     return {
       1: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
-      2: {'left': Offset(16, 50), 'right': Offset(284, 50), 'leftInner': Offset(142, 50), 'rightInner': Offset(196, 50),},
+      2: {'left': Offset(16, 50), 'right': Offset(284, 50), 'leftInner': Offset(40, 74), 'rightInner': Offset(172, 74),},
       3: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
       4: {'left': Offset(16, 50), 'right': Offset(132, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
       5: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
