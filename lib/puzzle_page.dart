@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
@@ -15,6 +16,7 @@ class PuzzlePage extends StatefulWidget {
 
 class _PuzzlePageState extends State<PuzzlePage> {
   final ScrollController _scrollController = ScrollController();
+  final itemScrollController = ItemScrollController();
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
   int startFlag = 0; // 시작 플래그
@@ -64,15 +66,72 @@ class _PuzzlePageState extends State<PuzzlePage> {
       body: Column(
         children: <Widget>[
           Expanded(
-            flex: 2,
+            flex: 4,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () => itemScrollController.scrollTo(
+                    index: 0,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  ),
+                  child: Text('1'),
+                ),
+                ElevatedButton(
+                  onPressed: () => itemScrollController.scrollTo(
+                    index: 3,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  ),
+                  child: Text('2'),
+                ),
+                ElevatedButton(
+                  onPressed: () => itemScrollController.scrollTo(
+                    index: 5,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  ),
+                  child: Text('3'),
+                ),
+                ElevatedButton(
+                  onPressed: () => itemScrollController.scrollTo(
+                    index: 10,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  ),
+                  child: Text('4'),
+                ),
+                ElevatedButton(
+                  onPressed: () => itemScrollController.scrollTo(
+                    index: 22,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  ),
+                  child: Text('5'),
+                ),
+                ElevatedButton(
+                  onPressed: () => itemScrollController.scrollTo(
+                    index: 37,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.ease,
+                  ),
+                  child: Text('6'),
+                ),
+
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 16,
             child: Container(
               color: Colors.white,
               child: Scrollbar(
                 controller: _scrollController,
-                child: ListView.builder(
-                  controller: _scrollController,
+                child: ScrollablePositionedList.builder(
+                  itemScrollController: itemScrollController,
                   scrollDirection: Axis.horizontal,
-                  itemCount: startFlag == 0 ? 13 : 12,
+                  itemCount: startFlag == 0 ? 38 : 37,
                   itemBuilder: (context, index) {
                     final imageIdx = startFlag == 0 ? index + 1 : index + 2;
                     final image = Image.asset('images/puzzle/block${imageIdx}.png');
@@ -139,7 +198,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
           ),
 
           Expanded(
-            flex: 8,
+            flex: 80,
             child: Stack(
               children: <Widget>[
                 DragTarget<DraggableImage>(
@@ -215,29 +274,28 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       DraggableImage? currentImage = startImage;
 
                       while (currentImage != null && currentImage.blockIndex != 3) {
-                        DraggableImage? nextImage;
-                        double minDistance = double.infinity;
-
                         // 블록2의 내부 스냅 포인트에 연결된 이미지를 찾습니다.
                         if (currentImage.blockIndex == 2) {
+                          DraggableImage? innerImage;
+                          double minDistance = double.infinity;
                           for (var image in droppedImages) {
                             if (image == currentImage) continue;
                             double distance = (image.leftSnapPoint + image.position -
                                 currentImage.rightInnerSnapPoint - currentImage.position)
                                 .distance;
                             if (distance < minDistance) {
-                              nextImage = image;
+                              innerImage = image;
                               minDistance = distance;
                             }
                           }
-                          // 내부 스냅 포인트에 연결된 이미지가 있으면 추가하고 currentImage를 유지합니다.
-                          if (nextImage != null && minDistance < 50.0) {
-                            connectedImages.add(nextImage.path);
-                            continue;
+                          if (innerImage != null && minDistance < 50.0) {
+                            connectedImages.add(innerImage.path);
                           }
                         }
 
                         // 외부 스냅 포인트에 연결된 이미지를 찾습니다.
+                        DraggableImage? nextImage;
+                        double minDistance = double.infinity;
                         for (var image in droppedImages) {
                           if (image == currentImage) continue;
                           double distance = (image.leftSnapPoint + image.position -
@@ -282,6 +340,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         );
                       }
                     },
+
 
 
 
@@ -459,6 +518,31 @@ class DraggableImage {
       11: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
       12: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
       13: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      14: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      15: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      16: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      17: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      18: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      19: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      20: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      21: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      22: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      23: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      24: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      25: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      26: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      27: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      28: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      29: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      30: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      31: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      32: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      33: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      34: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      35: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      36: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      37: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      38: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
     }[index]!;
   }
 }
