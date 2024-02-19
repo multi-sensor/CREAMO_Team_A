@@ -45,6 +45,7 @@ dependencies:
   #fluttertoast: ^8.2.4
   permission_handler: ^11.2.0
   fluttertoast: ^8.2.4
+  scrollable_positioned_list: ^0.3.8
 
 
 dev_dependencies:
@@ -74,6 +75,11 @@ flutter:
     - images/
     - images/puzzle/
     - images/slider/
+    - images/start/
+    - images/start/creamo_logo.png
+    - images/start/start_background.png
+    - images/start/start_button.png
+    - images/start/use_button.png
     - images/slider/1.jpg
     - images/slider/2.jpg
     - images/slider/3.jpg
@@ -92,7 +98,31 @@ flutter:
     - images/puzzle/block11.png
     - images/puzzle/block12.png
     - images/puzzle/block13.png
-
+    - images/puzzle/block14.png
+    - images/puzzle/block15.png
+    - images/puzzle/block16.png
+    - images/puzzle/block17.png
+    - images/puzzle/block18.png
+    - images/puzzle/block19.png
+    - images/puzzle/block20.png
+    - images/puzzle/block21.png
+    - images/puzzle/block22.png
+    - images/puzzle/block23.png
+    - images/puzzle/block24.png
+    - images/puzzle/block25.png
+    - images/puzzle/block26.png
+    - images/puzzle/block27.png
+    - images/puzzle/block28.png
+    - images/puzzle/block29.png
+    - images/puzzle/block30.png
+    - images/puzzle/block31.png
+    - images/puzzle/block32.png
+    - images/puzzle/block33.png
+    - images/puzzle/block34.png
+    - images/puzzle/block35.png
+    - images/puzzle/block36.png
+    - images/puzzle/block37.png
+    - images/puzzle/block38.png
 
     - images/background.png
 
