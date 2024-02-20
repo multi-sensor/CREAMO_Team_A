@@ -15,7 +15,7 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
-  final ScrollController _scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   final itemScrollController = ItemScrollController();
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
@@ -71,53 +71,67 @@ class _PuzzlePageState extends State<PuzzlePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 0,  // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
+                  onPressed: () {
+                    scrollController.animateTo(
+                      0.0,  // 이동할 위치
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Text('1'),
                 ),
                 ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 3 - startFlag, // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
+                  onPressed: () {
+                    scrollController.animateTo(
+                      510.0  - startFlag *125,  // 이동할 위치
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Text('2'),
                 ),
                 ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 5 - startFlag,  // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
+                  onPressed: () {
+                    scrollController.animateTo(
+                      800.0 - startFlag *125,  // 이동할 위치
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Text('3'),
                 ),
                 ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 10 - startFlag, // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
+                  onPressed: () {
+                    scrollController.animateTo(
+                      1530.0 - startFlag *125,  // 이동할 위치
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Text('4'),
                 ),
                 ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 22 - startFlag,  // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
+                  onPressed: () {
+                    scrollController.animateTo(
+                      3280.0 - startFlag *125,  // 이동할 위치
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Text('5'),
                 ),
                 ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 37 - startFlag, // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
+                  onPressed: () {
+                    scrollController.animateTo(
+                      4200.0 - startFlag *125,  // 이동할 위치
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  },
                   child: Text('6'),
                 ),
+
+
               ],
             ),
           ),
@@ -127,8 +141,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
             child: Container(
               color: Colors.white,
               child: Scrollbar(
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: itemScrollController,
+                controller: scrollController, // 이 부분을 추가합니다.
+                child: ListView.builder(
+                  controller: scrollController, // 이 부분을 추가합니다.
                   scrollDirection: Axis.horizontal,
                   itemCount: startFlag == 0 ? 38 : 37,
                   itemBuilder: (context, index) {
