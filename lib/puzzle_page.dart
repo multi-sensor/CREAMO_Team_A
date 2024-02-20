@@ -118,7 +118,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
         children: <Widget>[
           Expanded(
             flex: 4,
-            child: Row(
+            child: Container(
+              color: Color(0xFFFFF6EB),
+          child: Row(
               children: [
                 Padding(
                   padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
@@ -206,11 +208,12 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ],
             ),
           ),
+      ),
 
           Expanded(
             flex: 16,
             child: Container(
-              color: Colors.white,
+              color : Color(0xFFFFF6EB),
               child: Scrollbar(
                 controller: scrollController, // 이 부분을 추가합니다.
                 child: ListView.builder(
@@ -281,6 +284,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ),
             ),
           ),
+
 
           Expanded(
             flex: 80,
@@ -494,6 +498,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ],
             ),
           ),
+
         ],
       ),
     );
