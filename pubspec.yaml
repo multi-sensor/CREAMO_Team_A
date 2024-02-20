@@ -33,10 +33,19 @@ dependencies:
   carousel_slider: ^4.2.1
   smooth_page_indicator: ^1.0.0+2
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  #webview_flutter: ^4.5.0
+  #flutter_blue: ^0.8.0
+  #flutter_blue_plus: ^1.31.13
+  #carousel_slider: ^4.2.1
+  flutter_blue_plus: ^1.31.13
+  #smooth_page_indicator: ^1.0.0+2
+  #fluttertoast: ^8.2.4
+  permission_handler: ^11.2.0
+  fluttertoast: ^8.2.4
+
 
 dev_dependencies:
   flutter_test:
@@ -64,17 +73,71 @@ flutter:
   assets:
     - images/
     - images/puzzle/
+    - images/button/
     - images/slider/
+    - images/start/
+    - images/start/creamo_logo.png
+    - images/start/start_background.png
+    - images/start/start_button.png
+    - images/start/use_button.png
     - images/slider/1.jpg
     - images/slider/2.jpg
     - images/slider/3.jpg
     - images/slider/4.jpg
     - images/slider/5.jpg
-    - images/puzzle/puzzle1.png
-    - images/puzzle/puzzle2.png
-    - images/puzzle/puzzle3.png
-    - images/puzzle/puzzle4.png
-    - images/background.png
+    - images/puzzle/block1.png
+    - images/puzzle/block2.png
+    - images/puzzle/block3.png
+    - images/puzzle/block4.png
+    - images/puzzle/block5.png
+    - images/puzzle/block6.png
+    - images/puzzle/block7.png
+    - images/puzzle/block8.png
+    - images/puzzle/block9.png
+    - images/puzzle/block10.png
+    - images/puzzle/block11.png
+    - images/puzzle/block12.png
+    - images/puzzle/block13.png
+    - images/puzzle/block14.png
+    - images/puzzle/block15.png
+    - images/puzzle/block16.png
+    - images/puzzle/block17.png
+    - images/puzzle/block18.png
+    - images/puzzle/block19.png
+    - images/puzzle/block20.png
+    - images/puzzle/block21.png
+    - images/puzzle/block22.png
+    - images/puzzle/block23.png
+    - images/puzzle/block24.png
+    - images/puzzle/block25.png
+    - images/puzzle/block26.png
+    - images/puzzle/block27.png
+    - images/puzzle/block28.png
+    - images/puzzle/block29.png
+    - images/puzzle/block30.png
+    - images/puzzle/block31.png
+    - images/puzzle/block32.png
+    - images/puzzle/block33.png
+    - images/puzzle/block34.png
+    - images/puzzle/block35.png
+    - images/puzzle/block36.png
+    - images/puzzle/block37.png
+    - images/puzzle/block38.png
+    - images/button/button1.png
+    - images/button/button2.png
+    - images/button/button3.png
+    - images/button/button4.png
+    - images/button/button5.png
+    - images/button/button6.png
+    - images/button/run.png
+    - images/button/trash.png
+    - images/button/reset.png
+    - images/button/home.png
+    - images/button/poweroff.png
+
+    - images/backgrounds/splash_background.png
+    - images/backgrounds/background.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -101,3 +164,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+images/puzzle/block5:
+  png:
