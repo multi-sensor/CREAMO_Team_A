@@ -72,7 +72,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
               children: [
                 ElevatedButton(
                   onPressed: () => itemScrollController.scrollTo(
-                    index: 0,
+                    index: 0,  // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   ),
@@ -80,7 +80,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 ElevatedButton(
                   onPressed: () => itemScrollController.scrollTo(
-                    index: 3,
+                    index: 3 - startFlag, // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   ),
@@ -88,7 +88,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 ElevatedButton(
                   onPressed: () => itemScrollController.scrollTo(
-                    index: 5,
+                    index: 5 - startFlag,  // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   ),
@@ -96,7 +96,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 ElevatedButton(
                   onPressed: () => itemScrollController.scrollTo(
-                    index: 10,
+                    index: 10 - startFlag, // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   ),
@@ -104,7 +104,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 ElevatedButton(
                   onPressed: () => itemScrollController.scrollTo(
-                    index: 22,
+                    index: 22 - startFlag,  // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   ),
@@ -112,22 +112,21 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 ElevatedButton(
                   onPressed: () => itemScrollController.scrollTo(
-                    index: 37,
+                    index: 37 - startFlag, // 이미 이동한 블록의 개수를 고려하여 인덱스 계산
                     duration: Duration(milliseconds: 500),
                     curve: Curves.ease,
                   ),
                   child: Text('6'),
                 ),
-
               ],
             ),
           ),
+
           Expanded(
             flex: 16,
             child: Container(
               color: Colors.white,
               child: Scrollbar(
-                controller: _scrollController,
                 child: ScrollablePositionedList.builder(
                   itemScrollController: itemScrollController,
                   scrollDirection: Axis.horizontal,
