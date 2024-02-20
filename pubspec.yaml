@@ -129,11 +129,15 @@ flutter:
     - images/button/button4.png
     - images/button/button5.png
     - images/button/button6.png
+    - images/button/run.png
+    - images/button/trash.png
+    - images/button/reset.png
+    - images/button/home.png
+    - images/button/poweroff.png
 
-    - images/background.png
-    - images/home.png
-    - images/poweroff.png
-    - images/bluetooth.png
+    - images/backgrounds/splash_background.png
+    - images/backgrounds/background.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

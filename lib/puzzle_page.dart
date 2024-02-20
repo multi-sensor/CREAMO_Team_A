@@ -47,7 +47,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
-    Future<void> scrollAnimation;  // 추가
 
     return Scaffold(
       appBar: AppBar(
@@ -79,11 +78,12 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               MaterialPageRoute(builder: (context) => StartPage()),
                             );
                           },
-                          child: Image.asset('images/home.png'),
+                          child: Image.asset('images/button/home.png'),
                         ),
                       ),
                       Row(
                         children:[
+
                           Padding(
                           padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
                             child: InkWell(
@@ -103,6 +103,27 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               child: Image.asset('images/poweroff.png'),
                             ),
                           ),
+
+                      Padding(
+                        padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
+                        child: IconButton(
+                          icon: const Icon(Icons.bluetooth_searching),
+                          tooltip: 'Connect to Bluetooth',
+                          onPressed: () {
+                            BluetoothHelper.startBluetoothScan(context);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
+                          },
+                          child: Image.asset('images/button/poweroff.png'),
+                        ),
+                        ),
+
                       ],
                       ),
                     ],
@@ -334,17 +355,17 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 // Reset button
                 Positioned(
-                  bottom: 40,
-                  right: 125,
-                  child: ElevatedButton(
-                    onPressed: _resetImages,
-                    child: Text('Reset'),
+                  bottom: 30,
+                  left: 140,
+                  child: InkWell(
+                    onTap: _resetImages,
+                    child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
                   ),
                 ),
-//플레이버튼
+                //플레이버튼
                 Positioned(
-                  right: 10,
-                  bottom: 10,
+                  bottom: 30,
+                  left: 20,
                   child: InkWell(
 
                     onTap: () {
@@ -439,18 +460,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     hoverColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    child: Icon(
-                      Icons.play_circle_fill,
-                      size: 100,
-                    ),
+                    child: Image.asset('images/button/run.png'),  // 이미지 경로 적용
+
                   ),
                 ),
 
 
                 // 쓰레기통
                 Positioned(
-                  left: 16,
-                  bottom: 16,
+                  right: 30,
+                  bottom: 30,
                   child: DragTarget<DraggableImage>(
                     builder: (context, candidateData, rejectedData) {
                       return Container(
@@ -461,13 +480,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             width: 80,
                             height: 80,
                             decoration: ShapeDecoration(
-                              color: Colors.white,
+                              color: Colors.transparent,
                               shape: CircleBorder(),
                             ),
-                            child: Icon(
-                              Icons.delete_outline,
-                              size: 80,
-                            ),
+                            child: Image.asset('images/button/trash.png'),  // 이미지 경로 적용
+
                           ),
                         ),
                       );
