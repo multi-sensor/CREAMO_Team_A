@@ -78,7 +78,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               MaterialPageRoute(builder: (context) => StartPage()),
                             );
                           },
-                          child: Image.asset('images/home.png'),
+                          child: Image.asset('images/button/home.png'),
                         ),
                       ),
                       Row(
@@ -99,7 +99,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                           onTap: () {
                             // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
                           },
-                          child: Image.asset('images/poweroff.png'),
+                          child: Image.asset('images/button/poweroff.png'),
                         ),
                         ),
                       ],
