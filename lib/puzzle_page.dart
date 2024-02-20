@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
@@ -16,7 +15,6 @@ class PuzzlePage extends StatefulWidget {
 
 class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
-  final itemScrollController = ItemScrollController();
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
   int startFlag = 0; // 시작 플래그
