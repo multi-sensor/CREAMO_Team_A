@@ -101,29 +101,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               onTap: () {
                                 // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
                               },
-                              child: Image.asset('images/poweroff.png'),
+                              child: Image.asset('images/button/poweroff.png'),
                             ),
                           ),
-
-                      Padding(
-                        padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
-                        child: IconButton(
-                          icon: const Icon(Icons.bluetooth_searching),
-                          tooltip: 'Connect to Bluetooth',
-                          onPressed: () {
-                            BluetoothHelper.startBluetoothScan(context);
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: 20.0),
-                        child: InkWell(
-                          onTap: () {
-                            // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
-                          },
-                          child: Image.asset('images/button/poweroff.png'),
-                        ),
-                        ),
 
                       ],
                       ),
