@@ -259,6 +259,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: InkWell(
 
                     onTap: () {
+                      BluetoothHelper.sendData("1221");
                       // '시작' 블록을 찾습니다.
                       DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
                           orElse: () => DraggableImage(
@@ -332,6 +333,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   child: Text('확인'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
+
                                   },
                                 ),
                               ],
@@ -403,6 +405,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       if (distanceToTrashCan <= 100) { // 일정 거리 예시로 100으로 설정
                         droppedImages.remove(data);
                       }
+
                     },
                   ),
                 ),
