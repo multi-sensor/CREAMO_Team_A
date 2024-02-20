@@ -37,16 +37,6 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  #webview_flutter: ^4.5.0
-  #flutter_blue: ^0.8.0
-  #flutter_blue_plus: ^1.31.13
-  #carousel_slider: ^4.2.1
-  flutter_blue_plus: ^1.31.13
-  #smooth_page_indicator: ^1.0.0+2
-  #fluttertoast: ^8.2.4
-  permission_handler: ^11.2.0
-  fluttertoast: ^8.2.4
-
 
 dev_dependencies:
   flutter_test:
@@ -80,9 +70,10 @@ flutter:
     - images/slider/3.jpg
     - images/slider/4.jpg
     - images/slider/5.jpg
-    - images/puzzle/block1.png
-    - images/puzzle/block2.png
-    - images/puzzle/block3.png
+    - images/puzzle/puzzle1.png
+    - images/puzzle/puzzle2.png
+    - images/puzzle/puzzle3.png
+    - images/puzzle/puzzle4.png
     - images/background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
