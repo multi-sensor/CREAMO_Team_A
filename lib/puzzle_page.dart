@@ -16,6 +16,7 @@ class PuzzlePage extends StatefulWidget {
 
 class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
+
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
   int startFlag = 0; // 시작 플래그
