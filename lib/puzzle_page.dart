@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
+import 'start_page.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 // 퍼즐 페이지 위젯
@@ -51,18 +52,69 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Puzzle Page'),
-        backgroundColor: Colors.lightBlueAccent,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.bluetooth_searching),
-            tooltip: 'Connect to Bluetooth',
-            onPressed: () {
-              BluetoothHelper.startBluetoothScan(context); // 블루투스 스캔 시작
-            },
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  color: Color(0xFFFFF6EB), // 첫 번째 상자의 색상
+                  child: Image.asset('images/start/creamo_logo.png'),
+                ),
+              ),
+              Expanded(
+                flex: 8,
+                child: Container(
+                  color: Color(0xFFFAB75D), // 두 번째 상자의 색상
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => StartPage()),
+                            );
+                          },
+                          child: Image.asset('images/home.png'),
+                        ),
+                      ),
+                      Row(
+                        children:[
+                      Padding(
+                        padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
+                        child: IconButton(
+                          icon: const Icon(Icons.bluetooth_searching),
+                          tooltip: 'Connect to Bluetooth',
+                          onPressed: () {
+                            BluetoothHelper.startBluetoothScan(context);
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
+                          },
+                          child: Image.asset('images/poweroff.png'),
+                        ),
+                        ),
+                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
+
       body: Column(
         children: <Widget>[
           Expanded(
