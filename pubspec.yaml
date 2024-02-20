@@ -133,6 +133,7 @@ flutter:
     - images/background.png
     - images/home.png
     - images/poweroff.png
+    - images/bluetooth.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
