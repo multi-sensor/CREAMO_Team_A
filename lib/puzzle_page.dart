@@ -46,6 +46,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
+    Future<void> scrollAnimation;  // 추가
 
     return Scaffold(
       appBar: AppBar(
@@ -66,70 +67,90 @@ class _PuzzlePageState extends State<PuzzlePage> {
           Expanded(
             flex: 4,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () {
-                    scrollController.animateTo(
-                      0.0,  // 이동할 위치
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Text('1'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    scrollController.animateTo(
-                      510.0  - startFlag *125,  // 이동할 위치
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Text('2'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    scrollController.animateTo(
-                      800.0 - startFlag *125,  // 이동할 위치
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Text('3'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    scrollController.animateTo(
-                      1530.0 - startFlag *125,  // 이동할 위치
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Text('4'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    scrollController.animateTo(
-                      3280.0 - startFlag *125,  // 이동할 위치
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Text('5'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    scrollController.animateTo(
-                      4200.0 - startFlag *125,  // 이동할 위치
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.ease,
-                    );
-                  },
-                  child: Text('6'),
+                Padding(
+                  padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button1.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        0.0,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
                 ),
 
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button2.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        510.0  - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
 
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button3.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        800.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button4.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        1530.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button5.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        3280.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button6.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        4200.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
