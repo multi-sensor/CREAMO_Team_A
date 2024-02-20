@@ -32,7 +32,7 @@ class _ContentPageState extends State<ContentPage> {
         children: [
           // Background Image (Assuming you want to keep this part)
           Image.asset(
-            'images/background.png',
+            'images/backgrounds/background.png',
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             fit: BoxFit.cover,

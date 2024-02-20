@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'start_page.dart';
 
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
@@ -15,8 +15,8 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
-  final ScrollController _scrollController = ScrollController();
-  final itemScrollController = ItemScrollController();
+  ScrollController scrollController = ScrollController();
+
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
   int startFlag = 0; // 시작 플래그
@@ -51,85 +51,175 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Puzzle Page'),
-        backgroundColor: Colors.lightBlueAccent,
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.bluetooth_searching),
-            tooltip: 'Connect to Bluetooth',
-            onPressed: () {
-              BluetoothHelper.startBluetoothScan(context); // 블루투스 스캔 시작
-            },
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          child: Row(
+            children: [
+              Expanded(
+                flex: 2,
+                child: Container(
+                  color: Color(0xFFFFF6EB), // 첫 번째 상자의 색상
+                  child: Image.asset('images/start/creamo_logo.png'),
+                ),
+              ),
+              Expanded(
+                flex: 8,
+                child: Container(
+                  color: Color(0xFFFAB75D), // 두 번째 상자의 색상
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => StartPage()),
+                            );
+                          },
+                          child: Image.asset('images/button/home.png'),
+                        ),
+                      ),
+                      Row(
+                        children:[
+
+                          Padding(
+                          padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
+                            child: InkWell(
+                              onTap: () {
+                                BluetoothHelper.startBluetoothScan(context);
+                              },
+                              child: Image.asset('images/bluetooth.png'),
+                            )
+
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 20.0),
+                            child: InkWell(
+                              onTap: () {
+                                // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
+                              },
+                              child: Image.asset('images/button/poweroff.png'),
+                            ),
+                          ),
+
+                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
+
       body: Column(
         children: <Widget>[
           Expanded(
             flex: 4,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            child: Container(
+              color: Color(0xFFFFF6EB),
+          child: Row(
               children: [
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 0,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
+                Padding(
+                  padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button1.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        0.0,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
                   ),
-                  child: Text('1'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 3,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('2'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 5,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('3'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 10,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('4'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 22,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('5'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 37,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('6'),
                 ),
 
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button2.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        525.0  - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button3.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        830.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button4.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        1585.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button5.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        3410.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button6.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        4500.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
+      ),
+
           Expanded(
             flex: 16,
             child: Container(
-              color: Colors.white,
+              color : Color(0xFFFFF6EB),
               child: Scrollbar(
-                controller: _scrollController,
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: itemScrollController,
+                controller: scrollController, // 이 부분을 추가합니다.
+                child: ListView.builder(
+                  controller: scrollController, // 이 부분을 추가합니다.
                   scrollDirection: Axis.horizontal,
                   itemCount: startFlag == 0 ? 38 : 37,
                   itemBuilder: (context, index) {
@@ -197,6 +287,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
             ),
           ),
 
+
           Expanded(
             flex: 80,
             child: Stack(
@@ -205,7 +296,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   key: _targetKey,
                   builder: (context, candidateData, rejectedData) {
                     return Container(
-                      color: Colors.black12,
+                      color: Colors.white,
                       child: Stack(
                         children: droppedImages.map((draggableImage) {
                           return Positioned(
@@ -245,17 +336,17 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 // Reset button
                 Positioned(
-                  bottom: 40,
-                  right: 125,
-                  child: ElevatedButton(
-                    onPressed: _resetImages,
-                    child: Text('Reset'),
+                  bottom: 30,
+                  left: 140,
+                  child: InkWell(
+                    onTap: _resetImages,
+                    child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
                   ),
                 ),
-//플레이버튼
+                //플레이버튼
                 Positioned(
-                  right: 10,
-                  bottom: 10,
+                  bottom: 30,
+                  left: 20,
                   child: InkWell(
 
                     onTap: () {
@@ -352,18 +443,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     hoverColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    child: Icon(
-                      Icons.play_circle_fill,
-                      size: 100,
-                    ),
+                    child: Image.asset('images/button/run.png'),  // 이미지 경로 적용
+
                   ),
                 ),
 
 
                 // 쓰레기통
                 Positioned(
-                  left: 16,
-                  bottom: 16,
+                  right: 30,
+                  bottom: 30,
                   child: DragTarget<DraggableImage>(
                     builder: (context, candidateData, rejectedData) {
                       return Container(
@@ -374,13 +463,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             width: 80,
                             height: 80,
                             decoration: ShapeDecoration(
-                              color: Colors.white,
+                              color: Colors.transparent,
                               shape: CircleBorder(),
                             ),
-                            child: Icon(
-                              Icons.delete_outline,
-                              size: 80,
-                            ),
+                            child: Image.asset('images/button/trash.png'),  // 이미지 경로 적용
+
                           ),
                         ),
                       );
@@ -412,6 +499,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ],
             ),
           ),
+
         ],
       ),
     );
