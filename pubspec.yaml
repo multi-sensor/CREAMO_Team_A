@@ -45,7 +45,6 @@ dependencies:
   #fluttertoast: ^8.2.4
   permission_handler: ^11.2.0
   fluttertoast: ^8.2.4
-  scrollable_positioned_list: ^0.3.8
 
 
 dev_dependencies:
@@ -74,6 +73,7 @@ flutter:
   assets:
     - images/
     - images/puzzle/
+    - images/button/
     - images/slider/
     - images/start/
     - images/start/creamo_logo.png
@@ -123,6 +123,12 @@ flutter:
     - images/puzzle/block36.png
     - images/puzzle/block37.png
     - images/puzzle/block38.png
+    - images/button/button1.png
+    - images/button/button2.png
+    - images/button/button3.png
+    - images/button/button4.png
+    - images/button/button5.png
+    - images/button/button6.png
 
     - images/background.png
     - images/home.png

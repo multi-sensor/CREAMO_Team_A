@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
 import 'start_page.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
@@ -16,8 +15,7 @@ class PuzzlePage extends StatefulWidget {
 }
 
 class _PuzzlePageState extends State<PuzzlePage> {
-  final ScrollController _scrollController = ScrollController();
-  final itemScrollController = ItemScrollController();
+  ScrollController scrollController = ScrollController();
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
   int startFlag = 0; // 시작 플래그
@@ -49,6 +47,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
+    Future<void> scrollAnimation;  // 추가
 
     return Scaffold(
       appBar: AppBar(
@@ -120,68 +119,102 @@ class _PuzzlePageState extends State<PuzzlePage> {
           Expanded(
             flex: 4,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 0,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
+                Padding(
+                  padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button1.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        0.0,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
                   ),
-                  child: Text('1'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 3,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('2'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 5,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('3'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 10,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('4'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 22,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('5'),
-                ),
-                ElevatedButton(
-                  onPressed: () => itemScrollController.scrollTo(
-                    index: 37,
-                    duration: Duration(milliseconds: 500),
-                    curve: Curves.ease,
-                  ),
-                  child: Text('6'),
                 ),
 
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button2.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        510.0  - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button3.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        800.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button4.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        1530.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button5.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        3280.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
+
+                Padding(
+                  padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
+                  child: IconButton(
+                    icon: Image.asset('images/button/button6.png'),
+                    onPressed: () {
+                      scrollController.animateTo(
+                        4200.0 - startFlag *125,  // 이동할 위치
+                        duration: Duration(milliseconds: 500),
+                        curve: Curves.ease,
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           ),
+
           Expanded(
             flex: 16,
             child: Container(
               color: Colors.white,
               child: Scrollbar(
-                controller: _scrollController,
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: itemScrollController,
+                controller: scrollController, // 이 부분을 추가합니다.
+                child: ListView.builder(
+                  controller: scrollController, // 이 부분을 추가합니다.
                   scrollDirection: Axis.horizontal,
                   itemCount: startFlag == 0 ? 38 : 37,
                   itemBuilder: (context, index) {
