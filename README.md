@@ -56,9 +56,14 @@ TBD
 * The file that runs the application. 
 
 
-`start_page.dart`
+`splash_page.dart`
 
 * This is the initial screen where Addi AI coding is executed.
+
+
+`start_page.dart`
+
+* The page is for choosing between "Getting Started" and "How to Use."
 
 
 `content_page.dart`
