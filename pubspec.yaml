@@ -129,6 +129,10 @@ flutter:
     - images/button/button4.png
     - images/button/button5.png
     - images/button/button6.png
+    - images/button/run.png
+    - images/button/trash.png
+    - images/button/reset.png
+
 
     - images/background.png
     - images/home.png

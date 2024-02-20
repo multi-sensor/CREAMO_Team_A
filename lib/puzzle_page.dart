@@ -47,7 +47,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
-    Future<void> scrollAnimation;  // 추가
 
     return Scaffold(
       appBar: AppBar(
@@ -330,17 +329,17 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
                 // Reset button
                 Positioned(
-                  bottom: 40,
-                  right: 125,
-                  child: ElevatedButton(
-                    onPressed: _resetImages,
-                    child: Text('Reset'),
+                  bottom: 30,
+                  left: 140,
+                  child: InkWell(
+                    onTap: _resetImages,
+                    child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
                   ),
                 ),
-//플레이버튼
+                //플레이버튼
                 Positioned(
-                  right: 10,
-                  bottom: 10,
+                  bottom: 30,
+                  left: 20,
                   child: InkWell(
 
                     onTap: () {
@@ -435,18 +434,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     hoverColor: Colors.transparent,
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
-                    child: Icon(
-                      Icons.play_circle_fill,
-                      size: 100,
-                    ),
+                    child: Image.asset('images/button/run.png'),  // 이미지 경로 적용
+
                   ),
                 ),
 
 
                 // 쓰레기통
                 Positioned(
-                  left: 16,
-                  bottom: 16,
+                  right: 30,
+                  bottom: 30,
                   child: DragTarget<DraggableImage>(
                     builder: (context, candidateData, rejectedData) {
                       return Container(
@@ -457,13 +454,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             width: 80,
                             height: 80,
                             decoration: ShapeDecoration(
-                              color: Colors.white,
+                              color: Colors.transparent,
                               shape: CircleBorder(),
                             ),
-                            child: Icon(
-                              Icons.delete_outline,
-                              size: 80,
-                            ),
+                            child: Image.asset('images/button/trash.png'),  // 이미지 경로 적용
+
                           ),
                         ),
                       );
