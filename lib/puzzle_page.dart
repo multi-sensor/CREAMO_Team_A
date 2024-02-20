@@ -296,7 +296,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   key: _targetKey,
                   builder: (context, candidateData, rejectedData) {
                     return Container(
-                      color: Colors.black12,
+                      color: Colors.white,
                       child: Stack(
                         children: droppedImages.map((draggableImage) {
                           return Positioned(
