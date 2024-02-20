@@ -125,6 +125,8 @@ flutter:
     - images/puzzle/block38.png
 
     - images/background.png
+    - images/home.png
+    - images/poweroff.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
