@@ -143,8 +143,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: IconButton(
                     icon: Image.asset('images/button/button2.png'),
                     onPressed: () {
+                      double screenWidth = MediaQuery.of(context).size.width;
                       scrollController.animateTo(
-                        525.0  - startFlag *125,  // 이동할 위치
+                        //525.0  - startFlag *125,  // 이동할 위치
+                        screenWidth * 0.33  - startFlag *125,  // 이동할 위치
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease,
                       );
@@ -157,8 +159,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: IconButton(
                     icon: Image.asset('images/button/button3.png'),
                     onPressed: () {
+                      double screenWidth = MediaQuery.of(context).size.width;
                       scrollController.animateTo(
-                        830.0 - startFlag *125,  // 이동할 위치
+                        screenWidth * 0.52  - startFlag *125,  // 이동할 위치
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease,
                       );
@@ -171,8 +174,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: IconButton(
                     icon: Image.asset('images/button/button4.png'),
                     onPressed: () {
+                      double screenWidth = MediaQuery.of(context).size.width;
                       scrollController.animateTo(
-                        1585.0 - startFlag *125,  // 이동할 위치
+                        screenWidth * 1.0  - startFlag *125,  // 이동할 위치
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease,
                       );
@@ -185,8 +189,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: IconButton(
                     icon: Image.asset('images/button/button5.png'),
                     onPressed: () {
+                      double screenWidth = MediaQuery.of(context).size.width;
                       scrollController.animateTo(
-                        3410.0 - startFlag *125,  // 이동할 위치
+                        screenWidth * 2.14  - startFlag *125,  // 이동할 위치
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease,
                       );
@@ -199,8 +204,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: IconButton(
                     icon: Image.asset('images/button/button6.png'),
                     onPressed: () {
+                      double screenWidth = MediaQuery.of(context).size.width;
                       scrollController.animateTo(
-                        4500.0 - startFlag *125,  // 이동할 위치
+                        screenWidth *2.66 - startFlag *125,  // 이동할 위치
                         duration: Duration(milliseconds: 500),
                         curve: Curves.ease,
                       );
