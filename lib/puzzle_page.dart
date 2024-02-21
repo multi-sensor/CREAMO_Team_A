@@ -91,7 +91,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               onTap: () {
                                 BluetoothHelper.startBluetoothScan(context);
                               },
-                              child: Image.asset('images/bluetooth.png'),
+                              child: Image.asset('images/bluetooth_1.png'),
                             )
 
                           ),
