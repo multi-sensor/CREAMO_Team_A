@@ -4,6 +4,9 @@ import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
 import 'start_page.dart';
 
+//전역변수 설정
+String connected_block_numbers='';
+
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -91,7 +94,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 onTap: () {
                                   BluetoothHelper.startBluetoothScan(context);
                                 },
-                                child: Image.asset('images/bluetooth.png'),
+                                child: Image.asset('images/bluetooth_1.png'),
                               )
 
                           ),
@@ -217,10 +220,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
             child: Container(
               color : Color(0xFFFFF6EB),
               child: Scrollbar(
-                controller: scrollController, // 이 부분을 추가합니다.
+                controller: scrollController,
                 child: ListView.builder(
-                  controller: scrollController, // 이 부분을 추가합니다.
+                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
                   itemCount: startFlag == 0 ? 38 : 37,
                   itemBuilder: (context, index) {
                     final imageIdx = startFlag == 0 ? index + 1 : index + 2;
@@ -229,7 +233,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       future: _getImageSize(image),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
-                          return Draggable<DraggableImage>(
+                          return LongPressDraggable<DraggableImage>(
                             data: DraggableImage(
                               name: 'images/puzzle/block${imageIdx}',
                               path: 'images/puzzle/block${imageIdx}.png',
@@ -350,7 +354,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   child: InkWell(
 
                     onTap: () {
-
                       // '시작' 블록을 찾습니다.
                       DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
                           orElse: () => DraggableImage(
@@ -364,9 +367,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       // '시작' 블록부터 시작하여 연결된 이미지들의 파일명을 순서대로 출력합니다.
                       List<String> connectedImages = [startImage.path];
                       DraggableImage? currentImage = startImage;
-
-                      //블루투스 데이터 전송
-                      BluetoothHelper.sendData("1253");
 
                       while (currentImage != null && currentImage.blockIndex != 3) {
                         // 블록2의 내부 스냅 포인트에 연결된 이미지를 찾습니다.
@@ -411,7 +411,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
-                        // 팝업을 띄웁니다.
+                        // 팝업, 숫자만 추출하여 콤마로 구분된 문자열로 만듭니다.
+                        connected_block_numbers = connectedImages.map((path) {
+                          return path.replaceAll(RegExp(r'\D'), '');
+                        }).join(', ');
+
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -419,7 +423,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               title: Text('연결된 이미지 목록'),
                               content: SingleChildScrollView(
                                 child: ListBody(
-                                  children: connectedImages.map((path) => Text(path)).toList(),
+                                  children: <Widget>[
+                                    Text(connected_block_numbers),  // 합친 문자열을 표시합니다.
+                                  ],
                                 ),
                               ),
                               actions: <Widget>[
@@ -433,7 +439,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             );
                           },
                         );
+
+
                       }
+                      BluetoothHelper.sendData(connected_block_numbers);
                     },
 
 
