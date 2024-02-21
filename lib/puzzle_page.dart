@@ -4,6 +4,9 @@ import 'bluetooth_helper.dart'; // 블루투스 도우미 파일 임포트
 import 'package:flutter/services.dart';
 import 'start_page.dart';
 
+//전역변수 설정
+String connected_block_numbers='';
+
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
@@ -122,111 +125,106 @@ class _PuzzlePageState extends State<PuzzlePage> {
             flex: 4,
             child: Container(
               color: Color(0xFFFFF6EB),
-          child: Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
-                  child: IconButton(
-                    icon: Image.asset('images/button/button1.png'),
-                    onPressed: () {
-                      scrollController.animateTo(
-                        0.0,  // 이동할 위치
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
+                    child: IconButton(
+                      icon: Image.asset('images/button/button1.png'),
+                      onPressed: () {
+                        scrollController.animateTo(
+                          0.0,  // 이동할 위치
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                  child: IconButton(
-                    icon: Image.asset('images/button/button2.png'),
-                    onPressed: () {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      scrollController.animateTo(
-                        //525.0  - startFlag *125,  // 이동할 위치
-                        screenWidth * 0.33  - startFlag *125,  // 이동할 위치
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                    child: IconButton(
+                      icon: Image.asset('images/button/button2.png'),
+                      onPressed: () {
+                        scrollController.animateTo(
+                          525.0  - startFlag *125,  // 이동할 위치
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                  child: IconButton(
-                    icon: Image.asset('images/button/button3.png'),
-                    onPressed: () {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      scrollController.animateTo(
-                        screenWidth * 0.52  - startFlag *125,  // 이동할 위치
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                    child: IconButton(
+                      icon: Image.asset('images/button/button3.png'),
+                      onPressed: () {
+                        scrollController.animateTo(
+                          830.0 - startFlag *125,  // 이동할 위치
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                  child: IconButton(
-                    icon: Image.asset('images/button/button4.png'),
-                    onPressed: () {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      scrollController.animateTo(
-                        screenWidth * 1.0  - startFlag *125,  // 이동할 위치
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                    child: IconButton(
+                      icon: Image.asset('images/button/button4.png'),
+                      onPressed: () {
+                        scrollController.animateTo(
+                          1585.0 - startFlag *125,  // 이동할 위치
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                  child: IconButton(
-                    icon: Image.asset('images/button/button5.png'),
-                    onPressed: () {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      scrollController.animateTo(
-                        screenWidth * 2.14  - startFlag *125,  // 이동할 위치
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
+                    child: IconButton(
+                      icon: Image.asset('images/button/button5.png'),
+                      onPressed: () {
+                        scrollController.animateTo(
+                          3410.0 - startFlag *125,  // 이동할 위치
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
-                ),
 
-                Padding(
-                  padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
-                  child: IconButton(
-                    icon: Image.asset('images/button/button6.png'),
-                    onPressed: () {
-                      double screenWidth = MediaQuery.of(context).size.width;
-                      scrollController.animateTo(
-                        screenWidth *2.66 - startFlag *125,  // 이동할 위치
-                        duration: Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      );
-                    },
+                  Padding(
+                    padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
+                    child: IconButton(
+                      icon: Image.asset('images/button/button6.png'),
+                      onPressed: () {
+                        scrollController.animateTo(
+                          4500.0 - startFlag *125,  // 이동할 위치
+                          duration: Duration(milliseconds: 500),
+                          curve: Curves.ease,
+                        );
+                      },
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-      ),
 
           Expanded(
             flex: 16,
             child: Container(
               color : Color(0xFFFFF6EB),
               child: Scrollbar(
-                controller: scrollController, // 이 부분을 추가합니다.
+                controller: scrollController,
                 child: ListView.builder(
-                  controller: scrollController, // 이 부분을 추가합니다.
+                  controller: scrollController,
                   scrollDirection: Axis.horizontal,
+                  physics: BouncingScrollPhysics(),
                   itemCount: startFlag == 0 ? 38 : 37,
                   itemBuilder: (context, index) {
                     final imageIdx = startFlag == 0 ? index + 1 : index + 2;
@@ -235,7 +233,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       future: _getImageSize(image),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.done) {
-                          return Draggable<DraggableImage>(
+                          return LongPressDraggable<DraggableImage>(
                             data: DraggableImage(
                               name: 'images/puzzle/block${imageIdx}',
                               path: 'images/puzzle/block${imageIdx}.png',
@@ -413,7 +411,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
-                        // 팝업을 띄웁니다.
+                        // 팝업, 숫자만 추출하여 콤마로 구분된 문자열로 만듭니다.
+                        connected_block_numbers = connectedImages.map((path) {
+                          return path.replaceAll(RegExp(r'\D'), '');
+                        }).join(', ');
+
                         showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -421,7 +423,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                               title: Text('연결된 이미지 목록'),
                               content: SingleChildScrollView(
                                 child: ListBody(
-                                  children: connectedImages.map((path) => Text(path)).toList(),
+                                  children: <Widget>[
+                                    Text(connected_block_numbers),  // 합친 문자열을 표시합니다.
+                                  ],
                                 ),
                               ),
                               actions: <Widget>[
@@ -435,6 +439,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             );
                           },
                         );
+
+
                       }
                     },
 
