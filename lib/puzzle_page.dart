@@ -147,7 +147,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button2.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          525.0  - startFlag *125,  // 이동할 위치
+                          520.0  - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -161,7 +161,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button3.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          830.0 - startFlag *125,  // 이동할 위치
+                          815.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -175,7 +175,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button4.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          1585.0 - startFlag *125,  // 이동할 위치
+                          1550.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -189,7 +189,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button5.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          3410.0 - startFlag *125,  // 이동할 위치
+                          3310.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
