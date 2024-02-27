@@ -46,11 +46,11 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 <br/>
 <h2> START PAGE </h2>
 
-![2](https://github.com/multi-sensor/CREAMO_Team_A/assets/83489449/d7e5be24-9f6e-4227-aec1-9d99aad36ded)
+![2](https://github.com/multi-sensor/CREAMO_Team_A/assets/90318181/e7abe5fd-a531-423b-9b7d-d7d2cf21bd78)
 <br/>
 <h2>PUZZLE PAGE</h2>
 
-![3](https://github.com/multi-sensor/CREAMO_Team_A/assets/83489449/7e49b106-df8f-45f0-82f6-2b975b5b2970)
+![3](https://github.com/multi-sensor/CREAMO_Team_A/assets/90318181/a033b2ec-726b-4f74-8a86-be7c1fac25b4)
 
 TBD
 
