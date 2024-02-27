@@ -147,7 +147,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button2.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          525.0  - startFlag *125,  // 이동할 위치
+                          520.0  - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -161,7 +161,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button3.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          830.0 - startFlag *125,  // 이동할 위치
+                          815.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -175,7 +175,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button4.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          1585.0 - startFlag *125,  // 이동할 위치
+                          1550.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -189,7 +189,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button5.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          3410.0 - startFlag *125,  // 이동할 위치
+                          3310.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -411,10 +411,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
-                        // 팝업, 숫자만 추출하여 콤마로 구분된 문자열로 만듭니다.
-                        connected_block_numbers = connectedImages.map((path) {
+                        // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
+                        connected_block_numbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                           return path.replaceAll(RegExp(r'\D'), '');
                         }).join(', ');
+                        connected_block_numbers = connected_block_numbers.replaceAllMapped(RegExp(r'(\d+), (\d+)'), (match) {
+                          return '${match.group(1)}:${match.group(2)}';
+                        });
+                        BluetoothHelper.sendData(connected_block_numbers);
 
                         showDialog(
                           context: context,
@@ -442,7 +446,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
 
                       }
-                      BluetoothHelper.sendData(connected_block_numbers);
+
                     },
 
 
