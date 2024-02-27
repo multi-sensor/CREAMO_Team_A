@@ -16,9 +16,9 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 
 |Members|
 |------|
-|Seungyeon JI|
-|Heeyun HEO|
-|Jiwoo BYUN|
+|[Seungyeon JI](https://github.com/jisally)|
+|[Heeyun HEO](https://github.com/Heeyun0724)|
+|[Jiwoo BYUN](https://github.com/dede0827)|
 
 <h1>:gear: Environment Setting</h1>
 <hr/>
