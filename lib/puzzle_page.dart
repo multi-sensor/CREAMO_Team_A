@@ -19,6 +19,9 @@ class PuzzlePage extends StatefulWidget {
 
 class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
+  double scrollPosition = 0.0; // 스크롤 위치를 저장할 변수
+
+
 
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
@@ -239,17 +242,25 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             ),
                             feedback: image,
                             child: image,
+                            onDragStarted: () {
+                              scrollPosition = scrollController.position.pixels; // 드래그 시작시 스크롤 위치 저장
+                            },
                             onDragEnd: (details) {
                               final RenderBox targetBox =
                               _targetKey.currentContext!
                                   .findRenderObject() as RenderBox;
                               final targetPosition =
                               targetBox.globalToLocal(details.offset);
+
                               if (imageIdx == 1) {
                                 setState(() {
                                   startFlag = 1;
                                 });
                               }
+
+                              Future.delayed(Duration(milliseconds: 50), () {
+                                scrollController.jumpTo(scrollPosition);
+                              });
 
                               setState(() {
                                 final newImage = DraggableImage(
@@ -271,10 +282,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                     nearestImage,
                                   );
                                 }
-
                                 droppedImages.add(newImage);
                               });
                             },
+
                           );
                         } else {
                           return CircularProgressIndicator();
@@ -286,6 +297,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ),
             ),
           ),
+
           Expanded(
             flex: 80,
             child: Stack(
