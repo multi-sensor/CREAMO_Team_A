@@ -290,8 +290,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ),
             ),
           ),
-
-
           Expanded(
             flex: 80,
             child: Stack(
@@ -420,29 +418,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         });
                         BluetoothHelper.sendData(connected_block_numbers);
 
-                        // showDialog(
-                        //   context: context,
-                        //   builder: (BuildContext context) {
-                        //     return AlertDialog(
-                        //       title: Text('연결된 이미지 목록'),
-                        //       content: SingleChildScrollView(
-                        //         child: ListBody(
-                        //           children: <Widget>[
-                        //             Text(connected_block_numbers),  // 합친 문자열을 표시합니다.
-                        //           ],
-                        //         ),
-                        //       ),
-                        //       actions: <Widget>[
-                        //         TextButton(
-                        //           child: Text('확인'),
-                        //           onPressed: () {
-                        //             Navigator.of(context).pop();
-                        //           },
-                        //         ),
-                        //       ],
-                        //     );
-                        //   },
-                        // );
+
 
 
                       }
