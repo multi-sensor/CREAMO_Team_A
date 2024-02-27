@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'content_page.dart';
+import 'puzzle_page.dart';
 
 class StartPage extends StatelessWidget {
   const StartPage({Key? key}) : super(key: key);
@@ -10,6 +11,15 @@ class StartPage extends StatelessWidget {
       MaterialPageRoute(builder: (context) => const ContentPage()),
     );
   }
+
+  void _navigateToPuzzlePage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PuzzlePage(imagePath: 'images/start/start_button_1.png')),
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,10 +75,17 @@ class StartPage extends StatelessWidget {
       ),
       body: Stack(
         children: [
-          Positioned(
-            bottom: 0,
-            child: Image.asset('images/start/start_background.png'),
+          Positioned.fill(
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('images/start/start_background.png'),
+                  fit: BoxFit.fill,
+                ),
+              ),
+            ),
           ),
+
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -76,8 +93,8 @@ class StartPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 50.0),
                   child: InkWell(
-                    onTap: () => _navigateToContentPage(context),
-                    child: Image.asset('images/start/start_button.png', width: 294, height: 470),
+                    onTap: () => _navigateToPuzzlePage(context),
+                    child: Image.asset('images/start/start_button_1.png', width: 300, height: 340),
                   ),
                 ),
                 SizedBox(width: 50),
@@ -85,7 +102,7 @@ class StartPage extends StatelessWidget {
                   padding: EdgeInsets.only(top: 50.0),
                   child: InkWell(
                     onTap: () => _navigateToContentPage(context),
-                    child: Image.asset('images/start/use_button.png', width: 486, height: 399),
+                    child: Image.asset('images/start/use_button_1.png', width: 300, height: 340),
                   ),
                 ),
               ],
