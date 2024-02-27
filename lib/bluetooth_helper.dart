@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'bluetooth_communication.dart';
+
 
 class BluetoothHelper {
   static BluetoothDevice? connectedDevice;
   static List<BluetoothDevice> devices = [];
   static StreamSubscription<List<ScanResult>>? scanSubscription;
-  static BluetoothCommunication? bluetoothCommunication; // BluetoothCommunication 객체 추가
 
   static Future<void> startBluetoothScan(BuildContext context) async {
-    devices.clear(); // 기존에 스캔한 장치 정보 초기화
+    devices.clear();
 
-    // 연결된 기기가 있으면 해당 정보를 보여줌
     if (connectedDevice != null) {
       _showConnectedDeviceDialog(context);
       return;
@@ -62,7 +60,8 @@ class BluetoothHelper {
 
     scanSubscription = FlutterBluePlus.scanResults.listen((results) {
       devices.clear();
-      List<ScanResult> filteredResults = results.where((result) => result.device.name.contains('Creamo_CB_')).toList();
+      List<ScanResult> filteredResults = results.where((result) =>
+          result.device.name.contains('Creamo_CB_')).toList();
       for (ScanResult r in filteredResults) {
         devices.add(r.device);
       }
@@ -70,10 +69,10 @@ class BluetoothHelper {
 
     Future.delayed(Duration(seconds: 3), () {
       FlutterBluePlus.stopScan();
-      scanSubscription?.cancel(); // scanSubscription 취소
+      scanSubscription?.cancel();
       if (Navigator.canPop(context)) {
-        Navigator.pop(context); // 다이얼로그 닫기
-        _showDevicesDialog(context); // 연결 가능한 기기 다이얼로그 표시
+        Navigator.pop(context);
+        _showDevicesDialog(context);
       }
     });
   }
@@ -95,7 +94,7 @@ class BluetoothHelper {
             TextButton(
               child: Text("연결 해제"),
               onPressed: () {
-                _disconnectDevice(context); // 연결 해제 함수 호출
+                _disconnectDevice(context);
               },
             ),
             TextButton(
@@ -117,8 +116,14 @@ class BluetoothHelper {
         return AlertDialog(
           title: Text('연결 가능한 기기들'),
           content: Container(
-            height: MediaQuery.of(context).size.height * 0.5, // 화면 높이의 절반
-            width: MediaQuery.of(context).size.width * 0.5,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.5,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.5,
             child: ListView.builder(
               itemCount: devices.length,
               itemBuilder: (context, index) {
@@ -128,7 +133,7 @@ class BluetoothHelper {
                   onTap: () async {
                     try {
                       await devices[index].connect();
-                      connectedDevice = devices[index]; // 연결된 디바이스 설정
+                      connectedDevice = devices[index];
                       Fluttertoast.showToast(
                         msg: "기기와 연결되었습니다: ${devices[index].name}",
                         toastLength: Toast.LENGTH_SHORT,
@@ -138,7 +143,7 @@ class BluetoothHelper {
                         textColor: Colors.white,
                         fontSize: 16.0,
                       );
-                      Navigator.pop(context); // 현재 다이얼로그 닫기
+                      Navigator.pop(context);
                     } catch (e) {
                       Fluttertoast.showToast(
                         msg: "기기 연결 실패: ${e.toString()}",
@@ -171,7 +176,7 @@ class BluetoothHelper {
   static void _disconnectDevice(BuildContext context) {
     if (connectedDevice != null) {
       connectedDevice!.disconnect().then((_) {
-        connectedDevice = null; // 연결된 기기 초기화
+        connectedDevice = null;
         Fluttertoast.showToast(
           msg: "기기와의 연결이 해제되었습니다.",
           toastLength: Toast.LENGTH_SHORT,
@@ -181,7 +186,7 @@ class BluetoothHelper {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        Navigator.pop(context); // 대화 상자 닫기
+        Navigator.pop(context);
       }).catchError((error) {
         Fluttertoast.showToast(
           msg: "기기 연결 해제 실패: ${error.toString()}",
@@ -192,6 +197,20 @@ class BluetoothHelper {
           textColor: Colors.white,
           fontSize: 16.0,
         );
+      });
+    }
+  }
+
+  static void sendData(String data) async {
+    if (connectedDevice != null) {
+      List<BluetoothService> services = await connectedDevice!
+          .discoverServices();
+      services.forEach((service) {
+        service.characteristics.forEach((characteristic) async {
+          if (characteristic.properties.write) {
+            await characteristic.write(data.codeUnits);
+          }
+        });
       });
     }
   }

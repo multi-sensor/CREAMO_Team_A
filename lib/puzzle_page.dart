@@ -411,10 +411,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
-                        // 팝업, 숫자만 추출하여 콤마로 구분된 문자열로 만듭니다.
-                        connected_block_numbers = connectedImages.map((path) {
+                        // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
+                        connected_block_numbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                           return path.replaceAll(RegExp(r'\D'), '');
                         }).join(', ');
+                        connected_block_numbers = connected_block_numbers.replaceAllMapped(RegExp(r'(\d+), (\d+)'), (match) {
+                          return '${match.group(1)}:${match.group(2)}';
+                        });
+                        BluetoothHelper.sendData(connected_block_numbers);
 
                         showDialog(
                           context: context,
@@ -442,8 +446,8 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
 
                       }
-                    },
 
+                    },
 
 
 
