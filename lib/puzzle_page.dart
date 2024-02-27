@@ -89,13 +89,13 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         children:[
 
                           Padding(
-                          padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
-                            child: InkWell(
-                              onTap: () {
-                                BluetoothHelper.startBluetoothScan(context);
-                              },
-                              child: Image.asset('images/bluetooth_1.png'),
-                            )
+                              padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
+                              child: InkWell(
+                                onTap: () {
+                                  BluetoothHelper.startBluetoothScan(context);
+                                },
+                                child: Image.asset('images/bluetooth_1.png'),
+                              )
 
                           ),
                           Padding(
@@ -108,7 +108,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             ),
                           ),
 
-                      ],
+                        ],
                       ),
                     ],
                   ),
@@ -420,32 +420,33 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         });
                         BluetoothHelper.sendData(connected_block_numbers);
 
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('연결된 이미지 목록'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: <Widget>[
-                                    Text(connected_block_numbers),  // 합친 문자열을 표시합니다.
-                                  ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('확인'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+                        // showDialog(
+                        //   context: context,
+                        //   builder: (BuildContext context) {
+                        //     return AlertDialog(
+                        //       title: Text('연결된 이미지 목록'),
+                        //       content: SingleChildScrollView(
+                        //         child: ListBody(
+                        //           children: <Widget>[
+                        //             Text(connected_block_numbers),  // 합친 문자열을 표시합니다.
+                        //           ],
+                        //         ),
+                        //       ),
+                        //       actions: <Widget>[
+                        //         TextButton(
+                        //           child: Text('확인'),
+                        //           onPressed: () {
+                        //             Navigator.of(context).pop();
+                        //           },
+                        //         ),
+                        //       ],
+                        //     );
+                        //   },
+                        // );
 
 
                       }
+
                     },
 
 
