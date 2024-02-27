@@ -71,10 +71,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 child: Container(
                   color: Color(0xFFFAB75D), // 두 번째 상자의 색상
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(right: 20.0),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
@@ -85,31 +86,26 @@ class _PuzzlePageState extends State<PuzzlePage> {
                           child: Image.asset('images/button/home.png'),
                         ),
                       ),
-                      Row(
-                        children:[
+                      Padding(
+                          padding: EdgeInsets.only(right: 20.0), // 좌우 간격 동일하게 설정
+                          child: InkWell(
+                            onTap: () {
+                              BluetoothHelper.startBluetoothScan(context);
+                            },
+                            child: Image.asset('images/bluetooth_1.png'),
+                          )
 
-                          Padding(
-                              padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
-                              child: InkWell(
-                                onTap: () {
-                                  BluetoothHelper.startBluetoothScan(context);
-                                },
-                                child: Image.asset('images/bluetooth_1.png'),
-                              )
-
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 20.0),
-                            child: InkWell(
-                              onTap: () {
-                                // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
-                              },
-                              child: Image.asset('images/button/poweroff.png'),
-                            ),
-                          ),
-
-                        ],
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
+                          },
+                          child: Image.asset('images/button/poweroff.png'),
+                        ),
+                      ),
+
                     ],
                   ),
                 ),
