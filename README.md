@@ -23,7 +23,7 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 <h1>:gear: Environment Setting</h1>
 <hr/>
 
-[![예제](http://img.youtube.com/vi/usE9IKaogDU/0.jpg)](https://youtu.be/usE9IKaogDU?t=0s) 
+[![예제](http://img.youtube.com/vi/usE9IKaogDU/0.jpg)](https://youtu.be/usE9IKaogDU?t=0s)
 
 <ul>
   <li><b>IDE: Android Studio 2022.3.1.21</b></li>
@@ -67,7 +67,7 @@ TBD
 
 `main.dart`
 
-* The file that runs the application. 
+* The file that runs the application.
 
 
 `splash_page.dart`

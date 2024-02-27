@@ -42,10 +42,10 @@ class StartPage extends StatelessWidget {
                 child: Container(
                   color: Color(0xFFFAB75D),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(right: 20.0),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(

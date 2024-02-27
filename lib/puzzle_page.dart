@@ -19,6 +19,9 @@ class PuzzlePage extends StatefulWidget {
 
 class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
+  double scrollPosition = 0.0; // 스크롤 위치를 저장할 변수
+
+
 
   final GlobalKey _targetKey = GlobalKey();
   List<DraggableImage> droppedImages = [];
@@ -71,10 +74,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 child: Container(
                   color: Color(0xFFFAB75D), // 두 번째 상자의 색상
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+
                       Padding(
-                        padding: EdgeInsets.only(left: 20.0),
+                        padding: EdgeInsets.only(right: 20.0),
                         child: InkWell(
                           onTap: () {
                             Navigator.push(
@@ -85,31 +89,26 @@ class _PuzzlePageState extends State<PuzzlePage> {
                           child: Image.asset('images/button/home.png'),
                         ),
                       ),
-                      Row(
-                        children:[
+                      Padding(
+                          padding: EdgeInsets.only(right: 20.0), // 좌우 간격 동일하게 설정
+                          child: InkWell(
+                            onTap: () {
+                              BluetoothHelper.startBluetoothScan(context);
+                            },
+                            child: Image.asset('images/bluetooth_1.png'),
+                          )
 
-                          Padding(
-                          padding: EdgeInsets.only(right: 30.0), // 좌우 간격 동일하게 설정
-                            child: InkWell(
-                              onTap: () {
-                                BluetoothHelper.startBluetoothScan(context);
-                              },
-                              child: Image.asset('images/bluetooth_1.png'),
-                            )
-
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 20.0),
-                            child: InkWell(
-                              onTap: () {
-                                // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
-                              },
-                              child: Image.asset('images/button/poweroff.png'),
-                            ),
-                          ),
-
-                      ],
                       ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 20.0),
+                        child: InkWell(
+                          onTap: () {
+                            // 버튼을 눌렀을 때 수행할 작업을 추가하세요.
+                          },
+                          child: Image.asset('images/button/poweroff.png'),
+                        ),
+                      ),
+
                     ],
                   ),
                 ),
@@ -147,7 +146,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button2.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          520.0  - startFlag *125,  // 이동할 위치
+                          525.0  - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -161,7 +160,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button3.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          815.0 - startFlag *125,  // 이동할 위치
+                          830.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -175,7 +174,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button4.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          1550.0 - startFlag *125,  // 이동할 위치
+                          1585.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -189,7 +188,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button5.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          3310.0 - startFlag *125,  // 이동할 위치
+                          3410.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -203,7 +202,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       icon: Image.asset('images/button/button6.png'),
                       onPressed: () {
                         scrollController.animateTo(
-                          4500.0 - startFlag *125,  // 이동할 위치
+                          4400.0 - startFlag *125,  // 이동할 위치
                           duration: Duration(milliseconds: 500),
                           curve: Curves.ease,
                         );
@@ -243,17 +242,25 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             ),
                             feedback: image,
                             child: image,
+                            onDragStarted: () {
+                              scrollPosition = scrollController.position.pixels; // 드래그 시작시 스크롤 위치 저장
+                            },
                             onDragEnd: (details) {
                               final RenderBox targetBox =
                               _targetKey.currentContext!
                                   .findRenderObject() as RenderBox;
                               final targetPosition =
                               targetBox.globalToLocal(details.offset);
+
                               if (imageIdx == 1) {
                                 setState(() {
                                   startFlag = 1;
                                 });
                               }
+
+                              Future.delayed(Duration(milliseconds: 50), () {
+                                scrollController.jumpTo(scrollPosition);
+                              });
 
                               setState(() {
                                 final newImage = DraggableImage(
@@ -275,10 +282,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                     nearestImage,
                                   );
                                 }
-
                                 droppedImages.add(newImage);
                               });
                             },
+
                           );
                         } else {
                           return CircularProgressIndicator();
@@ -290,7 +297,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ),
             ),
           ),
-
 
           Expanded(
             flex: 80,
@@ -411,38 +417,23 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
-                        // 팝업, 숫자만 추출하여 콤마로 구분된 문자열로 만듭니다.
-                        connected_block_numbers = connectedImages.map((path) {
+                        // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
+                        connected_block_numbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                           return path.replaceAll(RegExp(r'\D'), '');
                         }).join(', ');
+                        connected_block_numbers = connected_block_numbers.replaceAllMapped(RegExp(r'(\d+), (\d+)'), (match) {
+                          return '${match.group(1)}:${match.group(2)}';
+                        });
+                        BluetoothHelper.sendData(connected_block_numbers);
 
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('연결된 이미지 목록'),
-                              content: SingleChildScrollView(
-                                child: ListBody(
-                                  children: <Widget>[
-                                    Text(connected_block_numbers),  // 합친 문자열을 표시합니다.
-                                  ],
-                                ),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('확인'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
+
 
 
                       }
+
+
                     },
+
 
 
 
