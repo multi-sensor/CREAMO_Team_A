@@ -54,6 +54,12 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 
 TBD
 
+<br/>
+<h1> 📑Flow Chart </h1>
+<hr/>
+
+
+
 <br/><br/>
 <h1> ➕ Details </h1>
 <hr/>
