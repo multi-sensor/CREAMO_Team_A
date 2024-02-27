@@ -58,6 +58,7 @@ TBD
 <h1> 📑Flow Chart </h1>
 <hr/>
 
+![002](https://github.com/multi-sensor/CREAMO_Team_A/assets/90318181/62794b7c-946d-42a5-ab11-7297e9e62515)
 
 
 <br/><br/>
