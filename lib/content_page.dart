@@ -118,7 +118,7 @@ class _ContentPageState extends State<ContentPage> {
             children: [
               // This Expanded takes 2/10 of the available width
               Expanded(
-                flex: 2,
+                flex: 15,
                 child: Container(
                   //color: Colors.amber,
                   child: Row(
@@ -180,7 +180,7 @@ class _ContentPageState extends State<ContentPage> {
 
               // This Expanded takes 8/10 of the available width
               Expanded(
-                flex: 8,
+                flex: 85,
                 child: Positioned(
                   left: 250,
                   top: 90,
