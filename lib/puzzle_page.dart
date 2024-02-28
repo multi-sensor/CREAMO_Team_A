@@ -417,21 +417,35 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
+                        // 허용된 숫자들의 리스트
+                        List<int> allowedNumbers = [4, 6, 7, 11, 12, 13, 23, 37];
+
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
-                        connected_block_numbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
-                          return path.replaceAll(RegExp(r'\D'), '');
-                        }).join(', ');
-                        connected_block_numbers = connected_block_numbers.replaceAllMapped(RegExp(r'(\d+), (\d+)'), (match) {
-                          return '${match.group(1)}:${match.group(2)}';
-                        });
+                        List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
+                          return int.parse(path.replaceAll(RegExp(r'\D'), ''));
+                        }).toList();
+
+                        List<String> formattedNumbers = [];
+                        int i = 0;
+                        while (i < blockNumbers.length) {
+                          String numberString = '';
+                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
+                            numberString += '${blockNumbers[i]}:';
+                            i++;
+                          }
+                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                            numberString += '${blockNumbers[i]},';
+                            i++;
+                          }
+                          numberString = numberString.substring(0, numberString.length - 1);
+                          formattedNumbers.add(numberString);
+                        }
+
+                        connected_block_numbers = formattedNumbers.join(', ');
+
                         BluetoothHelper.sendData(connected_block_numbers);
-
-
-
-
+                        print(connected_block_numbers);
                       }
-
-
                     },
 
 
