@@ -1,15 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'puzzle_page.dart'; // Importing PuzzlePage
 import 'package:carousel_slider/carousel_slider.dart';
-import 'start_page.dart';
-
-enum ContainerState {
-  Initial,
-  Middle,
-  Hard,
-}
+import 'puzzle_page.dart'; // PuzzlePage 임포트
+import 'start_page.dart'; // StartPage 임포트
 
 class ContentPage extends StatefulWidget {
   const ContentPage({Key? key}) : super(key: key);
@@ -19,35 +12,31 @@ class ContentPage extends StatefulWidget {
 }
 
 class _ContentPageState extends State<ContentPage> {
-  ContainerState containerState = ContainerState.Initial;
-  // 각각의 컨테이너에 대한 이미지 리스트
-  final List<String> initialImages = [
-    'images/slider_initial/1.png',
-    'images/slider_initial/2.png',
-    'images/slider_initial/3.png',
-    // Add more images as needed
+  List<List<String>> carouselImages = [
+    [
+      'images/slider_initial/1.png',
+      'images/slider_initial/2.png',
+      'images/slider_initial/3.png',
+    ],
+    [
+      'images/slider_middle/1.png',
+      'images/slider_middle/2.png',
+      'images/slider_middle/3.png',
+    ],
+    [
+      'images/slider_hard/1.png',
+      'images/slider_hard/2.png',
+      'images/slider_hard/3.png',
+    ],
+    // Add more image paths as needed
   ];
 
-  final List<String> middleImages = [
-    'images/slider_middle/1.png',
-    'images/slider_middle/2.png',
-    'images/slider_middle/3.png',
-    // Add more images as needed
-  ];
-
-  final List<String> hardImages = [
-    'images/slider_hard/1.png',
-    'images/slider_hard/2.png',
-    'images/slider_hard/3.png',
-    // Add more images as needed
-  ];
+  int selectedCarouselIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-
-
-    SystemChrome.setEnabledSystemUIMode(
-        SystemUiMode.manual, overlays: []); //status 바 숨김 기능
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: []); //status 바 숨김 기능
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -99,7 +88,6 @@ class _ContentPageState extends State<ContentPage> {
           ),
         ),
       ),
-
       body: Stack(
         children: [
           // Background color
@@ -129,8 +117,9 @@ class _ContentPageState extends State<ContentPage> {
                             height: 62,
                           ),
                           onPressed: () {
+                            // Do something when button is pressed
                             setState(() {
-                              containerState = ContainerState.Initial;
+                              selectedCarouselIndex = 0;
                             });
                           },
                         ),
@@ -144,8 +133,9 @@ class _ContentPageState extends State<ContentPage> {
                             height: 62,
                           ),
                           onPressed: () {
+                            // Do something when button is pressed
                             setState(() {
-                              containerState = ContainerState.Middle;
+                              selectedCarouselIndex = 1;
                             });
                           },
                         ),
@@ -153,18 +143,19 @@ class _ContentPageState extends State<ContentPage> {
                       Padding(
                         padding: EdgeInsets.fromLTRB(10.0, 15.0, 0.0, 0.0),
                         child: IconButton(
-                        icon: Image.asset(
+                          icon: Image.asset(
                             'images/button/hard.png',
-                          width: 126,
-                          height: 62,
-                        ), // Replace with your image
-                        onPressed: () {
-                          setState(() {
-                            containerState = ContainerState.Hard;
-                          });
-                        },
+                            width: 126,
+                            height: 62,
+                          ),
+                          onPressed: () {
+                            // Do something when button is pressed
+                            setState(() {
+                              selectedCarouselIndex = 2;
+                            });
+                          },
+                        ),
                       ),
-                       ),
                     ],
                   ),
                 ),
@@ -176,7 +167,46 @@ class _ContentPageState extends State<ContentPage> {
                 child: Positioned(
                   left: 250,
                   top: 90,
-                  child: _buildContainer(),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width, // 화면 너비에 맞춤
+                    height: 200,
+                    child: CarouselSlider.builder(
+                      itemCount: carouselImages[selectedCarouselIndex].length,
+                      options: CarouselOptions(
+                        aspectRatio: 16 / 9,
+                        viewportFraction: 1 / 3,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: false,
+                        autoPlayInterval: Duration(seconds: 3),
+                        autoPlayAnimationDuration: Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        onPageChanged: (index, reason) {},
+                        scrollDirection: Axis.horizontal,
+                      ),
+                      itemBuilder: (context, index, realIndex) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PuzzlePage(imagePath: carouselImages[selectedCarouselIndex][index])),
+                            );
+                          },
+                          child: Row(
+                            children: [
+                              _buildImageWithPadding(
+                                carouselImages[selectedCarouselIndex][index],
+                                index,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -184,62 +214,7 @@ class _ContentPageState extends State<ContentPage> {
         ],
       ),
     );
-
   }
-
-  // 각각의 컨테이너에 대한 슬라이더 반환
-  Widget _buildContainer() {
-    switch (containerState) {
-      case ContainerState.Initial:
-        return _buildCarouselSlider(initialImages); // initialImages 사용
-      case ContainerState.Middle:
-        return _buildCarouselSlider(middleImages); // middleImages 사용
-      case ContainerState.Hard:
-        return _buildCarouselSlider(hardImages); // hardImages 사용
-      default:
-        return Container(); // 기본값으로 빈 컨테이너 반환
-    }
-  }
-
-  // 슬라이더 생성 및 반환
-  Widget _buildCarouselSlider(List<String> images) { // 이미지 리스트 파라미터 추가
-    return Positioned(
-      left: 150,
-      top: (MediaQuery.of(context).size.height - 500) / 2,
-      child: Container(
-        width: 950,
-        height: 500,
-        child: CarouselSlider.builder(
-          itemCount: images.length ~/ 3,
-          options: CarouselOptions(
-            aspectRatio: 16 / 9,
-            viewportFraction: 1,
-            initialPage: 0,
-            enableInfiniteScroll: true,
-            reverse: false,
-            autoPlay: false,
-            autoPlayInterval: Duration(seconds: 3),
-            autoPlayAnimationDuration: Duration(milliseconds: 800),
-            autoPlayCurve: Curves.fastOutSlowIn,
-            enlargeCenterPage: true,
-            onPageChanged: (index, reason) {},
-            scrollDirection: Axis.horizontal,
-          ),
-          itemBuilder: (context, index, realIndex) {
-            return Row(
-              children: [
-                _buildImageWithPadding(images[index * 3], index * 3),
-                _buildImageWithPadding(images[index * 3 + 1], index * 3 + 1),
-                _buildImageWithPadding(images[index * 3 + 2], index * 3 + 2),
-              ],
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-
   Widget _buildImageWithPadding(String imagePath, int index) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -251,11 +226,13 @@ class _ContentPageState extends State<ContentPage> {
                 builder: (context) => PuzzlePage(imagePath: imagePath)),
           );
         },
-        child: Image.asset(imagePath, width: 280, height: 296),
+        child: Image.asset(imagePath, width: 450, height: 400),
       ),
     );
   }
 
-
-
 }
+
+
+
+
