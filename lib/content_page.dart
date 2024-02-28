@@ -14,19 +14,36 @@ class ContentPage extends StatefulWidget {
 class _ContentPageState extends State<ContentPage> {
   List<List<String>> carouselImages = [
     [
-      'images/slider_initial/1.png',
-      'images/slider_initial/2.png',
-      'images/slider_initial/3.png',
+      'images/slider/content1.png',
+      'images/slider/content2.png',
+      'images/slider/content3.png',
+      'images/slider/content4.png',
+      'images/slider/content5.png',
+      'images/slider/content6.png',
+      'images/slider/content7.png',
+      'images/slider/content8.png',
+      'images/slider/content9.png',
+      'images/slider/content10.png',
+      'images/slider/content11.png',
     ],
     [
-      'images/slider_middle/1.png',
-      'images/slider_middle/2.png',
-      'images/slider_middle/3.png',
+      'images/slider/content12.png',
+      'images/slider/content13.png',
+      'images/slider/content14.png',
+      'images/slider/content15.png',
+      'images/slider/content16.png',
+      'images/slider/content17.png',
     ],
     [
-      'images/slider_hard/1.png',
-      'images/slider_hard/2.png',
-      'images/slider_hard/3.png',
+      'images/slider/content18.png',
+      'images/slider/content19.png',
+      'images/slider/content20.png',
+      'images/slider/content21.png',
+      'images/slider/content22.png',
+      'images/slider/content23.png',
+      'images/slider/content24.png',
+      'images/slider/content25.png',
+      'images/slider/content26.png',
     ],
     // Add more image paths as needed
   ];
@@ -168,7 +185,7 @@ class _ContentPageState extends State<ContentPage> {
                   left: 250,
                   top: 90,
                   child: Container(
-                    width: MediaQuery.of(context).size.width, // 화면 너비에 맞춤
+                    width: MediaQuery.of(context).size.width,
                     height: 200,
                     child: CarouselSlider.builder(
                       itemCount: carouselImages[selectedCarouselIndex].length,
@@ -192,17 +209,11 @@ class _ContentPageState extends State<ContentPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => PuzzlePage(imagePath: carouselImages[selectedCarouselIndex][index])),
+                                builder: (context) => PuzzlePage(imagePath: carouselImages[selectedCarouselIndex][index]),
+                              ),
                             );
                           },
-                          child: Row(
-                            children: [
-                              _buildImageWithPadding(
-                                carouselImages[selectedCarouselIndex][index],
-                                index,
-                              ),
-                            ],
-                          ),
+                          child: _buildImageWithPadding(carouselImages[selectedCarouselIndex][index], index),
                         );
                       },
                     ),
@@ -215,24 +226,11 @@ class _ContentPageState extends State<ContentPage> {
       ),
     );
   }
+
   Widget _buildImageWithPadding(String imagePath, int index) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PuzzlePage(imagePath: imagePath)),
-          );
-        },
-        child: Image.asset(imagePath, width: 450, height: 400),
-      ),
+      child: Image.asset(imagePath, width: 450, height: 400),
     );
   }
-
 }
-
-
-
-

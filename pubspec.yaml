@@ -83,11 +83,32 @@ flutter:
     - images/start/start_background.png
     - images/start/start_button_1.png
     - images/start/use_button_1.png
-    - images/slider/1.jpg
-    - images/slider/2.jpg
-    - images/slider/3.jpg
-    - images/slider/4.jpg
-    - images/slider/5.jpg
+    - images/slider/content1.png
+    - images/slider/content2.png
+    - images/slider/content3.png
+    - images/slider/content4.png
+    - images/slider/content5.png
+    - images/slider/content6.png
+    - images/slider/content7.png
+    - images/slider/content8.png
+    - images/slider/content9.png
+    - images/slider/content10.png
+    - images/slider/content11.png
+    - images/slider/content12.png
+    - images/slider/content13.png
+    - images/slider/content14.png
+    - images/slider/content15.png
+    - images/slider/content16.png
+    - images/slider/content17.png
+    - images/slider/content18.png
+    - images/slider/content19.png
+    - images/slider/content20.png
+    - images/slider/content21.png
+    - images/slider/content22.png
+    - images/slider/content23.png
+    - images/slider/content24.png
+    - images/slider/content25.png
+    - images/slider/content26.png
     - images/puzzle/block1.png
     - images/puzzle/block2.png
     - images/puzzle/block3.png
