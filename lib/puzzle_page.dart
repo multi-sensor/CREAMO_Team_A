@@ -417,19 +417,37 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
+                        // 허용된 숫자들의 리스트
+                        List<int> allowedNumbers = [4, 6, 7, 11, 12, 13, 23, 37];
+
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
-                        connected_block_numbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
-                          return path.replaceAll(RegExp(r'\D'), '');
-                        }).join(', ');
-                        connected_block_numbers = connected_block_numbers.replaceAllMapped(RegExp(r'(\d+), (\d+)'), (match) {
-                          return '${match.group(1)}:${match.group(2)}';
-                        });
+                        List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
+                          return int.parse(path.replaceAll(RegExp(r'\D'), ''));
+                        }).toList();
+
+                        List<String> formattedNumbers = [];
+                        int i = 0;
+                        while (i < blockNumbers.length) {
+                          String numberString = '';
+                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
+                            numberString += '${blockNumbers[i]}:';
+                            i++;
+                          }
+                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                            numberString += '${blockNumbers[i]},';
+                            i++;
+                          }
+                          numberString = numberString.substring(0, numberString.length - 1);
+                          formattedNumbers.add(numberString);
+                        }
+
+                        connected_block_numbers = formattedNumbers.join(', ');
+
                         BluetoothHelper.sendData(connected_block_numbers);
-
-
-
-
+                        print(connected_block_numbers);
                       }
+
+
 
 
                     },
@@ -636,4 +654,66 @@ class DraggableImage {
       38: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
     }[index]!;
   }
+
 }
+
+// void image_string() {
+//   List<int> keys = [4, 6, 7, 11, 12, 13, 23, 37];
+//   String inputString = connected_block_numbers;
+//   Map<int, List<int>> keyValueMap = {};
+//   List<String> connectedImages = inputString.split(',');
+//
+//   int currentIndex = 0;
+//   for (int i = 0; i < keys.length; i++) {
+//     int key = keys[i];
+//     List<int> values = [];
+//     while (currentIndex < connectedImages.length) {
+//       int value = int.parse(connectedImages[currentIndex]);
+//       if (value < key) {
+//         currentIndex++;
+//       } else if (value >= key && (i == keys.length - 1 || value < keys[i + 1])) {
+//         values.add(value);
+//         currentIndex++;
+//       } else {
+//         break;
+//       }
+//     }
+//
+//     if (values.isNotEmpty) {
+//       keyValueMap[key] = values;
+//     }
+//
+//   }
+//   BluetoothHelper.sendData(keyValueMap as String);
+//   print("hello");
+//   print(keyValueMap);
+// }
+
+// void main() {
+//   List<int> keys = [4, 6, 7, 11, 12, 13, 23, 37];
+//   String inputString = connected_block_numbers;
+//   Map<int, List<int>> keyValueMap = {};
+//   List<String> connectedImages = inputString.split(',');
+//   int startKey = 1;
+//   int endKey = 3;
+//
+//   int nextKey = (keys.length > 0) ? keys[1] : connectedImages.length - 1;
+//
+//   List<int> values = [];
+//   for (int j = 0; j < connectedImages.length; j++) {
+//     int value = int.parse(connectedImages[j]);
+//     if (value >= startKey && value < nextKey) {
+//       values.add(value);
+//     } else if (value == nextKey) {
+//       // 키값이 나타날 때까지의 값들을 리스트로 묶어줍니다.
+//       keyValueMap[nextKey] = values;
+//       values = [];
+//       startKey = nextKey;
+//       nextKey = (keys.length > 0) ? keys[0] : connectedImages.length + 1;
+//     }
+//   }
+//
+//   print(keyValueMap);
+//   BluetoothHelper.sendData(keyValueMap as String);
+// }
+
