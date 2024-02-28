@@ -5,6 +5,12 @@ import 'puzzle_page.dart'; // Importing PuzzlePage
 import 'package:carousel_slider/carousel_slider.dart';
 import 'start_page.dart';
 
+enum ContainerState {
+  Initial,
+  Middle,
+  Hard,
+}
+
 class ContentPage extends StatefulWidget {
   const ContentPage({Key? key}) : super(key: key);
 
@@ -13,21 +19,33 @@ class ContentPage extends StatefulWidget {
 }
 
 class _ContentPageState extends State<ContentPage> {
-  final List<String> images = [
-    'images/slider/1.jpg',
-    'images/slider/2.jpg',
-    'images/slider/3.jpg',
-    'images/slider/4.jpg',
-    'images/slider/5.jpg',
-    'images/slider/1.jpg',
-    'images/slider/2.jpg',
-    'images/slider/3.jpg',
-    'images/slider/4.jpg',
-    // Add more image paths as needed
+  ContainerState containerState = ContainerState.Initial;
+  // 각각의 컨테이너에 대한 이미지 리스트
+  final List<String> initialImages = [
+    'images/slider_initial/1.png',
+    'images/slider_initial/2.png',
+    'images/slider_initial/3.png',
+    // Add more images as needed
+  ];
+
+  final List<String> middleImages = [
+    'images/slider_middle/1.png',
+    'images/slider_middle/2.png',
+    'images/slider_middle/3.png',
+    // Add more images as needed
+  ];
+
+  final List<String> hardImages = [
+    'images/slider_hard/1.png',
+    'images/slider_hard/2.png',
+    'images/slider_hard/3.png',
+    // Add more images as needed
   ];
 
   @override
   Widget build(BuildContext context) {
+
+
     SystemChrome.setEnabledSystemUIMode(
         SystemUiMode.manual, overlays: []); //status 바 숨김 기능
     return Scaffold(
@@ -111,7 +129,9 @@ class _ContentPageState extends State<ContentPage> {
                             height: 62,
                           ),
                           onPressed: () {
-                            // Do something when button is pressed
+                            setState(() {
+                              containerState = ContainerState.Initial;
+                            });
                           },
                         ),
                       ),
@@ -124,7 +144,9 @@ class _ContentPageState extends State<ContentPage> {
                             height: 62,
                           ),
                           onPressed: () {
-                            // Do something when button is pressed
+                            setState(() {
+                              containerState = ContainerState.Middle;
+                            });
                           },
                         ),
                       ),
@@ -137,7 +159,9 @@ class _ContentPageState extends State<ContentPage> {
                           height: 62,
                         ), // Replace with your image
                         onPressed: () {
-                          // Do something when button is pressed
+                          setState(() {
+                            containerState = ContainerState.Hard;
+                          });
                         },
                       ),
                        ),
@@ -152,36 +176,7 @@ class _ContentPageState extends State<ContentPage> {
                 child: Positioned(
                   left: 250,
                   top: 90,
-                  child: Container(
-                    width: 850,
-                    height: 200,
-                    child: CarouselSlider.builder(
-                      itemCount: images.length ~/ 3,
-                      options: CarouselOptions(
-                        aspectRatio: 16 / 9,
-                        viewportFraction: 1,
-                        initialPage: 0,
-                        enableInfiniteScroll: true,
-                        reverse: false,
-                        autoPlay: false,
-                        autoPlayInterval: Duration(seconds: 3),
-                        autoPlayAnimationDuration: Duration(milliseconds: 800),
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        enlargeCenterPage: true,
-                        onPageChanged: (index, reason) {},
-                        scrollDirection: Axis.horizontal,
-                      ),
-                      itemBuilder: (context, index, realIndex) {
-                        return Row(
-                          children: [
-                            _buildImageWithPadding(images[index * 3], index * 3),
-                            _buildImageWithPadding(images[index * 3 + 1], index * 3 + 1),
-                            _buildImageWithPadding(images[index * 3 + 2], index * 3 + 2),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
+                  child: _buildContainer(),
                 ),
               ),
             ],
@@ -190,6 +185,58 @@ class _ContentPageState extends State<ContentPage> {
       ),
     );
 
+  }
+
+  // 각각의 컨테이너에 대한 슬라이더 반환
+  Widget _buildContainer() {
+    switch (containerState) {
+      case ContainerState.Initial:
+        return _buildCarouselSlider(initialImages); // initialImages 사용
+      case ContainerState.Middle:
+        return _buildCarouselSlider(middleImages); // middleImages 사용
+      case ContainerState.Hard:
+        return _buildCarouselSlider(hardImages); // hardImages 사용
+      default:
+        return Container(); // 기본값으로 빈 컨테이너 반환
+    }
+  }
+
+  // 슬라이더 생성 및 반환
+  Widget _buildCarouselSlider(List<String> images) { // 이미지 리스트 파라미터 추가
+    return Positioned(
+      left: 150,
+      top: (MediaQuery.of(context).size.height - 500) / 2,
+      child: Container(
+        width: 950,
+        height: 500,
+        child: CarouselSlider.builder(
+          itemCount: images.length ~/ 3,
+          options: CarouselOptions(
+            aspectRatio: 16 / 9,
+            viewportFraction: 1,
+            initialPage: 0,
+            enableInfiniteScroll: true,
+            reverse: false,
+            autoPlay: false,
+            autoPlayInterval: Duration(seconds: 3),
+            autoPlayAnimationDuration: Duration(milliseconds: 800),
+            autoPlayCurve: Curves.fastOutSlowIn,
+            enlargeCenterPage: true,
+            onPageChanged: (index, reason) {},
+            scrollDirection: Axis.horizontal,
+          ),
+          itemBuilder: (context, index, realIndex) {
+            return Row(
+              children: [
+                _buildImageWithPadding(images[index * 3], index * 3),
+                _buildImageWithPadding(images[index * 3 + 1], index * 3 + 1),
+                _buildImageWithPadding(images[index * 3 + 2], index * 3 + 2),
+              ],
+            );
+          },
+        ),
+      ),
+    );
   }
 
 
@@ -204,9 +251,11 @@ class _ContentPageState extends State<ContentPage> {
                 builder: (context) => PuzzlePage(imagePath: imagePath)),
           );
         },
-        child: Image.asset(imagePath, width: 200, height: 200),
+        child: Image.asset(imagePath, width: 280, height: 296),
       ),
     );
   }
+
+
 
 }

@@ -76,6 +76,9 @@ flutter:
     - images/button/
     - images/slider/
     - images/start/
+    - images/slider_hard/
+    - images/slider_initial/
+    - images/slider_middle/
     - images/start/creamo_logo.png
     - images/start/start_background.png
     - images/start/start_button_1.png
@@ -137,6 +140,15 @@ flutter:
     - images/button/easy.png
     - images/button/middle.png
     - images/button/hard.png
+    - images/slider_initial/1.png
+    - images/slider_initial/2.png
+    - images/slider_initial/2.png
+    - images/slider_middle/1.png
+    - images/slider_middle/2.png
+    - images/slider_middle/3.png
+    - images/slider_hard/1.png
+    - images/slider_hard/2.png
+    - images/slider_hard/3.png
 
     - images/backgrounds/splash_background.png
     - images/backgrounds/background.png
