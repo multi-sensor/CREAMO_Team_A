@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'content_page.dart';
-import 'puzzle_page.dart';
+
 
 class StartPage extends StatelessWidget {
   const StartPage({Key? key}) : super(key: key);
@@ -12,12 +12,7 @@ class StartPage extends StatelessWidget {
     );
   }
 
-  void _navigateToPuzzlePage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => PuzzlePage(imagePath: 'images/start/start_button_1.png')),
-    );
-  }
+
 
 
 
@@ -93,7 +88,7 @@ class StartPage extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 50.0),
                   child: InkWell(
-                    onTap: () => _navigateToPuzzlePage(context),
+                    onTap: () => _navigateToContentPage(context),
                     child: Image.asset('images/start/start_button_1.png', width: 300, height: 340),
                   ),
                 ),

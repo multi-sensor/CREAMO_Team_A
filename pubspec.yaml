@@ -134,6 +134,9 @@ flutter:
     - images/button/reset.png
     - images/button/home.png
     - images/button/poweroff.png
+    - images/button/easy.png
+    - images/button/middle.png
+    - images/button/hard.png
 
     - images/backgrounds/splash_background.png
     - images/backgrounds/background.png
