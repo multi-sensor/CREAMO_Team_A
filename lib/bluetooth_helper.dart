@@ -201,21 +201,21 @@ class BluetoothHelper {
     }
   }
 
-  static void sendData(String data) async {
+  static void sendData(Map<int, List<int>> data) async {
     if (connectedDevice != null) {
       List<BluetoothService> services = await connectedDevice!
           .discoverServices();
       services.forEach((service) {
         service.characteristics.forEach((characteristic) async {
           if (characteristic.properties.write) {
-            await characteristic.write(data.codeUnits);
+            await characteristic.write(data
+                .toString()
+                .codeUnits);
           }
         });
       });
     }
   }
-
 }
-
 
 
