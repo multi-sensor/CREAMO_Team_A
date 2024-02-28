@@ -78,13 +78,34 @@ flutter:
     - images/start/
     - images/start/creamo_logo.png
     - images/start/start_background.png
-    - images/start/start_button.png
-    - images/start/use_button.png
-    - images/slider/1.jpg
-    - images/slider/2.jpg
-    - images/slider/3.jpg
-    - images/slider/4.jpg
-    - images/slider/5.jpg
+    - images/start/start_button_1.png
+    - images/start/use_button_1.png
+    - images/slider/content1.png
+    - images/slider/content2.png
+    - images/slider/content3.png
+    - images/slider/content4.png
+    - images/slider/content5.png
+    - images/slider/content6.png
+    - images/slider/content7.png
+    - images/slider/content8.png
+    - images/slider/content9.png
+    - images/slider/content10.png
+    - images/slider/content11.png
+    - images/slider/content12.png
+    - images/slider/content13.png
+    - images/slider/content14.png
+    - images/slider/content15.png
+    - images/slider/content16.png
+    - images/slider/content17.png
+    - images/slider/content18.png
+    - images/slider/content19.png
+    - images/slider/content20.png
+    - images/slider/content21.png
+    - images/slider/content22.png
+    - images/slider/content23.png
+    - images/slider/content24.png
+    - images/slider/content25.png
+    - images/slider/content26.png
     - images/puzzle/block1.png
     - images/puzzle/block2.png
     - images/puzzle/block3.png
@@ -125,15 +146,18 @@ flutter:
     - images/puzzle/block38.png
     - images/button/button1.png
     - images/button/button2.png
-    - images/button/button3.png
     - images/button/button4.png
-    - images/button/button5.png
+    - images/button/button3.png
     - images/button/button6.png
+    - images/button/button5.png
     - images/button/run.png
     - images/button/trash.png
     - images/button/reset.png
     - images/button/home.png
     - images/button/poweroff.png
+    - images/button/easy.png
+    - images/button/middle.png
+    - images/button/hard.png
 
     - images/backgrounds/splash_background.png
     - images/backgrounds/background.png
