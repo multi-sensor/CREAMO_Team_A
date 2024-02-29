@@ -57,7 +57,7 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 
 ![3](https://github.com/multi-sensor/CREAMO_Team_A/assets/90318181/a033b2ec-726b-4f74-8a86-be7c1fac25b4)
 
-TBD
+
 
 <br/>
 <h1> 📑Flow Chart </h1>
@@ -91,72 +91,57 @@ TBD
 
 
 `puzzle_page.dart`
-1. App Bar
-- The app bar contains navigation and control buttons. It includes a logo, a home button, a Bluetooth button, and a power-off button.
+1. Initialization
+- The widget initializes with a given image path for the puzzle.
 
+2. Scrolling Interface
+- It provides a horizontally scrollable interface divided into sections. The user can scroll through different sections using buttons.
 
-2. Image Navigation
-- Users can navigate through different sections of the puzzle image using buttons located at the top of the screen. Each button corresponds to a specific section of the puzzle.
+3. Image Drag and Drop
+- Users can drag and drop images onto a target area. The dropped images can snap to specific positions based on predefined snap points.
 
+4. Reset Functionality
+- There's a reset button to clear all dropped images and reset the puzzle.
 
-3. Puzzle Grid
-- The main section of the page displays the puzzle grid where users can drag and drop puzzle pieces. The puzzle grid is horizontally scrollable, allowing users to access different parts of the puzzle.
+5. Bluetooth Integration
+- It includes a button to trigger a Bluetooth scan, and another button to initiate a puzzle-solving process which involves generating a sequence of connected block numbers.
 
+6. Trash Can Feature
+- Users can drag images to a trash can area to delete them from the puzzle.
 
-4. Draggable Puzzle Pieces
-- Puzzle pieces are represented as draggable images. Users can long-press and drag these pieces across the puzzle grid. When dropped, the pieces snap into place based on predefined snap points, ensuring they align correctly with adjacent pieces.
+7. Image Snap and Connect
+- Images can snap to each other when placed close enough, forming connections. This functionality is crucial for solving the puzzle.
 
-
-5. Trash Can
-- There's a trash can icon located at the bottom right corner of the screen. Users can drag unwanted puzzle pieces to the trash can to delete them from the grid.
-
-
-6. Reset Button
-- A reset button is available at the bottom left corner of the screen. Users can tap this button to reset the puzzle grid, clearing all placed pieces.
-
-
-7. Play Button
-- The play button at the bottom left corner initiates a process to identify and send data related to the connected puzzle pieces. It identifies the sequence of connected pieces and sends the data, possibly for further processing or action.
-
-
-8. Bluetooth Integration
-- The widget includes functionality to interact with Bluetooth devices. This functionality might involve scanning for nearby Bluetooth devices or sending data over a Bluetooth connection.
-
-
-9. Status Bar Management
-- The widget manages the visibility of the status bar, possibly hiding it to provide a full-screen puzzle experience.
-
-
-10. Supporting Classes
-- The widget utilizes supporting classes such as DraggableImage to represent individual puzzle pieces and manage their behavior.
+8. Bluetooth Data Transmission
+- Upon solving the puzzle, the connected block numbers are formatted and sent via Bluetooth.
 
 
 `bluetooth_helper.dart`
 
-1. Start Bluetooth Scan:
-- Clears the list of discovered devices.
-- Displays information about the connected device if one is already connected.
-- Requests location permission if it's not granted.
-- Initiates the initial scan and displays discovered devices if permission is granted.
+1. Bluetooth Device Management
+- connectedDevice: Represents the currently connected Bluetooth device.
+- devices: A list to store available Bluetooth devices discovered during scanning.
 
-2. Initial Scan and Device Display:
-- Displays a dialog box indicating the progress of the Bluetooth scan.
-- Initiates the scan and filters the results for devices with names containing 'Creamo_CB_'.
-- Stops the scan after 3 seconds and displays a list of discovered devices.
+2. Bluetooth Scanning
+- startBluetoothScan(BuildContext context): Initiates the Bluetooth scan process and handles device discovery.
+- _startInitialScanAndShowDevicesDialog(BuildContext context): Starts the initial Bluetooth scan and displays a dialog showing scanning progress.
+- _showDevicesDialog(BuildContext context): Shows a dialog with a list of discovered Bluetooth devices, allowing the user to connect to a selected device.
 
-3. Show Connected Device:
-- Displays information about the connected device in a dialog box.
-- Provides options to disconnect or close the dialog.
+3. Device Connection
+- _disconnectDevice(BuildContext context): Disconnects the currently connected device.
+- sendData(String data): Sends data to the connected Bluetooth device.
 
-4. Show Devices Dialog:
-- Displays a dialog box listing discoverable Bluetooth devices.
-- Allows the user to tap on a device to attempt a connection.
-- Shows success or failure messages for the connection attempt.
+4. Dialogs and Feedback
+- _showConnectedDeviceDialog(BuildContext context): Displays information about the currently connected device.
+- Feedback through toast messages: Provides feedback to the user regarding connection status and operations (success or failure) using Fluttertoast.
 
-5. Disconnect Device:
-- Disconnects the connected Bluetooth device.
-- Displays success or failure messages based on the disconnection result.
+5. Permission Handling
+- Requests and handles location permission to enable Bluetooth scanning.
 
-6. Send Data:
-- Transmits data to the connected Bluetooth device.
-- Discovers available services and characteristics on the device and writes data to writable characteristics.
+6. Event Handling
+- Subscribes to Bluetooth scan results and stops scanning after a specified timeout.
+- Handles user interactions such as selecting a device to connect to.
+
+7. Service Discovery and Data Transmission
+- Discovers services and characteristics of the connected Bluetooth device.
+- Writes data to a writable characteristic of the connected device for data transmission.
