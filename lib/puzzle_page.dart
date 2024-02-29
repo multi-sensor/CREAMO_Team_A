@@ -433,19 +433,38 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             numberString += '${blockNumbers[i]}:';
                             i++;
                           }
-                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]},';
-                            i++;
+                          if (numberString.isNotEmpty) {
+                            numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
+                            formattedNumbers.add(numberString);
                           }
-                          numberString = numberString.substring(0, numberString.length - 1);
-                          formattedNumbers.add(numberString);
+                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                            numberString = '';
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                              numberString += '${blockNumbers[i]}';
+                              i++;
+                            }
+                            // 아래 라인을 변경하여 콜론(:)을 추가합니다.
+                            formattedNumbers.add(':[$numberString],');
+                          }
                         }
 
-                        connected_block_numbers = formattedNumbers.join(', ');
+                        connected_block_numbers = formattedNumbers.join('');
 
                         BluetoothHelper.sendData(connected_block_numbers);
                         print(connected_block_numbers);
                       }
+
+
+
+
+
+
+
+
+
+
+
+
                     },
 
 
@@ -650,4 +669,65 @@ class DraggableImage {
       38: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
     }[index]!;
   }
+
 }
+
+// void image_string() {
+//   List<int> keys = [4, 6, 7, 11, 12, 13, 23, 37];
+//   String inputString = connected_block_numbers;
+//   Map<int, List<int>> keyValueMap = {};
+//   List<String> connectedImages = inputString.split(',');
+//
+//   int currentIndex = 0;
+//   for (int i = 0; i < keys.length; i++) {
+//     int key = keys[i];
+//     List<int> values = [];
+//     while (currentIndex < connectedImages.length) {
+//       int value = int.parse(connectedImages[currentIndex]);
+//       if (value < key) {
+//         currentIndex++;
+//       } else if (value >= key && (i == keys.length - 1 || value < keys[i + 1])) {
+//         values.add(value);
+//         currentIndex++;
+//       } else {
+//         break;
+//       }
+//     }
+//
+//     if (values.isNotEmpty) {
+//       keyValueMap[key] = values;
+//     }
+//
+//   }
+//   BluetoothHelper.sendData(keyValueMap as String);
+//   print("hello");
+//   print(keyValueMap);
+// }
+
+// void main() {
+//   List<int> keys = [4, 6, 7, 11, 12, 13, 23, 37];
+//   String inputString = connected_block_numbers;
+//   Map<int, List<int>> keyValueMap = {};
+//   List<String> connectedImages = inputString.split(',');
+//   int startKey = 1;
+//   int endKey = 3;
+//
+//   int nextKey = (keys.length > 0) ? keys[1] : connectedImages.length - 1;
+//
+//   List<int> values = [];
+//   for (int j = 0; j < connectedImages.length; j++) {
+//     int value = int.parse(connectedImages[j]);
+//     if (value >= startKey && value < nextKey) {
+//       values.add(value);
+//     } else if (value == nextKey) {
+//       // 키값이 나타날 때까지의 값들을 리스트로 묶어줍니다.
+//       keyValueMap[nextKey] = values;
+//       values = [];
+//       startKey = nextKey;
+//       nextKey = (keys.length > 0) ? keys[0] : connectedImages.length + 1;
+//     }
+//   }
+//
+//   print(keyValueMap);
+//   BluetoothHelper.sendData(keyValueMap as String);
+// }
