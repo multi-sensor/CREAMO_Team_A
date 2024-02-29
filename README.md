@@ -145,4 +145,3 @@ Then, perform block coding and execute it to see the ADDI blocks operate in real
 7. Service Discovery and Data Transmission
 - Discovers services and characteristics of the connected Bluetooth device.
 - Writes data to a writable characteristic of the connected device for data transmission.
-
