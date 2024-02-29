@@ -433,19 +433,34 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             numberString += '${blockNumbers[i]}:';
                             i++;
                           }
-                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]},';
-                            i++;
+                          if (numberString.isNotEmpty) {
+                            numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
+                            formattedNumbers.add(numberString);
                           }
-                          numberString = numberString.substring(0, numberString.length - 1);
-                          formattedNumbers.add(numberString);
+                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                            numberString = '';
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                              numberString += '${blockNumbers[i]}';
+                              i++;
+                            }
+                            // 아래 라인을 변경하여 콜론(:)을 추가합니다.
+                            formattedNumbers.add(':[$numberString],');
+                          }
                         }
 
-                        connected_block_numbers = formattedNumbers.join(', ');
+                        connected_block_numbers = formattedNumbers.join('');
 
                         BluetoothHelper.sendData(connected_block_numbers);
                         print(connected_block_numbers);
                       }
+
+
+
+
+
+
+
+
 
 
 
