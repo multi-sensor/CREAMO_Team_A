@@ -224,7 +224,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
-                  itemCount: startFlag == 0 ? 44 : 43,
+                  itemCount: startFlag == 0 ? 43 : 42,
                   itemBuilder: (context, index) {
                     final imageIdx = startFlag == 0 ? index + 1 : index + 2;
                     final image = Image.asset('images/puzzle/block${imageIdx}.png');
@@ -627,7 +627,7 @@ class DraggableImage {
       41: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       42: {'left': Offset(16, 50), 'right': Offset(132, 50),},
       43: {'left': Offset(16, 50), 'right': Offset(132, 50), },
-      44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      //44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
 
     }[index]!;
   }
