@@ -106,6 +106,7 @@ flutter:
     - images/slider/content24.png
     - images/slider/content25.png
     - images/slider/content26.png
+
     - images/puzzle/block1.png
     - images/puzzle/block2.png
     - images/puzzle/block3.png
@@ -144,6 +145,13 @@ flutter:
     - images/puzzle/block36.png
     - images/puzzle/block37.png
     - images/puzzle/block38.png
+    - images/puzzle/block39.png
+    - images/puzzle/block40.png
+    - images/puzzle/block41.png
+    - images/puzzle/block42.png
+    - images/puzzle/block43.png
+    - images/puzzle/block44.png
+
     - images/button/button1.png
     - images/button/button2.png
     - images/button/button4.png
