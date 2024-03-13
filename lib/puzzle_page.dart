@@ -375,25 +375,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       DraggableImage? currentImage = startImage;
 
                       while (currentImage != null && currentImage.blockIndex != 3) {
-                        // 블록2의 내부 스냅 포인트에 연결된 이미지를 찾습니다.
-                        if (currentImage.blockIndex == 2) {
-                          DraggableImage? innerImage;
-                          double minDistance = double.infinity;
-                          for (var image in droppedImages) {
-                            if (image == currentImage) continue;
-                            double distance = (image.leftSnapPoint + image.position -
-                                currentImage.rightInnerSnapPoint - currentImage.position)
-                                .distance;
-                            if (distance < minDistance) {
-                              innerImage = image;
-                              minDistance = distance;
-                            }
-                          }
-                          if (innerImage != null && minDistance < 50.0) {
-                            connectedImages.add(innerImage.path);
-                          }
-                        }
-
                         // 외부 스냅 포인트에 연결된 이미지를 찾습니다.
                         DraggableImage? nextImage;
                         double minDistance = double.infinity;
@@ -415,6 +396,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                           currentImage = null;
                         }
                       }
+
 
                       if (currentImage != null && currentImage.blockIndex == 3) {
                         // 허용된 숫자들의 리스트
@@ -547,43 +529,31 @@ class _PuzzlePageState extends State<PuzzlePage> {
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
     Offset nearestSnapPoint = targetPosition;
     double minDistance = double.infinity;
-    bool useInnerSnapPoint = false;
 
     final newImageLeftSnapPoint = newImage.leftSnapPoint + targetPosition;
     final newImageRightSnapPoint = newImage.rightSnapPoint + targetPosition;
-    final newImageRightInnerSnapPoint = newImage.rightInnerSnapPoint + targetPosition;
 
     for (var droppedImage in droppedImages) {
       final droppedImageLeftSnapPoint = droppedImage.leftSnapPoint + droppedImage.position;
       final droppedImageRightSnapPoint = droppedImage.rightSnapPoint + droppedImage.position;
-      final droppedImageRightInnerSnapPoint = droppedImage.rightInnerSnapPoint + droppedImage.position;
 
-      final distanceRightInner = (newImageRightInnerSnapPoint - droppedImageRightInnerSnapPoint).distance;
+      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
+      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
-      if (distanceRightInner < 30.0 && distanceRightInner < minDistance) {
-        nearestSnapPoint = droppedImageRightInnerSnapPoint - newImage.rightInnerSnapPoint;
-        minDistance = distanceRightInner;
-        useInnerSnapPoint = true;
+      if (distanceLeft < 30.0 && distanceLeft < minDistance) {
+        nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
+        minDistance = distanceLeft;
       }
 
-      if (!useInnerSnapPoint) {
-        final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
-        final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
-
-        if (distanceLeft < 30.0 && distanceLeft < minDistance) {
-          nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
-          minDistance = distanceLeft;
-        }
-
-        if (distanceRight < 30.0 && distanceRight < minDistance) {
-          nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
-          minDistance = distanceRight;
-        }
+      if (distanceRight < 30.0 && distanceRight < minDistance) {
+        nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
+        minDistance = distanceRight;
       }
     }
 
     return nearestSnapPoint;
   }
+
 
 
 
@@ -598,8 +568,7 @@ class DraggableImage {
   int blockIndex; // 블록의 인덱스 추가
   Offset leftSnapPoint; // 왼쪽 스냅 포인트 추가
   Offset rightSnapPoint; // 오른쪽 스냅 포인트 추가
-  Offset leftInnerSnapPoint; // 내부 왼쪽 스냅 포인트 추가
-  Offset rightInnerSnapPoint; // 내부 오른쪽 스냅 포인트 추가
+
 
   // 생성자
   DraggableImage({
@@ -609,58 +578,56 @@ class DraggableImage {
     required this.size,
     required this.blockIndex,
   }) : leftSnapPoint = getSnapPoints(blockIndex)['left']!,
-        rightSnapPoint = getSnapPoints(blockIndex)['right']!,
-        leftInnerSnapPoint = getSnapPoints(blockIndex)['leftInner']!,
-        rightInnerSnapPoint = getSnapPoints(blockIndex)['rightInner']!;
+        rightSnapPoint = getSnapPoints(blockIndex)['right']!;
 
 
   // 블록의 스냅 포인트를 반환하는 함수
   static Map<String, Offset> getSnapPoints(int index) {
     return {
-      1: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
-      2: {'left': Offset(16, 50), 'right': Offset(284, 50), 'leftInner': Offset(40, 74), 'rightInner': Offset(172, 74),},
-      3: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
-      4: {'left': Offset(16, 50), 'right': Offset(132, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      5: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      6: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      7: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      8: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      9: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      10: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      11: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      12: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      13: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      14: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      15: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      16: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      17: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      18: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      19: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      20: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      21: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      22: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      23: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      24: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      25: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      26: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      27: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      28: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      29: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      30: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      31: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      32: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      33: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      34: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      35: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      36: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      37: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      38: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      39: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      40: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      41: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      42: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      43: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      44: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      1: {'left': Offset(16, 50), 'right': Offset(116, 50),},
+      2: {'left': Offset(16, 50), 'right': Offset(284, 50),},
+      3: {'left': Offset(16, 50), 'right': Offset(116, 50),},
+      4: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      5: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      6: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      7: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      8: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      9: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      10: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      11: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      12: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      13: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      14: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      15: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      16: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      17: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      18: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      19: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      20: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      21: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      22: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      23: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      24: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      25: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      26: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      27: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      28: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      29: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      30: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      31: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      32: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      33: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      34: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      35: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      36: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      37: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      38: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      39: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      40: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      41: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      42: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      43: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
 
     }[index]!;
   }
