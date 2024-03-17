@@ -633,5 +633,3 @@ class DraggableImage {
   }
 
 }
-
-
