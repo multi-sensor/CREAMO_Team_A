@@ -21,6 +21,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
   double scrollPosition = 0.0; // 스크롤 위치를 저장할 변수
 
+  int selectedSlide = 1; // 현재 선택된 슬라이드 번호
 
 
   final GlobalKey _targetKey = GlobalKey();
@@ -54,6 +55,52 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
+
+    Widget _buildButton(String imagePath, int slideNumber) {
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedSlide = slideNumber;
+          });
+        },
+        child: Image.asset(imagePath),
+      );
+    }
+    int _getItemCountForSelectedSlide() {
+      switch (selectedSlide) {
+        case 1:
+          return (startFlag==0? 2 : 1); // 첫 번째 슬라이드이미지
+        case 2:
+          return 2; // 두 번째 슬라이드에는 2개의 이미지
+        case 3:
+          return 5; // 세 번째 슬라이드에는 5개의 이미지
+        case 4:
+          return 12; // 세 번째 슬라이드에는 5개의 이미지
+        case 5:
+          return 14; // 세 번째 슬라이드에는 5개의 이미지
+        case 6:
+          return 8; // 세 번째 슬라이드에는 5개의 이미지
+        default:
+          return 0;
+      }
+    }
+
+    int _getImageIndexForSelectedSlide(int index) {
+      if (selectedSlide == 1) {
+        return (startFlag == 0 ? index + 1 : index + 2);
+      } else if (selectedSlide == 2) {
+        return index + 3; // block3.png부터 시작
+      } else if (selectedSlide == 3) {
+        return index + 5; // block5.png부터 시작
+      } else if (selectedSlide == 4) {
+        return index + 10; // block5.png부터 시작
+      } else if (selectedSlide == 5) {
+        return index + 22; // block5.png부터 시작
+      } else if (selectedSlide == 6) {
+        return index + 36; // block5.png부터 시작
+      }
+      return 0;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -125,90 +172,20 @@ class _PuzzlePageState extends State<PuzzlePage> {
             child: Container(
               color: Color(0xFFFFF6EB),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button1.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          0.0,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button2.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          525.0  - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button3.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          830.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button4.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          1585.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button5.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          3410.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button6.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          4400.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
+                  _buildButton('images/button/button1.png', 1),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button2.png', 2),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button3.png', 3),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button4.png', 4),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button5.png', 5),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button6.png', 6),
+                  SizedBox(width: 10), // 간격 추가
                 ],
               ),
             ),
@@ -217,16 +194,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
           Expanded(
             flex: 16,
             child: Container(
-              color : Color(0xFFFFF6EB),
+              color: Color(0xFFFFF6EB),
               child: Scrollbar(
                 controller: scrollController,
                 child: ListView.builder(
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
-                  itemCount: startFlag == 0 ? 43 : 42,
+                  itemCount: _getItemCountForSelectedSlide(),
                   itemBuilder: (context, index) {
-                    final imageIdx = startFlag == 0 ? index + 1 : index + 2;
+                    final imageIdx = _getImageIndexForSelectedSlide(index);
                     final image = Image.asset('images/puzzle/block${imageIdx}.png');
                     return FutureBuilder<Size>(
                       future: _getImageSize(image),
@@ -374,7 +351,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       List<String> connectedImages = [startImage.path];
                       DraggableImage? currentImage = startImage;
 
-                      while (currentImage != null && currentImage.blockIndex != 3) {
+                      while (currentImage != null && currentImage.blockIndex != 2) {
                         // 외부 스냅 포인트에 연결된 이미지를 찾습니다.
                         DraggableImage? nextImage;
                         double minDistance = double.infinity;
@@ -398,9 +375,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       }
 
 
-                      if (currentImage != null && currentImage.blockIndex == 3) {
+                      if (currentImage != null && currentImage.blockIndex == 2) {
                         // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [4, 6, 7, 11, 12, 13, 23, 37];
+                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36];
 
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
                         List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
@@ -553,10 +530,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
     return nearestSnapPoint;
   }
-
-
-
-
 }
 
 // 드래그 가능한 이미지 클래스
