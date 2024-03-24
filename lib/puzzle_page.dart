@@ -336,6 +336,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   left: 20,
                   child: InkWell(
 
+
+
+
                     onTap: () {
                       // '시작' 블록을 찾습니다.
                       DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
@@ -377,7 +380,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                       if (currentImage != null && currentImage.blockIndex == 2) {
                         // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36];
+                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41];
 
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
                         List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
@@ -409,14 +412,44 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                         connected_block_numbers = formattedNumbers.join('');
 
-                        BluetoothHelper.sendData(connected_block_numbers);
-                        print(connected_block_numbers);
                       }
+                      // connected_block_numbers 문자열을 처리하여 조건에 맞게 수정하는 부분
+                      RegExp regExp = RegExp(r'38(:\d+:\[\d+\],?)(39|40|41)');
+                      var matches = regExp.allMatches(connected_block_numbers).toList();
+
+                      if (matches.isNotEmpty) {
+                        String result = connected_block_numbers;
+                        // 모든 매치된 부분에 대해 역순으로 처리합니다.
+                        // 이렇게 하는 이유는 문자열을 변경하면서 인덱스를 유지하기 위함입니다.
+                        for (var match in matches.reversed) {
+                          String betweenText = match.group(1)!.substring(1); // 38과 39, 40, 41 사이의 문자열
+                          int endingNumber = int.parse(match.group(2)!); // 마지막 숫자 (39, 40, 41)
+
+                          // 중간 문자열의 앞 한 자리를 제거합니다.
+                          String modifiedText = betweenText;
+
+                          // 마지막 숫자에 따라 반복 횟수를 결정합니다.
+                          int repeatCount = endingNumber - 37; // 39면 1번, 40이면 2번, 41이면 3번 반복
+
+                          // 수정된 문자열을 반복하여 최종 문자열을 생성합니다.
+                          String finalText = modifiedText * repeatCount;
+
+                          // 원래 문자열에서 매치된 부분을 최종 문자열로 교체합니다.
+                          int startIndex = match.start;
+                          int endIndex = match.end;
+                          result = result.substring(0, startIndex) + finalText + result.substring(endIndex);
+                        }
+                        connected_block_numbers = result;
+                      }
+                      RegExp regExp2 = RegExp(r',:');
+                      connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
+                        return ',';
+                      });
+                      // 수정된 connected_block_numbers 문자열을 Bluetooth를 통해 전송하고 출력합니다.
+                      BluetoothHelper.sendData(connected_block_numbers);
+                      print(connected_block_numbers);
+
                     },
-
-
-
-
 
 
 
