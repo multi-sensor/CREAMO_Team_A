@@ -414,33 +414,35 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                       }
                       // connected_block_numbers 문자열을 처리하여 조건에 맞게 수정하는 부분
-                      RegExp regExp = RegExp(r'38(:\d+:\[\d+\],?)(39|40|41)');
+                      // '38'과 '39', '40', '41' 사이의 모든 문자열을 올바르게 반복하기 위한 로직
+                      RegExp regExp = RegExp(r'38(.*?)(39|40|41)');
                       var matches = regExp.allMatches(connected_block_numbers).toList();
 
                       if (matches.isNotEmpty) {
                         String result = connected_block_numbers;
-                        // 모든 매치된 부분에 대해 역순으로 처리합니다.
-                        // 이렇게 하는 이유는 문자열을 변경하면서 인덱스를 유지하기 위함입니다.
                         for (var match in matches.reversed) {
-                          String betweenText = match.group(1)!.substring(1); // 38과 39, 40, 41 사이의 문자열
+                          // 38과 39, 40, 41 사이의 전체 문자열을 추출합니다.
+                          String betweenText = match.group(1)!;
+
+                          // 마지막 숫자 (39, 40, 41)를 추출하여 반복 횟수를 결정합니다.
                           int endingNumber = int.parse(match.group(2)!); // 마지막 숫자 (39, 40, 41)
+                          int repeatCount = endingNumber - 37; // 반복 횟수 계산
 
-                          // 중간 문자열의 앞 한 자리를 제거합니다.
-                          String modifiedText = betweenText;
+                          // 반복될 문자열을 생성합니다.
+                          String repeatedText = '';
+                          for (int i = 0; i < repeatCount; i++) {
+                            repeatedText += betweenText;
+                          }
 
-                          // 마지막 숫자에 따라 반복 횟수를 결정합니다.
-                          int repeatCount = endingNumber - 37; // 39면 1번, 40이면 2번, 41이면 3번 반복
-
-                          // 수정된 문자열을 반복하여 최종 문자열을 생성합니다.
-                          String finalText = modifiedText * repeatCount;
-
-                          // 원래 문자열에서 매치된 부분을 최종 문자열로 교체합니다.
+                          // 원래 문자열에서 매치된 부분을 반복된 문자열로 교체합니다.
                           int startIndex = match.start;
                           int endIndex = match.end;
-                          result = result.substring(0, startIndex) + finalText + result.substring(endIndex);
+                          result = result.substring(0, startIndex) + repeatedText + result.substring(endIndex);
                         }
                         connected_block_numbers = result;
                       }
+
+
                       RegExp regExp2 = RegExp(r',:');
                       connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
                         return ',';
