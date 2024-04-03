@@ -380,7 +380,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                       if (currentImage != null && currentImage.blockIndex == 2) {
                         // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41];
+                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43];
 
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
                         List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
@@ -515,7 +515,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ],
             ),
           ),
-
         ],
       ),
     );
