@@ -389,25 +389,40 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                         List<String> formattedNumbers = [];
                         int i = 0;
+                        bool isConditionBlock = false; // 조건 블록 여부를 확인하는 플래그 변수
+
                         while (i < blockNumbers.length) {
-                          String numberString = '';
-                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]}:';
+                          if (blockNumbers[i] == 42) { // 조건 시작 블록 처리
+                            formattedNumbers.add('42,');
+                            isConditionBlock = true; // 조건 블록 시작
                             i++;
+                            continue;
                           }
-                          if (numberString.isNotEmpty) {
-                            numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
-                            formattedNumbers.add(numberString);
+                          if (blockNumbers[i] == 43) { // 조건 끝 블록 처리
+                            isConditionBlock = false; // 조건 블록 종료
+                            i++;
+                            continue;
                           }
-                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                            numberString = '';
-                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+
+                          if (isConditionBlock || allowedNumbers.contains(blockNumbers[i])) { // 조건 블록 내부이거나 허용된 숫자일 경우
+                            formattedNumbers.add('${blockNumbers[i]}:'); // 직접 숫자를 추가
+                            i++;
+                          } else { // 허용되지 않은 숫자일 경우
+                            String numberString = '';
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i]) && blockNumbers[i] != 42 && blockNumbers[i] != 43) {
                               numberString += '${blockNumbers[i]}';
                               i++;
                             }
-                            // 아래 라인을 변경하여 콜론(:)을 추가합니다.
-                            formattedNumbers.add(':[$numberString],');
+                            // 조건 블록이 아니고, 허용되지 않은 숫자일 때만 [ ]로 묶어서 추가
+                            if (!numberString.isEmpty) {
+                              formattedNumbers.add('[$numberString],');
+                            }
                           }
+                        }
+
+// 마지막 원소가 ','로 끝나면 제거
+                        if (formattedNumbers.isNotEmpty && formattedNumbers.last.endsWith(',')) {
+                          formattedNumbers[formattedNumbers.length - 1] = formattedNumbers.last.substring(0, formattedNumbers.last.length - 1);
                         }
 
                         connected_block_numbers = formattedNumbers.join('');
