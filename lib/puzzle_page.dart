@@ -75,11 +75,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
         case 3:
           return 5; // 세 번째 슬라이드에는 5개의 이미지
         case 4:
-          return 12; // 세 번째 슬라이드에는 5개의 이미지
+          return 12;
         case 5:
-          return 14; // 세 번째 슬라이드에는 5개의 이미지
+          return 14;
         case 6:
-          return 8; // 세 번째 슬라이드에는 5개의 이미지
+          return 14;
         default:
           return 0;
       }
@@ -93,11 +93,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
       } else if (selectedSlide == 3) {
         return index + 5; // block5.png부터 시작
       } else if (selectedSlide == 4) {
-        return index + 10; // block5.png부터 시작
+        return index + 10;
       } else if (selectedSlide == 5) {
-        return index + 22; // block5.png부터 시작
+        return index + 22;
       } else if (selectedSlide == 6) {
-        return index + 36; // block5.png부터 시작
+        return index + 36;
       }
       return 0;
     }
@@ -372,20 +372,39 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         if (nextImage != null && minDistance < 50.0) {
                           connectedImages.add(nextImage.path);
                           currentImage = nextImage;
+
+                          // 만약 현재 이미지가 48 블록이라면
+                          if (currentImage.blockIndex == 48) {
+                            // 49 블록을 찾습니다.
+                            DraggableImage? block49 = droppedImages.firstWhere((image) => image.blockIndex == 49,
+                                orElse: () => DraggableImage(
+                                  name: 'default',
+                                  path: 'default',
+                                  position: Offset.zero,
+                                  size: Size.zero,
+                                  blockIndex: 0,
+                                ));
+
+                            // 49 블록부터 끝 블록까지 연결된 블록 리스트를 찾습니다.
+                            if (block49 != null) {
+                              connectedImages.add(block49.path);
+                              currentImage = block49;
+                              continue; // 49 블록부터 다시 연결된 블록들을 찾기 시작합니다.
+                            }
+                          }
                         } else {
                           currentImage = null;
                         }
                       }
 
-
                       if (currentImage != null && currentImage.blockIndex == 2) {
                         // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43];
+                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 46, 48,49];
 
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
                         List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                           return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                        }).toList();
+                        }).where((number) => number != 48 && number != 49).toList();
 
                         List<String> formattedNumbers = [];
                         int i = 0;
@@ -635,7 +654,12 @@ class DraggableImage {
       41: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       42: {'left': Offset(16, 50), 'right': Offset(132, 50),},
       43: {'left': Offset(16, 50), 'right': Offset(132, 50), },
-      //44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      45: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      46: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      47: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      48: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      49: {'left': Offset(16, 50), 'right': Offset(132, 50), },
 
     }[index]!;
   }
