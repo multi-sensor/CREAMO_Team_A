@@ -404,7 +404,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
                         List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                           return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                        }).where((number) => number != 48 && number != 49).toList();
+                        }).where((number) => number != 48 && number != 49 && number != 38).toList();
 
                         List<String> formattedNumbers = [];
                         int i = 0;
@@ -432,34 +432,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         connected_block_numbers = formattedNumbers.join('');
 
                       }
-                      // connected_block_numbers 문자열을 처리하여 조건에 맞게 수정하는 부분
-                      // '38'과 '39', '40', '41' 사이의 모든 문자열을 올바르게 반복하기 위한 로직
-                      RegExp regExp = RegExp(r'38(.*?)(39|40|41)');
-                      var matches = regExp.allMatches(connected_block_numbers).toList();
 
-                      if (matches.isNotEmpty) {
-                        String result = connected_block_numbers;
-                        for (var match in matches.reversed) {
-                          // 38과 39, 40, 41 사이의 전체 문자열을 추출합니다.
-                          String betweenText = match.group(1)!;
-
-                          // 마지막 숫자 (39, 40, 41)를 추출하여 반복 횟수를 결정합니다.
-                          int endingNumber = int.parse(match.group(2)!); // 마지막 숫자 (39, 40, 41)
-                          int repeatCount = endingNumber - 37; // 반복 횟수 계산
-
-                          // 반복될 문자열을 생성합니다.
-                          String repeatedText = '';
-                          for (int i = 0; i < repeatCount; i++) {
-                            repeatedText += betweenText;
-                          }
-
-                          // 원래 문자열에서 매치된 부분을 반복된 문자열로 교체합니다.
-                          int startIndex = match.start;
-                          int endIndex = match.end;
-                          result = result.substring(0, startIndex) + repeatedText + result.substring(endIndex);
-                        }
-                        connected_block_numbers = result;
-                      }
 
 
                       RegExp regExp2 = RegExp(r',:');
