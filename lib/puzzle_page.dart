@@ -260,7 +260,20 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   );
                                 }
                                 droppedImages.add(newImage);
-                              });
+
+                                // 'block49.png' 추가 (block48.png의 경우에만 추가)
+                                if (imageIdx == 48) {
+                                  final newImage2 = DraggableImage(
+                                    name: 'images/puzzle/block49',
+                                    path: 'images/puzzle/block49.png',
+                                    position: Offset(newImage.position.dx - 100, newImage.position.dy + 100),
+                                    size: snapshot.data!,
+                                    blockIndex: 49,
+                                  );
+                                  droppedImages.add(newImage2);
+                                }
+                              }
+                              );
                             },
 
                           );
@@ -300,7 +313,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 draggableImage.path,
                                 width: draggableImage.size.width,
                                 height: draggableImage.size.height,
+
                               ),
+
 
                               onDragEnd: (details) {
                                 setState(() {
@@ -397,51 +412,51 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         }
                       }
 
-                      if (currentImage != null && currentImage.blockIndex == 2) {
-                        // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 46, 48,49];
 
-                        // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
-                        List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
-                          return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                        }).where((number) => number != 48 && number != 49 && number != 38).toList();
+                      if (connectedImages.first == "images/puzzle/block1.png" && connectedImages.last == "images/puzzle/block2.png") {
+                        if (currentImage != null && currentImage.blockIndex == 2) {
+                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 46, 48, 49];
 
-                        List<String> formattedNumbers = [];
-                        int i = 0;
-                        while (i < blockNumbers.length) {
-                          String numberString = '';
-                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]}:';
-                            i++;
-                          }
-                          if (numberString.isNotEmpty) {
-                            numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
-                            formattedNumbers.add(numberString);
-                          }
-                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                            numberString = '';
-                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                              numberString += '${blockNumbers[i]}';
+                          List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
+                            return int.parse(path.replaceAll(RegExp(r'\D'), ''));
+                          }).where((number) => number != 48 && number != 49 && number != 38).toList();
+
+                          List<String> formattedNumbers = [];
+                          int i = 0;
+                          while (i < blockNumbers.length) {
+                            String numberString = '';
+                            while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
+                              numberString += '${blockNumbers[i]}:';
                               i++;
                             }
-                            // 아래 라인을 변경하여 콜론(:)을 추가합니다.
-                            formattedNumbers.add(':[$numberString],');
+                            if (numberString.isNotEmpty) {
+                              numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
+                              formattedNumbers.add(numberString);
+                            }
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                              numberString = '';
+                              while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                                numberString += '${blockNumbers[i]}';
+                                i++;
+                              }
+                              formattedNumbers.add(':[$numberString],');
+                            }
                           }
+
+                          connected_block_numbers = formattedNumbers.join('');
+
+                          RegExp regExp2 = RegExp(r',:');
+                          connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
+                            return ',';
+                          });
+
+                          // 수정된 connected_block_numbers 문자열을 Bluetooth를 통해 전송하고 출력합니다.
+                          BluetoothHelper.sendData(connected_block_numbers);
+                          print(connected_block_numbers);
                         }
-
-                        connected_block_numbers = formattedNumbers.join('');
-
+                      } else {
                       }
 
-
-
-                      RegExp regExp2 = RegExp(r',:');
-                      connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
-                        return ',';
-                      });
-                      // 수정된 connected_block_numbers 문자열을 Bluetooth를 통해 전송하고 출력합니다.
-                      BluetoothHelper.sendData(connected_block_numbers);
-                      print(connected_block_numbers);
 
                     },
 
