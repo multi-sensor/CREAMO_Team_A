@@ -75,11 +75,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
         case 3:
           return 5; // 세 번째 슬라이드에는 5개의 이미지
         case 4:
-          return 12; // 세 번째 슬라이드에는 5개의 이미지
+          return 12;
         case 5:
-          return 14; // 세 번째 슬라이드에는 5개의 이미지
+          return 14;
         case 6:
-          return 8; // 세 번째 슬라이드에는 5개의 이미지
+          return 14;
         default:
           return 0;
       }
@@ -93,11 +93,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
       } else if (selectedSlide == 3) {
         return index + 5; // block5.png부터 시작
       } else if (selectedSlide == 4) {
-        return index + 10; // block5.png부터 시작
+        return index + 10;
       } else if (selectedSlide == 5) {
-        return index + 22; // block5.png부터 시작
+        return index + 22;
       } else if (selectedSlide == 6) {
-        return index + 36; // block5.png부터 시작
+        return index + 36;
       }
       return 0;
     }
@@ -260,7 +260,20 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   );
                                 }
                                 droppedImages.add(newImage);
-                              });
+
+                                // 'block49.png' 추가 (block48.png의 경우에만 추가)
+                                if (imageIdx == 48) {
+                                  final newImage2 = DraggableImage(
+                                    name: 'images/puzzle/block49',
+                                    path: 'images/puzzle/block49.png',
+                                    position: Offset(newImage.position.dx - 100, newImage.position.dy + 100),
+                                    size: snapshot.data!,
+                                    blockIndex: 49,
+                                  );
+                                  droppedImages.add(newImage2);
+                                }
+                              }
+                              );
                             },
 
                           );
@@ -277,79 +290,80 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
           Expanded(
             flex: 80,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              // 가로 스크롤 설정
-              child: Row(
-                
-                children: <Widget>[
-              Stack(
+            child: Stack(
               children: <Widget>[
-              DragTarget<DraggableImage>(
-              key: _targetKey,
-                builder: (context, candidateData, rejectedData) {
-                  return Container(
-                    color: Colors.white,
-                    width: MediaQuery.of(context).size.width, // 스크롤을 위해 너비 설정이 필요할 수 있음
-                    child: Stack(
-                      children: droppedImages.map((draggableImage) {
-                        return Positioned(
-                          left: draggableImage.position.dx,
-                          top: draggableImage.position.dy,
-                          child: Draggable<DraggableImage>(
-                            data: draggableImage,
-                            feedback: Image.asset(
-                              draggableImage.path,
-                              width: draggableImage.size.width,
-                              height: draggableImage.size.height,
+                DragTarget<DraggableImage>(
+                  key: _targetKey,
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      color: Colors.white,
+                      child: Stack(
+                        children: droppedImages.map((draggableImage) {
+                          return Positioned(
+                            left: draggableImage.position.dx,
+                            top: draggableImage.position.dy,
+                            child: Draggable<DraggableImage>(
+                              data: draggableImage,
+                              feedback: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+                              ),
+                              child: Image.asset(
+                                draggableImage.path,
+                                width: draggableImage.size.width,
+                                height: draggableImage.size.height,
+
+                              ),
+
+
+                              onDragEnd: (details) {
+                                setState(() {
+                                  final RenderBox box = context.findRenderObject() as RenderBox;
+                                  final droppedPosition = box.globalToLocal(details.offset);
+                                  // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
+                                  final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
+                                  draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
+                                });
+                              },
+
                             ),
-                            child: Image.asset(
-                              draggableImage.path,
-                              width: draggableImage.size.width,
-                              height: draggableImage.size.height,
-                            ),
-                            onDragEnd: (details) {
-                              setState(() {
-                                final RenderBox box = context.findRenderObject() as RenderBox;
-                                final droppedPosition = box.globalToLocal(details.offset);
-                                // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
-                                final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
-                                draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
-                              });
-                            },
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                },
-                onWillAccept: (data) => true,
-                onAccept: (data) {},
-              ),
-              // Reset button
-              Positioned(
-                bottom: 30,
-                left: 140,
-                child: InkWell(
-                  onTap: _resetImages,
-                  child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  },
+                  onWillAccept: (data) => true,
+                  onAccept: (data) {},
                 ),
-              ),
-              //플레이버튼
-              Positioned(
-                bottom: 30,
-                left: 20,
-                child: InkWell(
-                  onTap: () {
-                    // '시작' 블록을 찾습니다.
-                    DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
-                        orElse: () => DraggableImage(
-                          name: 'default',
-                          path: 'default',
-                          position: Offset.zero,
-                          size: Size.zero,
-                          blockIndex: 0,
-                        ));
+                // Reset button
+                Positioned(
+                  bottom: 30,
+                  left: 140,
+                  child: InkWell(
+                    onTap: _resetImages,
+                    child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
+                  ),
+                ),
+                //플레이버튼
+                Positioned(
+                  bottom: 30,
+                  left: 20,
+                  child: InkWell(
+
+
+
+
+                    onTap: () {
+                      // '시작' 블록을 찾습니다.
+                      DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
+                          orElse: () => DraggableImage(
+                            name: 'default',
+                            path: 'default',
+                            position: Offset.zero,
+                            size: Size.zero,
+                            blockIndex: 0,
+                          ));
 
                       // '시작' 블록부터 시작하여 연결된 이미지들의 파일명을 순서대로 출력합니다.
                       List<String> connectedImages = [startImage.path];
@@ -373,84 +387,76 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         if (nextImage != null && minDistance < 50.0) {
                           connectedImages.add(nextImage.path);
                           currentImage = nextImage;
+
+                          // 만약 현재 이미지가 48 블록이라면
+                          if (currentImage.blockIndex == 48) {
+                            // 49 블록을 찾습니다.
+                            DraggableImage? block49 = droppedImages.firstWhere((image) => image.blockIndex == 49,
+                                orElse: () => DraggableImage(
+                                  name: 'default',
+                                  path: 'default',
+                                  position: Offset.zero,
+                                  size: Size.zero,
+                                  blockIndex: 0,
+                                ));
+
+                            // 49 블록부터 끝 블록까지 연결된 블록 리스트를 찾습니다.
+                            if (block49 != null) {
+                              connectedImages.add(block49.path);
+                              currentImage = block49;
+                              continue; // 49 블록부터 다시 연결된 블록들을 찾기 시작합니다.
+                            }
+                          }
                         } else {
                           currentImage = null;
                         }
                       }
 
 
-                      if (currentImage != null && currentImage.blockIndex == 2) {
-                        // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43];
+                      if (connectedImages.first == "images/puzzle/block1.png" && connectedImages.last == "images/puzzle/block2.png") {
+                        if (currentImage != null && currentImage.blockIndex == 2) {
+                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 46, 48, 49];
 
-                        // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
-                        List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
-                          return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                        }).toList();
+                          List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
+                            return int.parse(path.replaceAll(RegExp(r'\D'), ''));
+                          }).where((number) => number != 48 && number != 49 && number != 38).toList();
 
-                        List<String> formattedNumbers = [];
-                        int i = 0;
-                        while (i < blockNumbers.length) {
-                          String numberString = '';
-                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]}:';
-                            i++;
-                          }
-                          if (numberString.isNotEmpty) {
-                            numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
-                            formattedNumbers.add(numberString);
-                          }
-                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                            numberString = '';
-                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                              numberString += '${blockNumbers[i]}';
+                          List<String> formattedNumbers = [];
+                          int i = 0;
+                          while (i < blockNumbers.length) {
+                            String numberString = '';
+                            while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
+                              numberString += '${blockNumbers[i]}:';
                               i++;
                             }
-                            // 아래 라인을 변경하여 콜론(:)을 추가합니다.
-                            formattedNumbers.add(':[$numberString],');
-                          }
-                        }
-
-                        connected_block_numbers = formattedNumbers.join('');
-
-                      }
-                      // connected_block_numbers 문자열을 처리하여 조건에 맞게 수정하는 부분
-                      // '38'과 '39', '40', '41' 사이의 모든 문자열을 올바르게 반복하기 위한 로직
-                      RegExp regExp = RegExp(r'38(.*?)(39|40|41)');
-                      var matches = regExp.allMatches(connected_block_numbers).toList();
-
-                      if (matches.isNotEmpty) {
-                        String result = connected_block_numbers;
-                        for (var match in matches.reversed) {
-                          // 38과 39, 40, 41 사이의 전체 문자열을 추출합니다.
-                          String betweenText = match.group(1)!;
-
-                          // 마지막 숫자 (39, 40, 41)를 추출하여 반복 횟수를 결정합니다.
-                          int endingNumber = int.parse(match.group(2)!); // 마지막 숫자 (39, 40, 41)
-                          int repeatCount = endingNumber - 37; // 반복 횟수 계산
-
-                          // 반복될 문자열을 생성합니다.
-                          String repeatedText = '';
-                          for (int i = 0; i < repeatCount; i++) {
-                            repeatedText += betweenText;
+                            if (numberString.isNotEmpty) {
+                              numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
+                              formattedNumbers.add(numberString);
+                            }
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                              numberString = '';
+                              while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                                numberString += '${blockNumbers[i]}';
+                                i++;
+                              }
+                              formattedNumbers.add(':[$numberString],');
+                            }
                           }
 
-                          // 원래 문자열에서 매치된 부분을 반복된 문자열로 교체합니다.
-                          int startIndex = match.start;
-                          int endIndex = match.end;
-                          result = result.substring(0, startIndex) + repeatedText + result.substring(endIndex);
+                          connected_block_numbers = formattedNumbers.join('');
+
+                          RegExp regExp2 = RegExp(r',:');
+                          connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
+                            return ',';
+                          });
+
+                          // 수정된 connected_block_numbers 문자열을 Bluetooth를 통해 전송하고 출력합니다.
+                          BluetoothHelper.sendData(connected_block_numbers);
+                          print(connected_block_numbers);
                         }
-                        connected_block_numbers = result;
+                      } else {
                       }
 
-
-                      RegExp regExp2 = RegExp(r',:');
-                      connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
-                        return ',';
-                      });
-                      // 수정된 connected_block_numbers 문자열을 Bluetooth를 통해 전송하고 출력합니다.
-                      BluetoothHelper.sendData(connected_block_numbers);
-                      print(connected_block_numbers);
 
                     },
 
@@ -515,9 +521,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
               ],
             ),
-          ],
-          ),
-    ),
           ),
         ],
       ),
@@ -639,7 +642,12 @@ class DraggableImage {
       41: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       42: {'left': Offset(16, 50), 'right': Offset(132, 50),},
       43: {'left': Offset(16, 50), 'right': Offset(132, 50), },
-      //44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      45: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      46: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      47: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      48: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      49: {'left': Offset(16, 50), 'right': Offset(132, 50), },
 
     }[index]!;
   }
