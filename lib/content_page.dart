@@ -48,6 +48,42 @@ class _ContentPageState extends State<ContentPage> {
     // Add more image paths as needed
   ];
 
+  List<List<String>> hints = [
+    [
+      "1 이미지에 대한 힌트",
+      "2 이미지에 대한 힌트",
+      "3 이미지에 대한 힌트",
+      "4 이미지에 대한 힌트",
+      "5 이미지에 대한 힌트",
+      "6 이미지에 대한 힌트",
+      "7 이미지에 대한 힌트",
+      "8 이미지에 대한 힌트",
+      "9 이미지에 대한 힌트",
+      "10 이미지에 대한 힌트",
+      "11 이미지에 대한 힌트",
+    ],
+    [
+      "12 이미지에 대한 힌트",
+      "13 이미지에 대한 힌트",
+      "14 이미지에 대한 힌트",
+      "15 이미지에 대한 힌트",
+      "16 이미지에 대한 힌트",
+      "17 이미지에 대한 힌트",
+    ],
+    [
+      "18 이미지에 대한 힌트",
+      "19 이미지에 대한 힌트",
+      "20 이미지에 대한 힌트",
+      "21 이미지에 대한 힌트",
+      "22 이미지에 대한 힌트",
+      "23 이미지에 대한 힌트",
+      "24 이미지에 대한 힌트",
+      "25 이미지에 대한 힌트",
+      "26 이미지에 대한 힌트",
+    ],
+    // 추가 힌트 배열...
+  ];
+
   int selectedCarouselIndex = 0;
 
   @override
@@ -209,7 +245,10 @@ class _ContentPageState extends State<ContentPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PuzzlePage(imagePath: carouselImages[selectedCarouselIndex][index]),
+                                builder: (context) => PuzzlePage(
+                                  imagePath: carouselImages[selectedCarouselIndex][index],
+                                  hint: hints[selectedCarouselIndex][index], // 'hint' 매개변수에 대한 인자 추가
+                                ),
                               ),
                             );
                           },

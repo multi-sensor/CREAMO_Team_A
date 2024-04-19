@@ -10,12 +10,14 @@ String connected_block_numbers='';
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
+  final String hint; // 힌트 데이터를 위한 변수 추가
 
-  const PuzzlePage({Key? key, required this.imagePath}) : super(key: key);
+  const PuzzlePage({Key? key, required this.imagePath, required this.hint}) : super(key: key);
 
   @override
   _PuzzlePageState createState() => _PuzzlePageState();
 }
+
 
 class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
@@ -469,6 +471,49 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     highlightColor: Colors.transparent,
                     child: Image.asset('images/button/run.png'),  // 이미지 경로 적용
 
+                  ),
+                ),
+
+
+                Positioned(
+                  right: 30,  // 쓰레기통과 같은 가로 위치
+                  bottom: 140,  // 쓰레기통보다 위쪽에 배치하기 위해 bottom 값을 조정
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('힌트'),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(widget.hint),
+                                  // 힌트 내용
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('닫기'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue,  // 버튼 배경 색상 예시
+                      ),
+                      child: Icon(Icons.search, size: 50.0, color: Colors.white),  // 돋보기 아이콘
+                    ),
                   ),
                 ),
 
