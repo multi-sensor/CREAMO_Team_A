@@ -277,78 +277,79 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
           Expanded(
             flex: 80,
-            child: Stack(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              // 가로 스크롤 설정
+              child: Row(
+                
+                children: <Widget>[
+              Stack(
               children: <Widget>[
-                DragTarget<DraggableImage>(
-                  key: _targetKey,
-                  builder: (context, candidateData, rejectedData) {
-                    return Container(
-                      color: Colors.white,
-                      child: Stack(
-                        children: droppedImages.map((draggableImage) {
-                          return Positioned(
-                            left: draggableImage.position.dx,
-                            top: draggableImage.position.dy,
-                            child: Draggable<DraggableImage>(
-                              data: draggableImage,
-                              feedback: Image.asset(
-                                draggableImage.path,
-                                width: draggableImage.size.width,
-                                height: draggableImage.size.height,
-                              ),
-                              child: Image.asset(
-                                draggableImage.path,
-                                width: draggableImage.size.width,
-                                height: draggableImage.size.height,
-                              ),
-
-                              onDragEnd: (details) {
-                                setState(() {
-                                  final RenderBox box = context.findRenderObject() as RenderBox;
-                                  final droppedPosition = box.globalToLocal(details.offset);
-                                  // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
-                                  final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
-                                  draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
-                                });
-                              },
-
+              DragTarget<DraggableImage>(
+              key: _targetKey,
+                builder: (context, candidateData, rejectedData) {
+                  return Container(
+                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width, // 스크롤을 위해 너비 설정이 필요할 수 있음
+                    child: Stack(
+                      children: droppedImages.map((draggableImage) {
+                        return Positioned(
+                          left: draggableImage.position.dx,
+                          top: draggableImage.position.dy,
+                          child: Draggable<DraggableImage>(
+                            data: draggableImage,
+                            feedback: Image.asset(
+                              draggableImage.path,
+                              width: draggableImage.size.width,
+                              height: draggableImage.size.height,
                             ),
-                          );
-                        }).toList(),
-                      ),
-                    );
-                  },
-                  onWillAccept: (data) => true,
-                  onAccept: (data) {},
+                            child: Image.asset(
+                              draggableImage.path,
+                              width: draggableImage.size.width,
+                              height: draggableImage.size.height,
+                            ),
+                            onDragEnd: (details) {
+                              setState(() {
+                                final RenderBox box = context.findRenderObject() as RenderBox;
+                                final droppedPosition = box.globalToLocal(details.offset);
+                                // getSnappedPosition 함수를 사용하여 스냅될 위치를 계산합니다.
+                                final snappedPosition = getSnappedPosition(droppedPosition, draggableImage);
+                                draggableImage.position = snappedPosition; // 스냅된 위치로 이미지를 이동합니다.
+                              });
+                            },
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  );
+                },
+                onWillAccept: (data) => true,
+                onAccept: (data) {},
+              ),
+              // Reset button
+              Positioned(
+                bottom: 30,
+                left: 140,
+                child: InkWell(
+                  onTap: _resetImages,
+                  child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
                 ),
-                // Reset button
-                Positioned(
-                  bottom: 30,
-                  left: 140,
-                  child: InkWell(
-                    onTap: _resetImages,
-                    child: Image.asset('images/button/reset.png'),  // 이미지 경로 적용
-                  ),
-                ),
-                //플레이버튼
-                Positioned(
-                  bottom: 30,
-                  left: 20,
-                  child: InkWell(
-
-
-
-
-                    onTap: () {
-                      // '시작' 블록을 찾습니다.
-                      DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
-                          orElse: () => DraggableImage(
-                            name: 'default',
-                            path: 'default',
-                            position: Offset.zero,
-                            size: Size.zero,
-                            blockIndex: 0,
-                          ));
+              ),
+              //플레이버튼
+              Positioned(
+                bottom: 30,
+                left: 20,
+                child: InkWell(
+                  onTap: () {
+                    // '시작' 블록을 찾습니다.
+                    DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
+                        orElse: () => DraggableImage(
+                          name: 'default',
+                          path: 'default',
+                          position: Offset.zero,
+                          size: Size.zero,
+                          blockIndex: 0,
+                        ));
 
                       // '시작' 블록부터 시작하여 연결된 이미지들의 파일명을 순서대로 출력합니다.
                       List<String> connectedImages = [startImage.path];
@@ -389,40 +390,25 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                         List<String> formattedNumbers = [];
                         int i = 0;
-                        bool isConditionBlock = false; // 조건 블록 여부를 확인하는 플래그 변수
-
                         while (i < blockNumbers.length) {
-                          if (blockNumbers[i] == 42) { // 조건 시작 블록 처리
-                            formattedNumbers.add('42,');
-                            isConditionBlock = true; // 조건 블록 시작
+                          String numberString = '';
+                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
+                            numberString += '${blockNumbers[i]}:';
                             i++;
-                            continue;
                           }
-                          if (blockNumbers[i] == 43) { // 조건 끝 블록 처리
-                            isConditionBlock = false; // 조건 블록 종료
-                            i++;
-                            continue;
+                          if (numberString.isNotEmpty) {
+                            numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
+                            formattedNumbers.add(numberString);
                           }
-
-                          if (isConditionBlock || allowedNumbers.contains(blockNumbers[i])) { // 조건 블록 내부이거나 허용된 숫자일 경우
-                            formattedNumbers.add('${blockNumbers[i]}:'); // 직접 숫자를 추가
-                            i++;
-                          } else { // 허용되지 않은 숫자일 경우
-                            String numberString = '';
-                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i]) && blockNumbers[i] != 42 && blockNumbers[i] != 43) {
+                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                            numberString = '';
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
                               numberString += '${blockNumbers[i]}';
                               i++;
                             }
-                            // 조건 블록이 아니고, 허용되지 않은 숫자일 때만 [ ]로 묶어서 추가
-                            if (!numberString.isEmpty) {
-                              formattedNumbers.add('[$numberString],');
-                            }
+                            // 아래 라인을 변경하여 콜론(:)을 추가합니다.
+                            formattedNumbers.add(':[$numberString],');
                           }
-                        }
-
-// 마지막 원소가 ','로 끝나면 제거
-                        if (formattedNumbers.isNotEmpty && formattedNumbers.last.endsWith(',')) {
-                          formattedNumbers[formattedNumbers.length - 1] = formattedNumbers.last.substring(0, formattedNumbers.last.length - 1);
                         }
 
                         connected_block_numbers = formattedNumbers.join('');
@@ -529,6 +515,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                 ),
               ],
             ),
+          ],
+          ),
+    ),
           ),
         ],
       ),
