@@ -76,6 +76,10 @@ flutter:
     - images/button/
     - images/slider/
     - images/start/
+    - images/hint/
+    - images/slider_hard/
+    - images/slider_initial/
+    - images/slider_middle/
     - images/start/creamo_logo.png
     - images/start/start_background.png
     - images/start/start_button_1.png
@@ -106,6 +110,7 @@ flutter:
     - images/slider/content24.png
     - images/slider/content25.png
     - images/slider/content26.png
+
     - images/puzzle/block1.png
     - images/puzzle/block2.png
     - images/puzzle/block3.png
@@ -144,6 +149,18 @@ flutter:
     - images/puzzle/block36.png
     - images/puzzle/block37.png
     - images/puzzle/block38.png
+    - images/puzzle/block39.png
+    - images/puzzle/block40.png
+    - images/puzzle/block41.png
+    - images/puzzle/block42.png
+    - images/puzzle/block43.png
+    - images/puzzle/block44.png
+    - images/puzzle/block45.png
+    - images/puzzle/block46.png
+    - images/puzzle/block47.png
+    - images/puzzle/block48.png
+    - images/puzzle/block49.png
+
     - images/button/button1.png
     - images/button/button2.png
     - images/button/button4.png
@@ -158,9 +175,53 @@ flutter:
     - images/button/easy.png
     - images/button/middle.png
     - images/button/hard.png
+    - images/slider_initial/1.png
+    - images/slider_initial/2.png
+    - images/slider_initial/2.png
+    - images/slider_middle/1.png
+    - images/slider_middle/2.png
+    - images/slider_middle/3.png
+    - images/slider_hard/1.png
+    - images/slider_hard/2.png
+    - images/slider_hard/3.png
 
     - images/backgrounds/splash_background.png
     - images/backgrounds/background.png
+
+    - images/hint/hint1.png
+    - images/hint/hint2.png
+    - images/hint/hint3.png
+    - images/hint/hint4.png
+    - images/hint/hint5.png
+    - images/hint/hint6.png
+    - images/hint/hint7.png
+    - images/hint/hint8.png
+    - images/hint/hint9.png
+    - images/hint/hint10.png
+    - images/hint/hint11.png
+    - images/hint/hint12.png
+    - images/hint/hint13.png
+    - images/hint/hint14.png
+    - images/hint/hint15.png
+    - images/hint/hint16.png
+    - images/hint/hint17.png
+    - images/hint/hint18.png
+    - images/hint/hint19.png
+    - images/hint/hint20.png
+    - images/hint/hint21.png
+    - images/hint/hint22.png
+    - images/hint/hint23.png
+    - images/hint/hint24.png
+    - images/hint/hint25.png
+    - images/hint/hint26.png
+
+
+
+
+
+
+
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

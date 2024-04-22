@@ -48,6 +48,41 @@ class _ContentPageState extends State<ContentPage> {
     // Add more image paths as needed
   ];
 
+  final List<List<String>> hints= [
+
+      ["images/hint/hint1.png"],
+      ["images/hint/hint2.png"],
+      ["images/hint/hint3.png"],
+      ["images/hint/hint4.png"],
+      ["images/hint/hint5.png"],
+      ["images/hint/hint6.png"],
+      ["images/hint/hint7.png"],
+      ["images/hint/hint8.png"],
+      ["images/hint/hint9.png"],
+      ["images/hint/hint10.png"],
+      ["images/hint/hint11.png"],
+
+
+      ["images/hint/hint12.png"],
+      ["images/hint/hint13.png"],
+      ["images/hint/hint14.png"],
+      ["images/hint/hint15.png"],
+      ["images/hint/hint16.png"],
+      ["images/hint/hint17.png"],
+
+
+      ["images/hint/hint18.png"],
+      ["images/hint/hint19.png"],
+      ["images/hint/hint20.png"],
+      ["images/hint/hint21.png"],
+      ["images/hint/hint22.png"],
+      ["images/hint/hint23.png"],
+      ["images/hint/hint24.png"],
+      ["images/hint/hint25.png"],
+      ["images/hint/hint26.png"],
+    // Add more image paths as needed
+  ];
+
   int selectedCarouselIndex = 0;
 
   @override
@@ -209,7 +244,10 @@ class _ContentPageState extends State<ContentPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => PuzzlePage(imagePath: carouselImages[selectedCarouselIndex][index]),
+                                builder: (context) => PuzzlePage(
+                                  hints: hints[index],
+                                  imagePath: "images/hint/hint${index + 1}.png", // 예시 imagePath 값 전달
+                                ), // 힌트 이미지 리스트를 퍼즐 페이지로 전달
                               ),
                             );
                           },
@@ -234,6 +272,3 @@ class _ContentPageState extends State<ContentPage> {
     );
   }
 }
-
-
-

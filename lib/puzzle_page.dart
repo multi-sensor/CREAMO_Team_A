@@ -10,17 +10,20 @@ String connected_block_numbers='';
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
+  final List<String> hints;// 힌트 데이터를 위한 변수 추가
 
-  const PuzzlePage({Key? key, required this.imagePath}) : super(key: key);
+  const PuzzlePage({Key? key, required this.imagePath, required this.hints}) : super(key: key);
 
   @override
   _PuzzlePageState createState() => _PuzzlePageState();
 }
 
+
 class _PuzzlePageState extends State<PuzzlePage> {
   ScrollController scrollController = ScrollController();
   double scrollPosition = 0.0; // 스크롤 위치를 저장할 변수
 
+  int selectedSlide = 1; // 현재 선택된 슬라이드 번호
 
 
   final GlobalKey _targetKey = GlobalKey();
@@ -54,6 +57,52 @@ class _PuzzlePageState extends State<PuzzlePage> {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []); //status 바 숨김 기능
+
+    Widget _buildButton(String imagePath, int slideNumber) {
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedSlide = slideNumber;
+          });
+        },
+        child: Image.asset(imagePath),
+      );
+    }
+    int _getItemCountForSelectedSlide() {
+      switch (selectedSlide) {
+        case 1:
+          return (startFlag==0? 2 : 1); // 첫 번째 슬라이드이미지
+        case 2:
+          return 2; // 두 번째 슬라이드에는 2개의 이미지
+        case 3:
+          return 5; // 세 번째 슬라이드에는 5개의 이미지
+        case 4:
+          return 12;
+        case 5:
+          return 14;
+        case 6:
+          return 14;
+        default:
+          return 0;
+      }
+    }
+
+    int _getImageIndexForSelectedSlide(int index) {
+      if (selectedSlide == 1) {
+        return (startFlag == 0 ? index + 1 : index + 2);
+      } else if (selectedSlide == 2) {
+        return index + 3; // block3.png부터 시작
+      } else if (selectedSlide == 3) {
+        return index + 5; // block5.png부터 시작
+      } else if (selectedSlide == 4) {
+        return index + 10;
+      } else if (selectedSlide == 5) {
+        return index + 22;
+      } else if (selectedSlide == 6) {
+        return index + 36;
+      }
+      return 0;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -125,90 +174,20 @@ class _PuzzlePageState extends State<PuzzlePage> {
             child: Container(
               color: Color(0xFFFFF6EB),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.only(right: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button1.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          0.0,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button2.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          525.0  - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button3.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          830.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button4.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          1585.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button5.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          3410.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 0.0),  // 원하는 간격으로 조절 가능
-                    child: IconButton(
-                      icon: Image.asset('images/button/button6.png'),
-                      onPressed: () {
-                        scrollController.animateTo(
-                          4400.0 - startFlag *125,  // 이동할 위치
-                          duration: Duration(milliseconds: 500),
-                          curve: Curves.ease,
-                        );
-                      },
-                    ),
-                  ),
+                  _buildButton('images/button/button1.png', 1),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button2.png', 2),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button3.png', 3),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button4.png', 4),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button5.png', 5),
+                  SizedBox(width: 10), // 간격 추가
+                  _buildButton('images/button/button6.png', 6),
+                  SizedBox(width: 10), // 간격 추가
                 ],
               ),
             ),
@@ -217,16 +196,16 @@ class _PuzzlePageState extends State<PuzzlePage> {
           Expanded(
             flex: 16,
             child: Container(
-              color : Color(0xFFFFF6EB),
+              color: Color(0xFFFFF6EB),
               child: Scrollbar(
                 controller: scrollController,
                 child: ListView.builder(
                   controller: scrollController,
                   scrollDirection: Axis.horizontal,
                   physics: BouncingScrollPhysics(),
-                  itemCount: startFlag == 0 ? 38 : 37,
+                  itemCount: _getItemCountForSelectedSlide(),
                   itemBuilder: (context, index) {
-                    final imageIdx = startFlag == 0 ? index + 1 : index + 2;
+                    final imageIdx = _getImageIndexForSelectedSlide(index);
                     final image = Image.asset('images/puzzle/block${imageIdx}.png');
                     return FutureBuilder<Size>(
                       future: _getImageSize(image),
@@ -283,7 +262,20 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   );
                                 }
                                 droppedImages.add(newImage);
-                              });
+
+                                // 'block49.png' 추가 (block48.png의 경우에만 추가)
+                                if (imageIdx == 48) {
+                                  final newImage2 = DraggableImage(
+                                    name: 'images/puzzle/block49',
+                                    path: 'images/puzzle/block49.png',
+                                    position: Offset(newImage.position.dx - 100, newImage.position.dy + 100),
+                                    size: snapshot.data!,
+                                    blockIndex: 49,
+                                  );
+                                  droppedImages.add(newImage2);
+                                }
+                              }
+                              );
                             },
 
                           );
@@ -323,7 +315,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 draggableImage.path,
                                 width: draggableImage.size.width,
                                 height: draggableImage.size.height,
+
                               ),
+
 
                               onDragEnd: (details) {
                                 setState(() {
@@ -359,6 +353,9 @@ class _PuzzlePageState extends State<PuzzlePage> {
                   left: 20,
                   child: InkWell(
 
+
+
+
                     onTap: () {
                       // '시작' 블록을 찾습니다.
                       DraggableImage startImage = droppedImages.firstWhere((image) => image.blockIndex == 1,
@@ -374,26 +371,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                       List<String> connectedImages = [startImage.path];
                       DraggableImage? currentImage = startImage;
 
-                      while (currentImage != null && currentImage.blockIndex != 3) {
-                        // 블록2의 내부 스냅 포인트에 연결된 이미지를 찾습니다.
-                        if (currentImage.blockIndex == 2) {
-                          DraggableImage? innerImage;
-                          double minDistance = double.infinity;
-                          for (var image in droppedImages) {
-                            if (image == currentImage) continue;
-                            double distance = (image.leftSnapPoint + image.position -
-                                currentImage.rightInnerSnapPoint - currentImage.position)
-                                .distance;
-                            if (distance < minDistance) {
-                              innerImage = image;
-                              minDistance = distance;
-                            }
-                          }
-                          if (innerImage != null && minDistance < 50.0) {
-                            connectedImages.add(innerImage.path);
-                          }
-                        }
-
+                      while (currentImage != null && currentImage.blockIndex != 2) {
                         // 외부 스냅 포인트에 연결된 이미지를 찾습니다.
                         DraggableImage? nextImage;
                         double minDistance = double.infinity;
@@ -411,45 +389,78 @@ class _PuzzlePageState extends State<PuzzlePage> {
                         if (nextImage != null && minDistance < 50.0) {
                           connectedImages.add(nextImage.path);
                           currentImage = nextImage;
+
+                          // 만약 현재 이미지가 48 블록이라면
+                          if (currentImage.blockIndex == 48) {
+                            // 49 블록을 찾습니다.
+                            DraggableImage? block49 = droppedImages.firstWhere((image) => image.blockIndex == 49,
+                                orElse: () => DraggableImage(
+                                  name: 'default',
+                                  path: 'default',
+                                  position: Offset.zero,
+                                  size: Size.zero,
+                                  blockIndex: 0,
+                                ));
+
+                            // 49 블록부터 끝 블록까지 연결된 블록 리스트를 찾습니다.
+                            if (block49 != null) {
+                              connectedImages.add(block49.path);
+                              currentImage = block49;
+                              continue; // 49 블록부터 다시 연결된 블록들을 찾기 시작합니다.
+                            }
+                          }
                         } else {
                           currentImage = null;
                         }
                       }
 
-                      if (currentImage != null && currentImage.blockIndex == 3) {
-                        // 허용된 숫자들의 리스트
-                        List<int> allowedNumbers = [4, 6, 7, 11, 12, 13, 23, 37];
 
-                        // 맨 앞의 블럭과 맨 뒤의 블럭을 제외하고, 나머지 블럭들의 순서를 추출합니다.
-                        List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
-                          return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                        }).toList();
+                      if (connectedImages.first == "images/puzzle/block1.png" && connectedImages.last == "images/puzzle/block2.png") {
+                        if (currentImage != null && currentImage.blockIndex == 2) {
+                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 46, 48, 49];
 
-                        List<String> formattedNumbers = [];
-                        int i = 0;
-                        while (i < blockNumbers.length) {
-                          String numberString = '';
-                          while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]}:';
-                            i++;
+                          List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
+                            return int.parse(path.replaceAll(RegExp(r'\D'), ''));
+                          }).where((number) => number != 48 && number != 49 && number != 38).toList();
+
+                          List<String> formattedNumbers = [];
+                          int i = 0;
+                          while (i < blockNumbers.length) {
+                            String numberString = '';
+                            while (i < blockNumbers.length && allowedNumbers.contains(blockNumbers[i])) {
+                              numberString += '${blockNumbers[i]}:';
+                              i++;
+                            }
+                            if (numberString.isNotEmpty) {
+                              numberString = numberString.substring(0, numberString.length - 1); // Remove the last ':'
+                              formattedNumbers.add(numberString);
+                            }
+                            while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                              numberString = '';
+                              while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
+                                numberString += '${blockNumbers[i]}';
+                                i++;
+                              }
+                              formattedNumbers.add(':[$numberString],');
+                            }
                           }
-                          while (i < blockNumbers.length && !allowedNumbers.contains(blockNumbers[i])) {
-                            numberString += '${blockNumbers[i]},';
-                            i++;
-                          }
-                          numberString = numberString.substring(0, numberString.length - 1);
-                          formattedNumbers.add(numberString);
+
+                          connected_block_numbers = formattedNumbers.join('');
+
+                          RegExp regExp2 = RegExp(r',:');
+                          connected_block_numbers = connected_block_numbers.replaceAllMapped(regExp2, (match) {
+                            return ',';
+                          });
+
+                          // 수정된 connected_block_numbers 문자열을 Bluetooth를 통해 전송하고 출력합니다.
+                          BluetoothHelper.sendData(connected_block_numbers);
+                          print(connected_block_numbers);
                         }
-
-                        connected_block_numbers = formattedNumbers.join(', ');
-
-                        BluetoothHelper.sendData(connected_block_numbers);
-                        print(connected_block_numbers);
+                      } else {
                       }
+
+
                     },
-
-
-
 
 
 
@@ -460,6 +471,46 @@ class _PuzzlePageState extends State<PuzzlePage> {
                     highlightColor: Colors.transparent,
                     child: Image.asset('images/button/run.png'),  // 이미지 경로 적용
 
+                  ),
+                ),
+
+
+                Positioned(
+                  right: 30,  // 쓰레기통과 같은 가로 위치
+                  bottom: 140,  // 쓰레기통보다 위쪽에 배치하기 위해 bottom 값을 조정
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('힌트'),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: widget.hints.map((hint) => Image.asset(hint)).toList(), // 'widget.hints'를 사용하여 수정
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('닫기'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.blue,  // 버튼 배경 색상 예시
+                      ),
+                      child: Icon(Icons.search, size: 50.0, color: Colors.white),  // 돋보기 아이콘
+                    ),
                   ),
                 ),
 
@@ -513,7 +564,6 @@ class _PuzzlePageState extends State<PuzzlePage> {
               ],
             ),
           ),
-
         ],
       ),
     );
@@ -540,46 +590,30 @@ class _PuzzlePageState extends State<PuzzlePage> {
   Offset getSnappedPosition(Offset targetPosition, DraggableImage newImage) {
     Offset nearestSnapPoint = targetPosition;
     double minDistance = double.infinity;
-    bool useInnerSnapPoint = false;
 
     final newImageLeftSnapPoint = newImage.leftSnapPoint + targetPosition;
     final newImageRightSnapPoint = newImage.rightSnapPoint + targetPosition;
-    final newImageRightInnerSnapPoint = newImage.rightInnerSnapPoint + targetPosition;
 
     for (var droppedImage in droppedImages) {
       final droppedImageLeftSnapPoint = droppedImage.leftSnapPoint + droppedImage.position;
       final droppedImageRightSnapPoint = droppedImage.rightSnapPoint + droppedImage.position;
-      final droppedImageRightInnerSnapPoint = droppedImage.rightInnerSnapPoint + droppedImage.position;
 
-      final distanceRightInner = (newImageRightInnerSnapPoint - droppedImageRightInnerSnapPoint).distance;
+      final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
+      final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
 
-      if (distanceRightInner < 30.0 && distanceRightInner < minDistance) {
-        nearestSnapPoint = droppedImageRightInnerSnapPoint - newImage.rightInnerSnapPoint;
-        minDistance = distanceRightInner;
-        useInnerSnapPoint = true;
+      if (distanceLeft < 30.0 && distanceLeft < minDistance) {
+        nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
+        minDistance = distanceLeft;
       }
 
-      if (!useInnerSnapPoint) {
-        final distanceLeft = (newImageRightSnapPoint - droppedImageLeftSnapPoint).distance;
-        final distanceRight = (newImageLeftSnapPoint - droppedImageRightSnapPoint).distance;
-
-        if (distanceLeft < 30.0 && distanceLeft < minDistance) {
-          nearestSnapPoint = droppedImageLeftSnapPoint - newImage.rightSnapPoint;
-          minDistance = distanceLeft;
-        }
-
-        if (distanceRight < 30.0 && distanceRight < minDistance) {
-          nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
-          minDistance = distanceRight;
-        }
+      if (distanceRight < 30.0 && distanceRight < minDistance) {
+        nearestSnapPoint = droppedImageRightSnapPoint - newImage.leftSnapPoint;
+        minDistance = distanceRight;
       }
     }
 
     return nearestSnapPoint;
   }
-
-
-
 }
 
 // 드래그 가능한 이미지 클래스
@@ -591,8 +625,7 @@ class DraggableImage {
   int blockIndex; // 블록의 인덱스 추가
   Offset leftSnapPoint; // 왼쪽 스냅 포인트 추가
   Offset rightSnapPoint; // 오른쪽 스냅 포인트 추가
-  Offset leftInnerSnapPoint; // 내부 왼쪽 스냅 포인트 추가
-  Offset rightInnerSnapPoint; // 내부 오른쪽 스냅 포인트 추가
+
 
   // 생성자
   DraggableImage({
@@ -602,52 +635,62 @@ class DraggableImage {
     required this.size,
     required this.blockIndex,
   }) : leftSnapPoint = getSnapPoints(blockIndex)['left']!,
-        rightSnapPoint = getSnapPoints(blockIndex)['right']!,
-        leftInnerSnapPoint = getSnapPoints(blockIndex)['leftInner']!,
-        rightInnerSnapPoint = getSnapPoints(blockIndex)['rightInner']!;
+        rightSnapPoint = getSnapPoints(blockIndex)['right']!;
 
 
   // 블록의 스냅 포인트를 반환하는 함수
   static Map<String, Offset> getSnapPoints(int index) {
     return {
-      1: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
-      2: {'left': Offset(16, 50), 'right': Offset(284, 50), 'leftInner': Offset(40, 74), 'rightInner': Offset(172, 74),},
-      3: {'left': Offset(16, 50), 'right': Offset(116, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(116, 50),},
-      4: {'left': Offset(16, 50), 'right': Offset(132, 50),'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      5: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      6: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      7: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      8: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      9: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      10: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      11: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      12: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      13: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      14: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      15: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      16: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      17: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      18: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      19: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      20: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      21: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      22: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      23: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      24: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      25: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      26: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      27: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      28: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      29: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      30: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      31: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      32: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      33: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      34: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      35: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      36: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      37: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
-      38: {'left': Offset(16, 50), 'right': Offset(132, 50), 'leftInner': Offset(16, 50), 'rightInner': Offset(132, 50),},
+      1: {'left': Offset(16, 50), 'right': Offset(116, 50),},
+      2: {'left': Offset(16, 50), 'right': Offset(284, 50),},
+      3: {'left': Offset(16, 50), 'right': Offset(116, 50),},
+      4: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      5: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      6: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      7: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      8: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      9: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      10: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      11: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      12: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      13: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      14: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      15: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      16: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      17: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      18: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      19: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      20: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      21: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      22: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      23: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      24: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      25: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      26: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      27: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      28: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      29: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      30: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      31: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      32: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      33: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      34: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      35: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      36: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      37: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      38: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      39: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      40: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      41: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      42: {'left': Offset(16, 50), 'right': Offset(132, 50),},
+      43: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      44: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      45: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      46: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      47: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      48: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      49: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+
     }[index]!;
   }
 }
