@@ -10,9 +10,9 @@ String connected_block_numbers='';
 // 퍼즐 페이지 위젯
 class PuzzlePage extends StatefulWidget {
   final String imagePath;
-  final String hint; // 힌트 데이터를 위한 변수 추가
+  final List<String> hints;// 힌트 데이터를 위한 변수 추가
 
-  const PuzzlePage({Key? key, required this.imagePath, required this.hint}) : super(key: key);
+  const PuzzlePage({Key? key, required this.imagePath, required this.hints}) : super(key: key);
 
   @override
   _PuzzlePageState createState() => _PuzzlePageState();
@@ -487,10 +487,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
                             title: Text('힌트'),
                             content: SingleChildScrollView(
                               child: ListBody(
-                                children: <Widget>[
-                                  Text(widget.hint),
-                                  // 힌트 내용
-                                ],
+                                children: widget.hints.map((hint) => Image.asset(hint)).toList(), // 'widget.hints'를 사용하여 수정
                               ),
                             ),
                             actions: <Widget>[

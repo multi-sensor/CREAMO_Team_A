@@ -48,40 +48,39 @@ class _ContentPageState extends State<ContentPage> {
     // Add more image paths as needed
   ];
 
-  List<List<String>> hints = [
-    [
-      "1 이미지에 대한 힌트",
-      "2 이미지에 대한 힌트",
-      "3 이미지에 대한 힌트",
-      "4 이미지에 대한 힌트",
-      "5 이미지에 대한 힌트",
-      "6 이미지에 대한 힌트",
-      "7 이미지에 대한 힌트",
-      "8 이미지에 대한 힌트",
-      "9 이미지에 대한 힌트",
-      "10 이미지에 대한 힌트",
-      "11 이미지에 대한 힌트",
-    ],
-    [
-      "12 이미지에 대한 힌트",
-      "13 이미지에 대한 힌트",
-      "14 이미지에 대한 힌트",
-      "15 이미지에 대한 힌트",
-      "16 이미지에 대한 힌트",
-      "17 이미지에 대한 힌트",
-    ],
-    [
-      "18 이미지에 대한 힌트",
-      "19 이미지에 대한 힌트",
-      "20 이미지에 대한 힌트",
-      "21 이미지에 대한 힌트",
-      "22 이미지에 대한 힌트",
-      "23 이미지에 대한 힌트",
-      "24 이미지에 대한 힌트",
-      "25 이미지에 대한 힌트",
-      "26 이미지에 대한 힌트",
-    ],
-    // 추가 힌트 배열...
+  final List<List<String>> hints= [
+
+      ["images/hint/hint1.png"],
+      ["images/hint/hint2.png"],
+      ["images/hint/hint3.png"],
+      ["images/hint/hint4.png"],
+      ["images/hint/hint5.png"],
+      ["images/hint/hint6.png"],
+      ["images/hint/hint7.png"],
+      ["images/hint/hint8.png"],
+      ["images/hint/hint9.png"],
+      ["images/hint/hint10.png"],
+      ["images/hint/hint11.png"],
+
+
+      ["images/hint/hint12.png"],
+      ["images/hint/hint13.png"],
+      ["images/hint/hint14.png"],
+      ["images/hint/hint15.png"],
+      ["images/hint/hint16.png"],
+      ["images/hint/hint17.png"],
+
+
+      ["images/hint/hint18.png"],
+      ["images/hint/hint19.png"],
+      ["images/hint/hint20.png"],
+      ["images/hint/hint21.png"],
+      ["images/hint/hint22.png"],
+      ["images/hint/hint23.png"],
+      ["images/hint/hint24.png"],
+      ["images/hint/hint25.png"],
+      ["images/hint/hint26.png"],
+    // Add more image paths as needed
   ];
 
   int selectedCarouselIndex = 0;
@@ -246,9 +245,9 @@ class _ContentPageState extends State<ContentPage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => PuzzlePage(
-                                  imagePath: carouselImages[selectedCarouselIndex][index],
-                                  hint: hints[selectedCarouselIndex][index], // 'hint' 매개변수에 대한 인자 추가
-                                ),
+                                  hints: hints[index],
+                                  imagePath: "images/hint/hint${index + 1}.png", // 예시 imagePath 값 전달
+                                ), // 힌트 이미지 리스트를 퍼즐 페이지로 전달
                               ),
                             );
                           },
