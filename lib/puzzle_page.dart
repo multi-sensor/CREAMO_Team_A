@@ -421,7 +421,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                           List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                             return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                          }).where((number) => number != 48 && number != 49 && number != 38).toList();
+                          }).where((number) => number != 48 && number != 49).toList();
 
                           List<String> formattedNumbers = [];
                           int i = 0;
