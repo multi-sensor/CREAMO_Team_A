@@ -81,7 +81,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
         case 5:
           return 14;
         case 6:
-          return 14;
+          return 44;
         default:
           return 0;
       }
@@ -263,14 +263,14 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                 }
                                 droppedImages.add(newImage);
 
-                                // 'block49.png' 추가 (block48.png의 경우에만 추가)
-                                if (imageIdx == 48) {
+                                // 'block45.png' 추가 (block44.png의 경우에만 추가)
+                                if (imageIdx == 44) {
                                   final newImage2 = DraggableImage(
-                                    name: 'images/puzzle/block49',
-                                    path: 'images/puzzle/block49.png',
+                                    name: 'images/puzzle/block45',
+                                    path: 'images/puzzle/block45.png',
                                     position: Offset(newImage.position.dx - 100, newImage.position.dy + 100),
                                     size: snapshot.data!,
-                                    blockIndex: 49,
+                                    blockIndex: 45,
                                   );
                                   droppedImages.add(newImage2);
                                 }
@@ -390,10 +390,10 @@ class _PuzzlePageState extends State<PuzzlePage> {
                           connectedImages.add(nextImage.path);
                           currentImage = nextImage;
 
-                          // 만약 현재 이미지가 48 블록이라면
-                          if (currentImage.blockIndex == 48) {
-                            // 49 블록을 찾습니다.
-                            DraggableImage? block49 = droppedImages.firstWhere((image) => image.blockIndex == 49,
+                          // 만약 현재 이미지가 44 블록이라면
+                          if (currentImage.blockIndex == 44) {
+                            // 45 블록을 찾습니다.
+                            DraggableImage? block45 = droppedImages.firstWhere((image) => image.blockIndex == 45,
                                 orElse: () => DraggableImage(
                                   name: 'default',
                                   path: 'default',
@@ -402,11 +402,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
                                   blockIndex: 0,
                                 ));
 
-                            // 49 블록부터 끝 블록까지 연결된 블록 리스트를 찾습니다.
-                            if (block49 != null) {
-                              connectedImages.add(block49.path);
-                              currentImage = block49;
-                              continue; // 49 블록부터 다시 연결된 블록들을 찾기 시작합니다.
+                            // 45 블록부터 끝 블록까지 연결된 블록 리스트를 찾습니다.
+                            if (block45 != null) {
+                              connectedImages.add(block45.path);
+                              currentImage = block45;
+                              continue; // 45 블록부터 다시 연결된 블록들을 찾기 시작합니다.
                             }
                           }
                         } else {
@@ -417,11 +417,11 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                       if (connectedImages.first == "images/puzzle/block1.png" && connectedImages.last == "images/puzzle/block2.png") {
                         if (currentImage != null && currentImage.blockIndex == 2) {
-                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 46, 48, 49];
+                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 53, 54, 64, 78];
 
                           List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                             return int.parse(path.replaceAll(RegExp(r'\D'), ''));
-                          }).where((number) => number != 48 && number != 49).toList();
+                          }).where((number) => number != 44 && number != 45).toList();
 
                           List<String> formattedNumbers = [];
                           int i = 0;
@@ -690,6 +690,36 @@ class DraggableImage {
       47: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       48: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       49: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      50: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      51: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      52: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      53: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      54: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      55: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      56: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      57: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      58: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      59: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      60: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      61: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      62: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      63: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      64: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      65: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      66: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      67: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      68: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      69: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      70: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      71: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      72: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      73: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      74: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      75: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      76: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      77: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      78: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      79: {'left': Offset(16, 50), 'right': Offset(132, 50), },
 
     }[index]!;
   }
