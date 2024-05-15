@@ -81,7 +81,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
         case 5:
           return 14;
         case 6:
-          return 44;
+          return 45;
         default:
           return 0;
       }
@@ -417,7 +417,7 @@ class _PuzzlePageState extends State<PuzzlePage> {
 
                       if (connectedImages.first == "images/puzzle/block1.png" && connectedImages.last == "images/puzzle/block2.png") {
                         if (currentImage != null && currentImage.blockIndex == 2) {
-                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 53, 54, 64, 78];
+                          List<int> allowedNumbers = [3, 5, 6, 10, 11, 12, 22, 36, 38, 39, 40, 41, 42, 43, 44, 45, 46, 48, 49, 53, 54, 55,  65, 79];
 
                           List<int> blockNumbers = connectedImages.sublist(1, connectedImages.length - 1).map((path) {
                             return int.parse(path.replaceAll(RegExp(r'\D'), ''));
@@ -720,6 +720,7 @@ class DraggableImage {
       77: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       78: {'left': Offset(16, 50), 'right': Offset(132, 50), },
       79: {'left': Offset(16, 50), 'right': Offset(132, 50), },
+      80: {'left': Offset(16, 50), 'right': Offset(132, 50), },
 
     }[index]!;
   }
